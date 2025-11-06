@@ -1,0 +1,591 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 1200 450"
+   version="1.1"
+   id="svg35"
+   sodipodi:docname="process_header.svg"
+   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview35"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.86382191"
+     inkscape:cx="605.44887"
+     inkscape:cy="259.31271"
+     inkscape:window-width="1440"
+     inkscape:window-height="841"
+     inkscape:window-x="0"
+     inkscape:window-y="31"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg35" />
+  <defs
+     id="defs10">
+    <linearGradient
+       id="shiftLeftGrad"
+       x1="0%"
+       y1="0%"
+       x2="100%"
+       y2="0%">
+      <stop
+         offset="0%"
+         style="stop-color:#00ccff;stop-opacity:0.5"
+         id="stop1" />
+      <stop
+         offset="25%"
+         style="stop-color:#00ccff;stop-opacity:0.8"
+         id="stop2" />
+      <stop
+         offset="50%"
+         style="stop-color:#00ccff;stop-opacity:0.5"
+         id="stop3" />
+      <stop
+         offset="100%"
+         style="stop-color:#00ccff;stop-opacity:0.2"
+         id="stop4" />
+    </linearGradient>
+    <linearGradient
+       id="traditionalGrad"
+       x1="0%"
+       y1="0%"
+       x2="100%"
+       y2="0%">
+      <stop
+         offset="0%"
+         style="stop-color:#666666;stop-opacity:0.15"
+         id="stop5" />
+      <stop
+         offset="50%"
+         style="stop-color:#666666;stop-opacity:0.35"
+         id="stop6" />
+      <stop
+         offset="100%"
+         style="stop-color:#666666;stop-opacity:0.1"
+         id="stop7" />
+    </linearGradient>
+    <filter
+       id="glow"
+       x="-0.6"
+       y="-0.6"
+       width="2.2"
+       height="2.2">
+      <feGaussianBlur
+         stdDeviation="4"
+         result="coloredBlur"
+         id="feGaussianBlur7" />
+      <feMerge
+         id="feMerge8">
+        <feMergeNode
+           in="coloredBlur"
+           id="feMergeNode7" />
+        <feMergeNode
+           in="SourceGraphic"
+           id="feMergeNode8" />
+      </feMerge>
+    </filter>
+    <filter
+       id="strongGlow"
+       x="-0.6"
+       y="-0.6"
+       width="2.2"
+       height="2.2">
+      <feGaussianBlur
+         stdDeviation="6"
+         result="coloredBlur"
+         id="feGaussianBlur8" />
+      <feMerge
+         id="feMerge10">
+        <feMergeNode
+           in="coloredBlur"
+           id="feMergeNode9" />
+        <feMergeNode
+           in="SourceGraphic"
+           id="feMergeNode10" />
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect
+     width="1200"
+     height="450"
+     fill="#0d0d0d"
+     id="rect10" />
+  <!-- Title with highlighted "Early" - adjusted to prevent overlap -->
+  <text
+     x="600"
+     y="32"
+     font-family="Lexend Exa, sans-serif"
+     font-size="32"
+     fill="#00ccff"
+     font-weight="700"
+     text-anchor="middle"
+     id="text10">Shift Left: Quality &amp; Effort </text>
+  <text
+     x="600"
+     y="60"
+     font-family="Lexend Exa, sans-serif"
+     font-size="16"
+     fill="#ff6600"
+     text-anchor="middle"
+     opacity="0.95"
+     id="text12">Early MBSE investment delivers superior product quality</text>
+  <!-- Graph container with rounded background -->
+  <rect
+     x="60"
+     y="100"
+     width="1080"
+     height="280"
+     rx="12"
+     fill="rgba(0,204,255,0.03)"
+     stroke="#00ccff"
+     stroke-width="2"
+     opacity="0.3"
+     id="rect12" />
+  <!-- Axes -->
+  <line
+     x1="100"
+     y1="340"
+     x2="1100"
+     y2="340"
+     stroke="#00ccff"
+     stroke-width="2.5"
+     opacity="0.6"
+     id="line12" />
+  <line
+     x1="100"
+     y1="340"
+     x2="100"
+     y2="120"
+     stroke="#00ccff"
+     stroke-width="2.5"
+     opacity="0.6"
+     id="line13" />
+  <!-- Y-axis label - moved further left to avoid overlap -->
+  <text
+     x="15"
+     y="230"
+     font-family="Lexend Exa, sans-serif"
+     font-size="14"
+     fill="#00ccff"
+     font-weight="600"
+     transform="rotate(-90 15 230)"
+     id="text13">Attention to Quality</text>
+  <!-- X-axis phase labels -->
+  <text
+     x="200"
+     y="370"
+     font-family="Lexend Exa, sans-serif"
+     font-size="13"
+     fill="#00ccff"
+     text-anchor="middle"
+     font-weight="600"
+     opacity="0.9"
+     id="text14">Plan &amp; Design</text>
+  <text
+     x="400"
+     y="370"
+     font-family="Lexend Exa, sans-serif"
+     font-size="13"
+     fill="#00ccff"
+     text-anchor="middle"
+     font-weight="600"
+     opacity="0.9"
+     id="text15">Develop &amp; Build</text>
+  <text
+     x="600"
+     y="370"
+     font-family="Lexend Exa, sans-serif"
+     font-size="13"
+     fill="#00ccff"
+     text-anchor="middle"
+     font-weight="600"
+     opacity="0.9"
+     id="text16">Test</text>
+  <text
+     x="800"
+     y="370"
+     font-family="Lexend Exa, sans-serif"
+     font-size="13"
+     fill="#00ccff"
+     text-anchor="middle"
+     font-weight="600"
+     opacity="0.9"
+     id="text17">Deploy &amp; Release</text>
+  <text
+     x="1000"
+     y="370"
+     font-family="Lexend Exa, sans-serif"
+     font-size="13"
+     fill="#00ccff"
+     text-anchor="middle"
+     font-weight="600"
+     opacity="0.9"
+     id="text18">Monitor &amp; Analyze</text>
+  <!-- Phase dividers -->
+  <line
+     x1="320"
+     y1="120"
+     x2="320"
+     y2="340"
+     stroke="#00ccff"
+     stroke-width="1"
+     stroke-dasharray="4,4"
+     opacity="0.25"
+     id="line18" />
+  <line
+     x1="520"
+     y1="120"
+     x2="520"
+     y2="340"
+     stroke="#00ccff"
+     stroke-width="1"
+     stroke-dasharray="4,4"
+     opacity="0.25"
+     id="line19" />
+  <line
+     x1="720"
+     y1="120"
+     x2="720"
+     y2="340"
+     stroke="#00ccff"
+     stroke-width="1"
+     stroke-dasharray="4,4"
+     opacity="0.25"
+     id="line20" />
+  <line
+     x1="920"
+     y1="120"
+     x2="920"
+     y2="340"
+     stroke="#00ccff"
+     stroke-width="1"
+     stroke-dasharray="4,4"
+     opacity="0.25"
+     id="line21" />
+  <!-- Traditional Quality Model (gray curve - starts at bottom, peaks late at same height as Shift Left) -->
+  <path
+     d="m 120,330 c 53.33333,-3.33333 106.66667,-10 160,-20 l 414.80456,-72.73411 c 57.8395,-34.40656 126.83166,-146.593279 256.45188,-83.47294 53.33336,20 93.93256,135.94502 127.58596,175.34579 L 1080,330 Z"
+     fill="url(#traditionalGrad)"
+     stroke="#666666"
+     stroke-width="3.5"
+     opacity="0.65"
+     filter="url(#glow)"
+     id="path21"
+     sodipodi:nodetypes="ccccccc" />
+  <!-- Shift Left Model (turquoise curve - starts at bottom, rises quickly to peak early, then declines) -->
+  <!-- Peak at x=350 (early in Develop & Build), y=130 (highest point within graph boundaries) -->
+  <path
+     d="m 120,330 c 53.33333,-46.66667 106.66667,-96.66667 160,-150 46.66667,-33.33333 86.66667,-48.33333 120,-45 66.66667,10 117.03378,85.80843 183.79296,98.67053 l 492.15734,94.8211"
+     fill="url(#shiftLeftGrad)"
+     stroke="#00ccff"
+     stroke-width="5"
+     opacity="0.85"
+     filter="url(#strongGlow)"
+     id="path22"
+     sodipodi:nodetypes="cccsc">
+    <animate
+       attributeName="opacity"
+       values="0.75;0.95;0.75"
+       dur="4s"
+       repeatCount="indefinite" />
+  </path>
+  <!-- Peak point for Shift Left (early in Develop & Build phase - highest point) -->
+  <circle
+     cx="387.04468"
+     cy="131.15764"
+     r="12"
+     fill="#00ccff"
+     opacity="1"
+     filter="url(#strongGlow)"
+     id="circle22">
+    <animate
+       attributeName="r"
+       values="10;14;10"
+       dur="2.5s"
+       repeatCount="indefinite" />
+  </circle>
+  <rect
+     x="300.12994"
+     y="90.86879"
+     width="99.740089"
+     height="35.843609"
+     rx="5.984405"
+     fill="rgba(0,204,255,0.15)"
+     stroke="#00ccff"
+     stroke-width="2.25991"
+     id="rect22" />
+  <text
+     x="350"
+     y="118"
+     font-family="Lexend Exa, sans-serif"
+     font-size="11"
+     fill="#00ccff"
+     font-weight="700"
+     text-anchor="middle"
+     id="text22">Peak Quality</text>
+  <text
+     x="350"
+     y="107"
+     font-family="Lexend Exa, sans-serif"
+     font-size="10"
+     fill="#00ccff"
+     font-weight="600"
+     text-anchor="middle"
+     id="text23">Early Phase</text>
+  <!-- Peak point for Traditional (Test phase - same height as Shift Left) -->
+  <circle
+     cx="720"
+     cy="130"
+     r="8"
+     fill="#666666"
+     opacity="0.7"
+     filter="url(#glow)"
+     id="circle23" />
+  <!-- Shift Left arrow (from traditional peak to early peak) -->
+  <path
+     d="m 844.63418,131.18327 -427.50782,-1.1851"
+     stroke="#ff6600"
+     stroke-width="2.82078"
+     fill="none"
+     stroke-dasharray="8, 4"
+     marker-end="url(#arrowShiftLeft)"
+     opacity="0.8"
+     id="path23"
+     sodipodi:nodetypes="cc">
+    <animate
+       attributeName="stroke-dashoffset"
+       values="0;20"
+       dur="2s"
+       repeatCount="indefinite" />
+  </path>
+  <text
+     x="535"
+     y="115"
+     font-family="Lexend Exa, sans-serif"
+     font-size="14"
+     fill="#ff6600"
+     font-weight="700"
+     text-anchor="middle"
+     id="text24">Shift Left</text>
+  <!-- Animated flow particles along Shift Left curve -->
+  <circle
+     r="4"
+     fill="#00ccff"
+     opacity="0.9"
+     id="circle24">
+    <animateMotion
+       dur="5s"
+       repeatCount="indefinite"
+       path="M 200 260 Q 280 180 350 130 Q 400 135 500 150" />
+    <animate
+       attributeName="opacity"
+       values="0.4;1;0.4"
+       dur="5s"
+       repeatCount="indefinite" />
+  </circle>
+  <circle
+     r="4"
+     fill="#00ccff"
+     opacity="0.9"
+     id="circle25">
+    <animateMotion
+       dur="5s"
+       repeatCount="indefinite"
+       path="M 200 260 Q 280 180 350 130 Q 400 135 500 150"
+       begin="1.5s" />
+    <animate
+       attributeName="opacity"
+       values="0.4;1;0.4"
+       dur="5s"
+       repeatCount="indefinite"
+       begin="1.5s" />
+  </circle>
+  <circle
+     r="4"
+     fill="#00ccff"
+     opacity="0.9"
+     id="circle26">
+    <animateMotion
+       dur="5s"
+       repeatCount="indefinite"
+       path="M 200 260 Q 280 180 350 130 Q 400 135 500 150"
+       begin="3s" />
+    <animate
+       attributeName="opacity"
+       values="0.4;1;0.4"
+       dur="5s"
+       repeatCount="indefinite"
+       begin="3s" />
+  </circle>
+  <!-- Early MBSE Investment annotation - positioned within graph area -->
+  <rect
+     x="140"
+     y="140"
+     width="150"
+     height="48"
+     rx="8"
+     fill="rgba(0,204,255,0.12)"
+     stroke="#00ccff"
+     stroke-width="2"
+     filter="url(#glow)"
+     id="rect26"
+     transform="matrix(0.99865968,0,0,1.2127788,0.28816903,-23.898081)" />
+  <text
+     x="215"
+     y="161"
+     font-family="Lexend Exa, sans-serif"
+     font-size="12"
+     fill="#00ccff"
+     font-weight="700"
+     text-anchor="middle"
+     id="text26">Early MBSE</text>
+  <text
+     x="215"
+     y="176"
+     font-family="Lexend Exa, sans-serif"
+     font-size="12"
+     fill="#00ccff"
+     font-weight="700"
+     text-anchor="middle"
+     id="text27">Investment</text>
+  <text
+     x="215"
+     y="190"
+     font-family="Lexend Exa, sans-serif"
+     font-size="10"
+     fill="#00ccff"
+     text-anchor="middle"
+     opacity="0.9"
+     id="text28">SysML v2 Modeling</text>
+  <path
+     d="m 169.68644,249.20126 51.90436,-48.1138"
+     stroke="#00ccff"
+     stroke-width="2"
+     fill="none"
+     marker-end="url(#arrowCallout)"
+     id="path28" />
+  <!-- Result box (right side) - adjusted positioning -->
+  <rect
+     x="1020"
+     y="100"
+     width="150"
+     height="85"
+     rx="10"
+     fill="rgba(0,204,255,0.15)"
+     stroke="#00ccff"
+     stroke-width="3"
+     filter="url(#strongGlow)"
+     id="rect28"
+     transform="matrix(0.99902616,0,0,1.1008273,1.0663581,-5.1067161)" />
+  <text
+     x="1095"
+     y="128"
+     font-family="Lexend Exa, sans-serif"
+     font-size="15"
+     fill="#00ccff"
+     font-weight="700"
+     text-anchor="middle"
+     id="text29">Result</text>
+  <text
+     x="1095"
+     y="148"
+     font-family="Lexend Exa, sans-serif"
+     font-size="13"
+     fill="#00ccff"
+     font-weight="600"
+     text-anchor="middle"
+     id="text30">Superior Quality</text>
+  <text
+     x="1095"
+     y="166"
+     font-family="Lexend Exa, sans-serif"
+     font-size="12"
+     fill="#00ccff"
+     text-anchor="middle"
+     opacity="0.9"
+     id="text31">Higher Quality</text>
+  <text
+     x="1095"
+     y="182"
+     font-family="Lexend Exa, sans-serif"
+     font-size="12"
+     fill="#00ccff"
+     text-anchor="middle"
+     opacity="0.9"
+     id="text32">Better Outcomes</text>
+  <!-- Legend -->
+  <g
+     id="legend"
+     transform="translate(100, 400)">
+    <rect
+       x="0"
+       y="0"
+       width="18"
+       height="18"
+       rx="3"
+       fill="#00ccff"
+       opacity="0.7"
+       id="rect32" />
+    <text
+       x="25"
+       y="14"
+       font-family="Lexend Exa, sans-serif"
+       font-size="13"
+       fill="#00ccff"
+       font-weight="600"
+       id="text33">Shift Left Model (MBSE)</text>
+    <rect
+       x="320"
+       y="0"
+       width="18"
+       height="18"
+       rx="3"
+       fill="#666666"
+       opacity="0.5"
+       id="rect33" />
+    <text
+       x="345"
+       y="14"
+       font-family="Lexend Exa, sans-serif"
+       font-size="13"
+       fill="#666666"
+       opacity="0.8"
+       id="text34">Traditional Quality Model</text>
+  </g>
+  <!-- Arrow markers -->
+  <defs
+     id="defs35">
+    <marker
+       id="arrowCallout"
+       markerWidth="10"
+       markerHeight="10"
+       refX="9"
+       refY="5"
+       orient="auto">
+      <polygon
+         points="0 0, 10 5, 0 10"
+         fill="#00ccff"
+         id="polygon34" />
+    </marker>
+    <marker
+       id="arrowShiftLeft"
+       markerWidth="12"
+       markerHeight="12"
+       refX="11"
+       refY="6"
+       orient="auto">
+      <polygon
+         points="0 0, 12 6, 0 12"
+         fill="#ff6600"
+         id="polygon35" />
+    </marker>
+  </defs>
+</svg>
