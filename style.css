@@ -12,15 +12,44 @@ body { font-family: 'Lexend Exa',system-ui,-apple-system,Segoe UI,Roboto,sans-se
 .brand { display:flex; align-items:center; gap:0.5rem; position: relative;}
 .logo { height:56px; transition: all 0.4s ease; filter: drop-shadow(0 0 8px rgba(0,204,255,0.3));}
 .brand:hover .logo { transform: scale(1.15) rotate(5deg); filter: drop-shadow(0 0 16px rgba(0,204,255,0.6));}
-.brand-text { color:var(--turquoise); font-weight:700; letter-spacing:0.5px; transition: color 0.3s ease;}
-.brand:hover .brand-text { color:var(--coral);}
+.brand-text { display:flex; flex-direction:column; align-items:flex-start; font-weight:700; line-height:1; letter-spacing:0.12em; text-transform:uppercase; gap:0.2rem; }
+.brand-text-primary { color:var(--turquoise); }
+.brand-text-secondary { color:var(--coral); letter-spacing:0.2em; font-size:0.82em; }
+.brand:hover .brand-text-primary { color:var(--turquoise); }
+.brand:hover .brand-text-secondary { color:var(--coral); }
 .navbar a { color:var(--turquoise); text-decoration:none; margin-left:1rem; transition: color 0.2s ease, transform 0.2s ease; position: relative;}
 .navbar a:focus-visible { outline: 2px solid var(--turquoise); outline-offset: 4px; border-radius: 4px;}
 .navbar a.active,.navbar a:hover { color:var(--aubergine); transform: translateY(-1px);}
-.hero { display:grid; grid-template-columns:1.1fr 0.9fr; gap:2rem; align-items:center; min-height:75vh; padding:5rem 1.25rem 2rem;}
-.hero-inner h1 { margin:0 0 0.5rem 0; font-size: clamp(2rem, 4.5vw, 3.2rem); color:var(--turquoise);}
-.hero-inner p { opacity:0.9; max-width:60ch; line-height:1.6;}
-.cta-row { margin-top:1.25rem; display:flex; gap:0.75rem;}
+.hero { position: relative; min-height:90vh; padding:clamp(4rem, 8vw, 6rem) clamp(1.25rem, 4vw, 4rem) clamp(3rem, 6vw, 5rem); overflow: hidden; display:flex; flex-direction:column; justify-content:center;}
+.hero-background { position: absolute; inset: 0; z-index: 0; overflow: hidden;}
+.hero-bg-image { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; opacity: 0.45; transition: opacity 0.3s ease;}
+.hero-overlay { position: absolute; inset: 0; background: linear-gradient(115deg, rgba(13,13,13,0.8) 0%, rgba(13,13,13,0.55) 45%, rgba(13,13,13,0.35) 100%); mix-blend-mode: multiply; z-index: 1; pointer-events:none;}
+.hero:hover .hero-bg-image { opacity: 0.55;}
+.hero-layout { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); align-items: center; gap: clamp(2rem, 6vw, 5rem);}
+.hero-content { max-width: 520px; display: grid; gap: 1.5rem; color: var(--light-text); }
+.hero-kicker { font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(0, 204, 255, 0.8); font-weight: 600; }
+.hero-inner h1 { margin:0; font-size: clamp(2.75rem, 6vw, 4rem); color:var(--turquoise); text-shadow: 0 6px 24px rgba(0,0,0,0.45);}
+.hero-inner p { opacity:0.92; max-width:none; line-height:1.7; margin: 0; text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);}
+.cta-row { margin-top:1.25rem; display:flex; gap:0.75rem; justify-content:flex-start; flex-wrap:wrap;}
+
+.hero-visual { position: relative; border-radius: 22px; overflow: hidden; box-shadow: 0 35px 70px rgba(0,0,0,0.55), 0 12px 30px rgba(0,0,0,0.45); isolation:isolate; }
+.hero-visual img { width: 100%; height: auto; display: block; transform: scale(1.02); filter: saturate(110%) contrast(108%); }
+.hero-visual::after { content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0) 25%, rgba(0,0,0,0.55) 100%); mix-blend-mode:multiply; }
+.hero-visual-caption { position:absolute; bottom:1.5rem; left:1.5rem; right:1.5rem; display:flex; justify-content:space-between; gap:1rem; color:var(--light-text); font-size:0.85rem; letter-spacing:0.08em; text-transform:uppercase; z-index:1; opacity:0.85; }
+.hero-visual-caption span + span { color:rgba(200,0,100,0.85); }
+
+.hero-insights { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:clamp(1.5rem, 4vw, 3rem); padding: clamp(2rem, 6vw, 4rem) clamp(1.25rem, 4vw, 4rem) clamp(3rem, 7vw, 5rem); margin-top:-2rem; position:relative; z-index:2; }
+.hero-insight-card { position:relative; padding:2.25rem 2rem; border-radius:18px; border:1px solid rgba(0,204,255,0.18); background:rgba(13,13,13,0.85); color:var(--light-text); overflow:hidden; isolation:isolate; display:grid; gap:1rem; box-shadow: 0 18px 45px rgba(0,0,0,0.35); }
+.hero-insight-card::before { content:""; position:absolute; inset:-10%; background-image:url('assets/ChatGPT Image 7. Nov. 2025, 08_44_58.png'); background-size:180%; background-repeat:no-repeat; opacity:0.28; filter:saturate(120%); z-index:-1; transform:scale(1.1); }
+.hero-insight-card header { display:grid; gap:0.35rem; }
+.hero-insight-eyebrow { font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(0,204,255,0.8); font-weight:600; }
+.hero-insight-card h3 { margin:0; font-size:1.25rem; color:var(--turquoise); text-shadow: 0 1px 8px rgba(0,0,0,0.5); }
+.hero-insight-card p { margin:0; line-height:1.7; opacity:0.92; }
+.hero-insight-card--aerial::before { background-position: 60% 10%; }
+.hero-insight-card--mobility::before { background-position: 30% 70%; }
+.hero-insight-card--infrastructure::before { background-position: 80% 50%; }
+.hero-insight-card--mobility { border-color: rgba(200,0,100,0.25); }
+.hero-insight-card--infrastructure { border-color: rgba(0,204,255,0.25); }
 .btn { padding:0.75rem 1.1rem; border-radius:10px; font-weight:600; text-decoration:none; transition: all 0.3s ease; display: inline-block; position: relative; overflow: hidden;}
 .btn:focus-visible { outline: 2px solid var(--turquoise); outline-offset: 4px;}
 .btn.primary { background:var(--aubergine); color:#fff; border: 1px solid var(--aubergine);}
@@ -86,7 +115,12 @@ footer { display:flex; justify-content:space-between; padding:1rem 1.25rem; bord
 .foot-links a:hover { color:var(--aubergine); transform: translateY(-1px);}
 .foot-links a:focus-visible { outline: 2px solid var(--turquoise); outline-offset: 4px; border-radius: 4px;}
 @media (max-width: 900px){ 
-  .hero{ grid-template-columns:1fr;} 
+  .hero{ min-height:70vh; padding:3.5rem 1.25rem 2.75rem;}
+  .hero-layout { grid-template-columns: 1fr; gap:2rem;}
+  .hero-content { order:2; text-align:center; justify-items:center; }
+  .hero-visual { order:1; border-radius:18px; }
+  .hero-visual-caption { left:1rem; right:1rem; justify-content:center; gap:0.5rem; font-size:0.75rem; }
+  .hero-insights { margin-top:0; padding:2.5rem 1.25rem 3rem; }
   .features{ grid-template-columns:1fr;}
   .benefits-grid { grid-template-columns: 1fr;}
   footer { flex-direction: column; gap: 1rem; align-items: center; text-align: center;}
