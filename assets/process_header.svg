@@ -279,7 +279,13 @@
      opacity="0.65"
      filter="url(#glow)"
      id="path21"
-     sodipodi:nodetypes="ccccccc" />
+     sodipodi:nodetypes="ccccccc">
+    <animate
+       attributeName="opacity"
+       values="0.55;0.75;0.55"
+       dur="4s"
+       repeatCount="indefinite" />
+  </path>
   <!-- Shift Left Model (turquoise curve - starts at bottom, rises quickly to peak early, then declines) -->
   <!-- Peak at x=350 (early in Develop & Build), y=130 (highest point within graph boundaries) -->
   <path
@@ -348,7 +354,13 @@
      fill="#666666"
      opacity="0.7"
      filter="url(#glow)"
-     id="circle23" />
+     id="circle23">
+    <animate
+       attributeName="r"
+       values="6;10;6"
+       dur="2.5s"
+       repeatCount="indefinite" />
+  </circle>
   <!-- Shift Left arrow (from traditional peak to early peak) -->
   <path
      d="m 844.63418,131.18327 -427.50782,-1.1851"
@@ -362,7 +374,7 @@
      sodipodi:nodetypes="cc">
     <animate
        attributeName="stroke-dashoffset"
-       values="0;20"
+       values="20;0"
        dur="2s"
        repeatCount="indefinite" />
   </path>
@@ -375,7 +387,7 @@
      font-weight="700"
      text-anchor="middle"
      id="text24">Shift Left</text>
-  <!-- Animated flow particles along Shift Left curve -->
+  <!-- Animated flow particles along Shift Left curve - using exact curve path -->
   <circle
      r="4"
      fill="#00ccff"
@@ -384,7 +396,7 @@
     <animateMotion
        dur="5s"
        repeatCount="indefinite"
-       path="M 200 260 Q 280 180 350 130 Q 400 135 500 150" />
+       path="m 120,330 c 53.33333,-46.66667 106.66667,-96.66667 160,-150 46.66667,-33.33333 86.66667,-48.33333 120,-45 66.66667,10 117.03378,85.80843 183.79296,98.67053 l 492.15734,94.8211" />
     <animate
        attributeName="opacity"
        values="0.4;1;0.4"
@@ -399,7 +411,7 @@
     <animateMotion
        dur="5s"
        repeatCount="indefinite"
-       path="M 200 260 Q 280 180 350 130 Q 400 135 500 150"
+       path="m 120,330 c 53.33333,-46.66667 106.66667,-96.66667 160,-150 46.66667,-33.33333 86.66667,-48.33333 120,-45 66.66667,10 117.03378,85.80843 183.79296,98.67053 l 492.15734,94.8211"
        begin="1.5s" />
     <animate
        attributeName="opacity"
@@ -416,7 +428,7 @@
     <animateMotion
        dur="5s"
        repeatCount="indefinite"
-       path="M 200 260 Q 280 180 350 130 Q 400 135 500 150"
+       path="m 120,330 c 53.33333,-46.66667 106.66667,-96.66667 160,-150 46.66667,-33.33333 86.66667,-48.33333 120,-45 66.66667,10 117.03378,85.80843 183.79296,98.67053 l 492.15734,94.8211"
        begin="3s" />
     <animate
        attributeName="opacity"
@@ -424,6 +436,56 @@
        dur="5s"
        repeatCount="indefinite"
        begin="3s" />
+  </circle>
+  <!-- Animated flow particles along Traditional curve - using exact curve path -->
+  <circle
+     r="3.5"
+     fill="#666666"
+     opacity="0.7"
+     id="circle27">
+    <animateMotion
+       dur="6s"
+       repeatCount="indefinite"
+       path="m 120,330 c 53.33333,-3.33333 106.66667,-10 160,-20 l 414.80456,-72.73411 c 57.8395,-34.40656 126.83166,-146.593279 256.45188,-83.47294 53.33336,20 93.93256,135.94502 127.58596,175.34579 L 1080,330" />
+    <animate
+       attributeName="opacity"
+       values="0.3;0.8;0.3"
+       dur="6s"
+       repeatCount="indefinite" />
+  </circle>
+  <circle
+     r="3.5"
+     fill="#666666"
+     opacity="0.7"
+     id="circle28">
+    <animateMotion
+       dur="6s"
+       repeatCount="indefinite"
+       path="m 120,330 c 53.33333,-3.33333 106.66667,-10 160,-20 l 414.80456,-72.73411 c 57.8395,-34.40656 126.83166,-146.593279 256.45188,-83.47294 53.33336,20 93.93256,135.94502 127.58596,175.34579 L 1080,330"
+       begin="2s" />
+    <animate
+       attributeName="opacity"
+       values="0.3;0.8;0.3"
+       dur="6s"
+       repeatCount="indefinite"
+       begin="2s" />
+  </circle>
+  <circle
+     r="3.5"
+     fill="#666666"
+     opacity="0.7"
+     id="circle29">
+    <animateMotion
+       dur="6s"
+       repeatCount="indefinite"
+       path="m 120,330 c 53.33333,-3.33333 106.66667,-10 160,-20 l 414.80456,-72.73411 c 57.8395,-34.40656 126.83166,-146.593279 256.45188,-83.47294 53.33336,20 93.93256,135.94502 127.58596,175.34579 L 1080,330"
+       begin="4s" />
+    <animate
+       attributeName="opacity"
+       values="0.3;0.8;0.3"
+       dur="6s"
+       repeatCount="indefinite"
+       begin="4s" />
   </circle>
   <!-- Early MBSE Investment annotation - positioned within graph area -->
   <rect

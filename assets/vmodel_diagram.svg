@@ -5,6 +5,10 @@
       <stop offset="0%" style="stop-color:#00ccff;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#0099cc;stop-opacity:0.8" />
     </linearGradient>
+    <linearGradient id="aubergineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#C80064;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A00050;stop-opacity:0.8" />
+    </linearGradient>
     <linearGradient id="coralGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#ff6600;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#cc5500;stop-opacity:0.8" />
@@ -14,8 +18,8 @@
     <marker id="arrowTurquoise" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
       <polygon points="0 0, 10 5, 0 10" fill="#00ccff" stroke="#00ccff" stroke-width="0.5"/>
     </marker>
-    <marker id="arrowCoral" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
-      <polygon points="0 0, 10 5, 0 10" fill="#ff6600" stroke="#ff6600" stroke-width="0.5"/>
+    <marker id="arrowAubergine" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
+      <polygon points="0 0, 10 5, 0 10" fill="#C80064" stroke="#C80064" stroke-width="0.5"/>
     </marker>
     
     <!-- Glow filter -->
@@ -48,215 +52,221 @@
   
   <!-- Title -->
   <text x="700" y="50" font-family="Lexend Exa, sans-serif" font-size="42" font-weight="700" fill="#00ccff" text-anchor="middle">V-Model with Git-Based SysML v2 Integration</text>
-  <text x="700" y="80" font-family="Lexend Exa, sans-serif" font-size="18" fill="#ff6600" text-anchor="middle" opacity="0.9">Version-controlled, traceable, and collaborative MBSE</text>
+  <text x="700" y="80" font-family="Lexend Exa, sans-serif" font-size="18" fill="#C80064" text-anchor="middle" opacity="0.9">Version-controlled, traceable, and collaborative MBSE</text>
   
-  <!-- Central Git/SysML v2 backbone (vertical) -->
+  <!-- Central Git/SysML v2 backbone (vertical) - Centered and aligned -->
   <g id="git-backbone">
-    <line x1="700" y1="120" x2="700" y2="800" stroke="#00ccff" stroke-width="4" opacity="0.3" stroke-dasharray="10,5"/>
-    <text x="720" y="460" font-family="Lexend Exa, sans-serif" font-size="16" fill="#00ccff" font-weight="600" transform="rotate(90 720 460)">Git + SysML v2 Backbone</text>
+    <line x1="700" y1="120" x2="700" y2="800" stroke="#00ccff" stroke-width="3.5" opacity="0.35" stroke-dasharray="12,6"/>
+    <text x="720" y="460" font-family="Lexend Exa, sans-serif" font-size="15" fill="#00ccff" font-weight="600" transform="rotate(90 720 460)" opacity="0.85">Git + SysML v2 Backbone</text>
     
-    <!-- Git icons along backbone -->
-    <g transform="translate(680, 200) scale(1.2)">
-      <circle cx="12" cy="12" r="10" fill="none" stroke="#00ccff" stroke-width="2"/>
-      <path d="M 12,2 Q 8,6 12,10 Q 16,6 12,2" fill="#00ccff" opacity="0.6"/>
-      <path d="M 12,14 Q 8,10 12,6 Q 16,10 12,14" fill="#00ccff" opacity="0.6"/>
-      <circle cx="12" cy="12" r="3" fill="#00ccff"/>
+    <!-- Git icons along backbone - aligned to V-model levels -->
+    <g transform="translate(680, 185) scale(1.1)">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#00ccff" stroke-width="2" opacity="0.8"/>
+      <path d="M 12,2 Q 8,6 12,10 Q 16,6 12,2" fill="#00ccff" opacity="0.65"/>
+      <path d="M 12,14 Q 8,10 12,6 Q 16,10 12,14" fill="#00ccff" opacity="0.65"/>
+      <circle cx="12" cy="12" r="2.5" fill="#00ccff" opacity="0.9"/>
     </g>
-    <g transform="translate(680, 350) scale(1.2)">
-      <circle cx="12" cy="12" r="10" fill="none" stroke="#00ccff" stroke-width="2"/>
-      <path d="M 12,2 Q 8,6 12,10 Q 16,6 12,2" fill="#00ccff" opacity="0.6"/>
-      <path d="M 12,14 Q 8,10 12,6 Q 16,10 12,14" fill="#00ccff" opacity="0.6"/>
-      <circle cx="12" cy="12" r="3" fill="#00ccff"/>
+    <g transform="translate(680, 305) scale(1.1)">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#00ccff" stroke-width="2" opacity="0.8"/>
+      <path d="M 12,2 Q 8,6 12,10 Q 16,6 12,2" fill="#00ccff" opacity="0.65"/>
+      <path d="M 12,14 Q 8,10 12,6 Q 16,10 12,14" fill="#00ccff" opacity="0.65"/>
+      <circle cx="12" cy="12" r="2.5" fill="#00ccff" opacity="0.9"/>
     </g>
-    <g transform="translate(680, 500) scale(1.2)">
-      <circle cx="12" cy="12" r="10" fill="none" stroke="#00ccff" stroke-width="2"/>
-      <path d="M 12,2 Q 8,6 12,10 Q 16,6 12,2" fill="#00ccff" opacity="0.6"/>
-      <path d="M 12,14 Q 8,10 12,6 Q 16,10 12,14" fill="#00ccff" opacity="0.6"/>
-      <circle cx="12" cy="12" r="3" fill="#00ccff"/>
+    <g transform="translate(680, 425) scale(1.1)">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#00ccff" stroke-width="2" opacity="0.8"/>
+      <path d="M 12,2 Q 8,6 12,10 Q 16,6 12,2" fill="#00ccff" opacity="0.65"/>
+      <path d="M 12,14 Q 8,10 12,6 Q 16,10 12,14" fill="#00ccff" opacity="0.65"/>
+      <circle cx="12" cy="12" r="2.5" fill="#00ccff" opacity="0.9"/>
     </g>
-    <g transform="translate(680, 650) scale(1.2)">
-      <circle cx="12" cy="12" r="10" fill="none" stroke="#00ccff" stroke-width="2"/>
-      <path d="M 12,2 Q 8,6 12,10 Q 16,6 12,2" fill="#00ccff" opacity="0.6"/>
-      <path d="M 12,14 Q 8,10 12,6 Q 16,10 12,14" fill="#00ccff" opacity="0.6"/>
-      <circle cx="12" cy="12" r="3" fill="#00ccff"/>
+    <g transform="translate(680, 537) scale(1.1)">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="#00ccff" stroke-width="2" opacity="0.8"/>
+      <path d="M 12,2 Q 8,6 12,10 Q 16,6 12,2" fill="#00ccff" opacity="0.65"/>
+      <path d="M 12,14 Q 8,10 12,6 Q 16,10 12,14" fill="#00ccff" opacity="0.65"/>
+      <circle cx="12" cy="12" r="2.5" fill="#00ccff" opacity="0.9"/>
     </g>
   </g>
   
-  <!-- V-Model Structure - More pronounced V shape -->
+  <!-- V-Model Structure - Perfectly aligned and symmetric -->
   
-  <!-- Left side: Development/Design (descending) -->
+  <!-- Left side: Development/Design (descending) - True V-shape -->
   <g id="left-side">
     <!-- Requirements Analysis (top left) -->
     <g id="requirements">
-      <rect x="100" y="150" width="280" height="100" rx="12" fill="rgba(0,204,255,0.1)" stroke="#00ccff" stroke-width="3" filter="url(#glow)"/>
-      <rect x="100" y="150" width="280" height="100" fill="url(#flowPattern)"/>
-      <text x="240" y="185" font-family="Lexend Exa, sans-serif" font-size="20" fill="#00ccff" font-weight="700" text-anchor="middle">Requirements</text>
-      <text x="240" y="210" font-family="Lexend Exa, sans-serif" font-size="14" fill="#00ccff" text-anchor="middle" opacity="0.9">SysML v2 Use Cases</text>
-      <text x="240" y="230" font-family="Lexend Exa, sans-serif" font-size="12" fill="#00ccff" text-anchor="middle" opacity="0.7">📝 .sysml files in Git</text>
+      <rect x="50" y="140" width="240" height="85" rx="12" fill="rgba(0,204,255,0.12)" stroke="#00ccff" stroke-width="2.5" filter="url(#glow)"/>
+      <text x="170" y="175" font-family="Lexend Exa, sans-serif" font-size="19" fill="#00ccff" font-weight="700" text-anchor="middle">Requirements</text>
+      <text x="170" y="197" font-family="Lexend Exa, sans-serif" font-size="13" fill="#00ccff" text-anchor="middle" opacity="0.9">SysML v2 Use Cases</text>
+      <text x="170" y="214" font-family="Lexend Exa, sans-serif" font-size="11" fill="#00ccff" text-anchor="middle" opacity="0.75">📝 .sysml files in Git</text>
       
       <!-- Animated flow to Git -->
-      <circle r="4" fill="#00ccff" opacity="0.8">
-        <animateMotion dur="2s" repeatCount="indefinite" path="M 380 190 L 670 200"/>
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+      <circle r="3.5" fill="#00ccff" opacity="0.85">
+        <animateMotion dur="2.5s" repeatCount="indefinite" path="M 290 182 L 680 200"/>
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
       </circle>
-      <path d="M 380 190 L 670 200" stroke="#00ccff" stroke-width="3" marker-end="url(#arrowTurquoise)" opacity="0.7" stroke-dasharray="6,4"/>
+      <path d="M 290 182 L 680 200" stroke="#00ccff" stroke-width="2.5" marker-end="url(#arrowTurquoise)" opacity="0.65" stroke-dasharray="5,4"/>
     </g>
     
     <!-- System Design -->
     <g id="system-design">
-      <rect x="125" y="280" width="280" height="100" rx="12" fill="rgba(0,204,255,0.1)" stroke="#00ccff" stroke-width="3" filter="url(#glow)"/>
-      <rect x="125" y="280" width="280" height="100" fill="url(#flowPattern)"/>
-      <text x="265" y="315" font-family="Lexend Exa, sans-serif" font-size="20" fill="#00ccff" font-weight="700" text-anchor="middle">System Design</text>
-      <text x="265" y="340" font-family="Lexend Exa, sans-serif" font-size="14" fill="#00ccff" text-anchor="middle" opacity="0.9">Functional Architecture</text>
-      <text x="265" y="360" font-family="Lexend Exa, sans-serif" font-size="12" fill="#00ccff" text-anchor="middle" opacity="0.7">🔄 Git branches &amp; PRs</text>
+      <rect x="120" y="260" width="240" height="85" rx="12" fill="rgba(0,204,255,0.12)" stroke="#00ccff" stroke-width="2.5" filter="url(#glow)"/>
+      <text x="240" y="295" font-family="Lexend Exa, sans-serif" font-size="19" fill="#00ccff" font-weight="700" text-anchor="middle">System Design</text>
+      <text x="240" y="317" font-family="Lexend Exa, sans-serif" font-size="13" fill="#00ccff" text-anchor="middle" opacity="0.9">Functional Architecture</text>
+      <text x="240" y="334" font-family="Lexend Exa, sans-serif" font-size="11" fill="#00ccff" text-anchor="middle" opacity="0.75">🔄 Git branches &amp; PRs</text>
       
       <!-- Animated flow to Git -->
-      <circle r="4" fill="#00ccff" opacity="0.8">
-        <animateMotion dur="2.5s" repeatCount="indefinite" path="M 380 320 L 670 350" begin="0.5s"/>
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="2.5s" repeatCount="indefinite" begin="0.5s"/>
+      <circle r="3.5" fill="#00ccff" opacity="0.85">
+        <animateMotion dur="2.8s" repeatCount="indefinite" path="M 360 302 L 680 340" begin="0.6s"/>
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2.8s" repeatCount="indefinite" begin="0.6s"/>
       </circle>
-      <path d="M 380 320 L 670 350" stroke="#00ccff" stroke-width="3" marker-end="url(#arrowTurquoise)" opacity="0.7" stroke-dasharray="6,4"/>
+      <path d="M 360 302 L 680 340" stroke="#00ccff" stroke-width="2.5" marker-end="url(#arrowTurquoise)" opacity="0.65" stroke-dasharray="5,4"/>
     </g>
     
     <!-- Detailed Design -->
     <g id="detailed-design">
-      <rect x="150" y="410" width="280" height="100" rx="12" fill="rgba(0,204,255,0.1)" stroke="#00ccff" stroke-width="3" filter="url(#glow)"/>
-      <rect x="150" y="410" width="280" height="100" fill="url(#flowPattern)"/>
-      <text x="290" y="445" font-family="Lexend Exa, sans-serif" font-size="20" fill="#00ccff" font-weight="700" text-anchor="middle">Detailed Design</text>
-      <text x="290" y="470" font-family="Lexend Exa, sans-serif" font-size="14" fill="#00ccff" text-anchor="middle" opacity="0.9">Concept &amp; Physical Arch</text>
-      <text x="290" y="490" font-family="Lexend Exa, sans-serif" font-size="12" fill="#00ccff" text-anchor="middle" opacity="0.7">🔗 Traceability links</text>
+      <rect x="190" y="380" width="240" height="85" rx="12" fill="rgba(0,204,255,0.12)" stroke="#00ccff" stroke-width="2.5" filter="url(#glow)"/>
+      <text x="310" y="415" font-family="Lexend Exa, sans-serif" font-size="19" fill="#00ccff" font-weight="700" text-anchor="middle">Detailed Design</text>
+      <text x="310" y="437" font-family="Lexend Exa, sans-serif" font-size="13" fill="#00ccff" text-anchor="middle" opacity="0.9">Concept &amp; Physical Arch</text>
+      <text x="310" y="454" font-family="Lexend Exa, sans-serif" font-size="11" fill="#00ccff" text-anchor="middle" opacity="0.75">🔗 Traceability links</text>
       
       <!-- Animated flow to Git -->
-      <circle r="4" fill="#00ccff" opacity="0.8">
-        <animateMotion dur="3s" repeatCount="indefinite" path="M 380 450 L 670 500" begin="1s"/>
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite" begin="1s"/>
+      <circle r="3.5" fill="#00ccff" opacity="0.85">
+        <animateMotion dur="3.1s" repeatCount="indefinite" path="M 430 422 L 680 480" begin="1.2s"/>
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="3.1s" repeatCount="indefinite" begin="1.2s"/>
       </circle>
-      <path d="M 380 450 L 670 500" stroke="#00ccff" stroke-width="3" marker-end="url(#arrowTurquoise)" opacity="0.7" stroke-dasharray="6,4"/>
+      <path d="M 430 422 L 680 480" stroke="#00ccff" stroke-width="2.5" marker-end="url(#arrowTurquoise)" opacity="0.65" stroke-dasharray="5,4"/>
     </g>
     
     <!-- Implementation (bottom of V) -->
     <g id="implementation">
-      <rect x="175" y="540" width="280" height="80" rx="12" fill="rgba(0,204,255,0.1)" stroke="#00ccff" stroke-width="3" filter="url(#glow)"/>
-      <rect x="175" y="540" width="280" height="80" fill="url(#flowPattern)"/>
-      <text x="315" y="575" font-family="Lexend Exa, sans-serif" font-size="20" fill="#00ccff" font-weight="700" text-anchor="middle">Implementation</text>
-      <text x="315" y="600" font-family="Lexend Exa, sans-serif" font-size="14" fill="#00ccff" text-anchor="middle" opacity="0.9">Model-to-Code</text>
-      <text x="315  " y="620" font-family="Lexend Exa, sans-serif" font-size="12" fill="#00ccff" text-anchor="middle" opacity="0.7">⚡ Codegen from models</text>
+      <rect x="260" y="500" width="240" height="75" rx="12" fill="rgba(0,204,255,0.12)" stroke="#00ccff" stroke-width="2.5" filter="url(#glow)"/>
+      <text x="380" y="535" font-family="Lexend Exa, sans-serif" font-size="19" fill="#00ccff" font-weight="700" text-anchor="middle">Implementation</text>
+      <text x="380" y="557" font-family="Lexend Exa, sans-serif" font-size="13" fill="#00ccff" text-anchor="middle" opacity="0.9">Model-to-Code</text>
+      <text x="380" y="572" font-family="Lexend Exa, sans-serif" font-size="11" fill="#00ccff" text-anchor="middle" opacity="0.75">⚡ Codegen from models</text>
       
       <!-- Animated flow to Git -->
-      <circle r="4" fill="#00ccff" opacity="0.8">
-        <animateMotion dur="3.5s" repeatCount="indefinite" path="M 380 580 L 670 650" begin="1.5s"/>
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="3.5s" repeatCount="indefinite" begin="1.5s"/>
+      <circle r="3.5" fill="#00ccff" opacity="0.85">
+        <animateMotion dur="3.4s" repeatCount="indefinite" path="M 500 537 L 680 620" begin="1.8s"/>
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="3.4s" repeatCount="indefinite" begin="1.8s"/>
       </circle>
-      <path d="M 380 580 L 670 650" stroke="#00ccff" stroke-width="3" marker-end="url(#arrowTurquoise)" opacity="0.7" stroke-dasharray="6,4"/>
+      <path d="M 500 537 L 680 620" stroke="#00ccff" stroke-width="2.5" marker-end="url(#arrowTurquoise)" opacity="0.65" stroke-dasharray="5,4"/>
     </g>
   </g>
   
-  <!-- Right side: Verification/Validation (ascending) -->
+  <!-- Right side: Verification/Validation (ascending) - True V-shape -->
   <g id="right-side">
     <!-- Unit Testing (bottom right) -->
     <g id="unit-test">
-      <rect x="1020" y="540" width="280" height="80" rx="12" fill="rgba(255,102,0,0.1)" stroke="#ff6600" stroke-width="3" filter="url(#glow)"/>
-      <rect x="1020" y="540" width="280" height="80" fill="url(#flowPattern)"/>
-      <text x="1160" y="575" font-family="Lexend Exa, sans-serif" font-size="20" fill="#ff6600" font-weight="700" text-anchor="middle">Unit Testing</text>
-      <text x="1160" y="600" font-family="Lexend Exa, sans-serif" font-size="14" fill="#ff6600" text-anchor="middle" opacity="0.9">Component Validation</text>
-      <text x="1160" y="620" font-family="Lexend Exa, sans-serif" font-size="12" fill="#ff6600" text-anchor="middle" opacity="0.7">✅ Test cases in Git</text>
+      <rect x="900" y="500" width="240" height="75" rx="12" fill="rgba(200,0,100,0.12)" stroke="#C80064" stroke-width="2.5" filter="url(#glow)"/>
+      <text x="1020" y="535" font-family="Lexend Exa, sans-serif" font-size="19" fill="#C80064" font-weight="700" text-anchor="middle">Unit Testing</text>
+      <text x="1020" y="557" font-family="Lexend Exa, sans-serif" font-size="13" fill="#C80064" text-anchor="middle" opacity="0.9">Component Validation</text>
+      <text x="1020" y="572" font-family="Lexend Exa, sans-serif" font-size="11" fill="#C80064" text-anchor="middle" opacity="0.75">✅ Test cases in Git</text>
       
       <!-- Animated flow from Git -->
-      <circle r="4" fill="#ff6600" opacity="0.8">
-        <animateMotion dur="3.5s" repeatCount="indefinite" path="M 730 650 L 1000 580" begin="1.5s"/>
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="3.5s" repeatCount="indefinite" begin="1.5s"/>
+      <circle r="3.5" fill="#C80064" opacity="0.85">
+        <animateMotion dur="3.4s" repeatCount="indefinite" path="M 720 620 L 900 537" begin="1.8s"/>
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="3.4s" repeatCount="indefinite" begin="1.8s"/>
       </circle>
-      <path d="M 730 650 L 1000 580" stroke="#ff6600" stroke-width="3" marker-end="url(#arrowCoral)" opacity="0.7" stroke-dasharray="6,4"/>
+      <path d="M 720 620 L 900 537" stroke="#C80064" stroke-width="2.5" marker-end="url(#arrowAubergine)" opacity="0.65" stroke-dasharray="5,4"/>
     </g>
     
     <!-- Integration Testing -->
     <g id="integration-test">
-      <rect x="1020" y="410" width="280" height="80" rx="12" fill="rgba(255,102,0,0.1)" stroke="#ff6600" stroke-width="3" filter="url(#glow)"/>
-      <rect x="1020" y="410" width="280" height="80" fill="url(#flowPattern)"/>
-      <text x="1160" y="445" font-family="Lexend Exa, sans-serif" font-size="20" fill="#ff6600" font-weight="700" text-anchor="middle">Integration Testing</text>
-      <text x="1160" y="470" font-family="Lexend Exa, sans-serif" font-size="14" fill="#ff6600" text-anchor="middle" opacity="0.9">System Integration</text>
-      <text x="1160" y="490" font-family="Lexend Exa, sans-serif" font-size="12" fill="#ff6600" text-anchor="middle" opacity="0.7">🔍 CI/CD validation</text>
+      <rect x="970" y="380" width="240" height="85" rx="12" fill="rgba(200,0,100,0.12)" stroke="#C80064" stroke-width="2.5" filter="url(#glow)"/>
+      <text x="1090" y="415" font-family="Lexend Exa, sans-serif" font-size="19" fill="#C80064" font-weight="700" text-anchor="middle">Integration Testing</text>
+      <text x="1090" y="437" font-family="Lexend Exa, sans-serif" font-size="13" fill="#C80064" text-anchor="middle" opacity="0.9">System Integration</text>
+      <text x="1090" y="454" font-family="Lexend Exa, sans-serif" font-size="11" fill="#C80064" text-anchor="middle" opacity="0.75">🔍 CI/CD validation</text>
       
       <!-- Animated flow from Git -->
-      <circle r="4" fill="#ff6600" opacity="0.8">
-        <animateMotion dur="3s" repeatCount="indefinite" path="M 730 500 L 1000 450" begin="1s"/>
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite" begin="1s"/>
+      <circle r="3.5" fill="#C80064" opacity="0.85">
+        <animateMotion dur="3.1s" repeatCount="indefinite" path="M 720 480 L 970 422" begin="1.2s"/>
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="3.1s" repeatCount="indefinite" begin="1.2s"/>
       </circle>
-      <path d="M 730 500 L 1000 450" stroke="#ff6600" stroke-width="3" marker-end="url(#arrowCoral)" opacity="0.7" stroke-dasharray="6,4"/>
+      <path d="M 720 480 L 970 422" stroke="#C80064" stroke-width="2.5" marker-end="url(#arrowAubergine)" opacity="0.65" stroke-dasharray="5,4"/>
     </g>
     
     <!-- System Testing -->
     <g id="system-test">
-      <rect x="1020" y="280" width="280" height="80" rx="12" fill="rgba(255,102,0,0.1)" stroke="#ff6600" stroke-width="3" filter="url(#glow)"/>
-      <rect x="1020" y="280" width="280" height="80" fill="url(#flowPattern)"/>
-      <text x="1160" y="315" font-family="Lexend Exa, sans-serif" font-size="20" fill="#ff6600" font-weight="700" text-anchor="middle">System Testing</text>
-      <text x="1160" y="340" font-family="Lexend Exa, sans-serif" font-size="14" fill="#ff6600" text-anchor="middle" opacity="0.9">Requirements Verification</text>
-      <text x="1160" y="360" font-family="Lexend Exa, sans-serif" font-size="12" fill="#ff6600" text-anchor="middle" opacity="0.7">📊 Traceability reports</text>
+      <rect x="1040" y="260" width="240" height="85" rx="12" fill="rgba(200,0,100,0.12)" stroke="#C80064" stroke-width="2.5" filter="url(#glow)"/>
+      <text x="1160" y="295" font-family="Lexend Exa, sans-serif" font-size="19" fill="#C80064" font-weight="700" text-anchor="middle">System Testing</text>
+      <text x="1160" y="317" font-family="Lexend Exa, sans-serif" font-size="13" fill="#C80064" text-anchor="middle" opacity="0.9">Requirements Verification</text>
+      <text x="1160" y="334" font-family="Lexend Exa, sans-serif" font-size="11" fill="#C80064" text-anchor="middle" opacity="0.75">📊 Traceability reports</text>
       
       <!-- Animated flow from Git -->
-      <circle r="4" fill="#ff6600" opacity="0.8">
-        <animateMotion dur="2.5s" repeatCount="indefinite" path="M 730 350 L 1000 320" begin="0.5s"/>
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="2.5s" repeatCount="indefinite" begin="0.5s"/>
+      <circle r="3.5" fill="#C80064" opacity="0.85">
+        <animateMotion dur="2.8s" repeatCount="indefinite" path="M 720 340 L 1040 302" begin="0.6s"/>
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2.8s" repeatCount="indefinite" begin="0.6s"/>
       </circle>
-      <path d="M 730 350 L 1000 320" stroke="#ff6600" stroke-width="3" marker-end="url(#arrowCoral)" opacity="0.7" stroke-dasharray="6,4"/>
+      <path d="M 720 340 L 1040 302" stroke="#C80064" stroke-width="2.5" marker-end="url(#arrowAubergine)" opacity="0.65" stroke-dasharray="5,4"/>
     </g>
     
     <!-- Acceptance Testing (top right) -->
     <g id="acceptance-test">
-      <rect x="1020" y="150" width="280" height="80" rx="12" fill="rgba(255,102,0,0.1)" stroke="#ff6600" stroke-width="3" filter="url(#glow)"/>
-      <rect x="1020" y="150" width="280" height="80" fill="url(#flowPattern)"/>
-      <text x="1160" y="185" font-family="Lexend Exa, sans-serif" font-size="20" fill="#ff6600" font-weight="700" text-anchor="middle">Acceptance Testing</text>
-      <text x="1160" y="210" font-family="Lexend Exa, sans-serif" font-size="14" fill="#ff6600" text-anchor="middle" opacity="0.9">User Validation</text>
-      <text x="1160" y="230" font-family="Lexend Exa, sans-serif" font-size="12" fill="#ff6600" text-anchor="middle" opacity="0.7">🎯 Use case validation</text>
+      <rect x="1110" y="140" width="240" height="85" rx="12" fill="rgba(200,0,100,0.12)" stroke="#C80064" stroke-width="2.5" filter="url(#glow)"/>
+      <text x="1230" y="175" font-family="Lexend Exa, sans-serif" font-size="19" fill="#C80064" font-weight="700" text-anchor="middle">Acceptance Testing</text>
+      <text x="1230" y="197" font-family="Lexend Exa, sans-serif" font-size="13" fill="#C80064" text-anchor="middle" opacity="0.9">User Validation</text>
+      <text x="1230" y="214" font-family="Lexend Exa, sans-serif" font-size="11" fill="#C80064" text-anchor="middle" opacity="0.75">🎯 Use case validation</text>
       
       <!-- Animated flow from Git -->
-      <circle r="4" fill="#ff6600" opacity="0.8">
-        <animateMotion dur="2s" repeatCount="indefinite" path="M 730 200 L 1000 190"/>
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+      <circle r="3.5" fill="#C80064" opacity="0.85">
+        <animateMotion dur="2.5s" repeatCount="indefinite" path="M 720 200 L 1110 182"/>
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
       </circle>
-      <path d="M 730 200 L 1000 190" stroke="#ff6600" stroke-width="3" marker-end="url(#arrowCoral)" opacity="0.7" stroke-dasharray="6,4"/>
+      <path d="M 720 200 L 1110 182" stroke="#C80064" stroke-width="2.5" marker-end="url(#arrowAubergine)" opacity="0.65" stroke-dasharray="5,4"/>
     </g>
   </g>
   
-  <!-- V-Model connecting lines (more pronounced V shape) -->
-  <g id="v-connections" opacity="0.6">
-    <!-- Left side descending (steeper angle) -->
-    <path d="M 240 230 L 240 280" stroke="#00ccff" stroke-width="3.5" marker-end="url(#arrowTurquoise)"/>
-    <path d="M 240 360 L 240 410" stroke="#00ccff" stroke-width="3.5" marker-end="url(#arrowTurquoise)"/>
-    <path d="M 240 490 L 240 540" stroke="#00ccff" stroke-width="3.5" marker-end="url(#arrowTurquoise)"/>
+  <!-- V-Model connecting lines - Optimized to follow true V-shape -->
+  <g id="v-connections" opacity="0.7">
+    <!-- Left side descending - diagonal following V-shape -->
+    <path d="M 170 225 L 240 302" stroke="#00ccff" stroke-width="3" marker-end="url(#arrowTurquoise)" stroke-dasharray="6,3">
+      <animate attributeName="stroke-dashoffset" values="0;12" dur="2s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 240 345 L 310 422" stroke="#00ccff" stroke-width="3" marker-end="url(#arrowTurquoise)" stroke-dasharray="6,3">
+      <animate attributeName="stroke-dashoffset" values="0;12" dur="2.2s" repeatCount="indefinite" begin="0.3s"/>
+    </path>
+    <path d="M 310 465 L 380 537" stroke="#00ccff" stroke-width="3" marker-end="url(#arrowTurquoise)" stroke-dasharray="6,3">
+      <animate attributeName="stroke-dashoffset" values="0;12" dur="2.4s" repeatCount="indefinite" begin="0.6s"/>
+    </path>
     
-    <!-- Right side ascending (steeper angle) -->
-    <path d="M 1160 620 L 1160 540" stroke="#ff6600" stroke-width="3.5" marker-end="url(#arrowCoral)"/>
-    <path d="M 1160 490 L 1160 410" stroke="#ff6600" stroke-width="3.5" marker-end="url(#arrowCoral)"/>
-    <path d="M 1160 360 L 1160 280" stroke="#ff6600" stroke-width="3.5" marker-end="url(#arrowCoral)"/>
-    <path d="M 1160 230 L 1160 150" stroke="#ff6600" stroke-width="3.5" marker-end="url(#arrowCoral)"/>
+    <!-- Right side ascending - diagonal following V-shape -->
+    <path d="M 1020 575 L 1090 500" stroke="#C80064" stroke-width="3" marker-end="url(#arrowAubergine)" stroke-dasharray="6,3">
+      <animate attributeName="stroke-dashoffset" values="0;12" dur="2.4s" repeatCount="indefinite" begin="0.6s"/>
+    </path>
+    <path d="M 1090 465 L 1160 380" stroke="#C80064" stroke-width="3" marker-end="url(#arrowAubergine)" stroke-dasharray="6,3">
+      <animate attributeName="stroke-dashoffset" values="0;12" dur="2.2s" repeatCount="indefinite" begin="0.3s"/>
+    </path>
+    <path d="M 1160 345 L 1230 260" stroke="#C80064" stroke-width="3" marker-end="url(#arrowAubergine)" stroke-dasharray="6,3">
+      <animate attributeName="stroke-dashoffset" values="0;12" dur="2s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 1230 225 L 1230 182" stroke="#C80064" stroke-width="3" marker-end="url(#arrowAubergine)" stroke-dasharray="6,3">
+      <animate attributeName="stroke-dashoffset" values="0;12" dur="1.8s" repeatCount="indefinite" begin="0.2s"/>
+    </path>
     
-    <!-- Bottom connection (Implementation to Unit Test) - horizontal with animation -->
-    <path d="M 380 580 L 1020 580" stroke="#00ccff" stroke-width="4" stroke-dasharray="10,5" opacity="0.7" marker-end="url(#arrowTurquoise)">
-      <animate attributeName="stroke-dashoffset" values="0;30" dur="3s" repeatCount="indefinite"/>
+    <!-- Bottom connection (Implementation to Unit Test) - precisely aligned to box centers -->
+    <path d="M 380 537 L 1020 537" stroke="#00ccff" stroke-width="3.5" stroke-dasharray="8,4" opacity="0.75" marker-end="url(#arrowTurquoise)">
+      <animate attributeName="stroke-dashoffset" values="0;20" dur="3s" repeatCount="indefinite"/>
     </path>
     <!-- Animated flow along bottom -->
-    <circle r="6" fill="#00ccff" opacity="0.9">
-      <animateMotion dur="3s" repeatCount="indefinite" path="M 380 580 L 1020 580"/>
-      <animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite"/>
+    <circle r="5" fill="#00ccff" opacity="0.9">
+      <animateMotion dur="3s" repeatCount="indefinite" path="M 380 537 L 1020 537"/>
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite"/>
     </circle>
   </g>
   
-  <!-- Key features callout - positioned on the left -->
+  <!-- Key features callout - harmonized positioning -->
   <g id="features">
-    <rect x="100" y="700" width="500" height="160" rx="15" fill="rgba(0,204,255,0.08)" stroke="#00ccff" stroke-width="3" filter="url(#glow)"/>
-    <text x="350" y="730" font-family="Lexend Exa, sans-serif" font-size="22" fill="#00ccff" font-weight="700" text-anchor="middle">Git-Based Integration Benefits</text>
+    <rect x="80" y="620" width="480" height="150" rx="12" fill="rgba(0,204,255,0.1)" stroke="#00ccff" stroke-width="2.5" filter="url(#glow)"/>
+    <text x="320" y="650" font-family="Lexend Exa, sans-serif" font-size="20" fill="#00ccff" font-weight="700" text-anchor="middle">Git-Based Integration Benefits</text>
     
-    <text x="120" y="760" font-family="Lexend Exa, sans-serif" font-size="14" fill="#00ccff" opacity="0.9">✓ Version control for all SysML v2 models</text>
-    <text x="120" y="785" font-family="Lexend Exa, sans-serif" font-size="14" fill="#00ccff" opacity="0.9">✓ Branch-based development workflows</text>
-    <text x="120" y="810" font-family="Lexend Exa, sans-serif" font-size="14" fill="#00ccff" opacity="0.9">✓ Automated traceability &amp; validation</text>
-    <text x="120" y="835" font-family="Lexend Exa, sans-serif" font-size="14" fill="#00ccff" opacity="0.9">✓ Collaborative model reviews via PRs</text>
+    <text x="100" y="680" font-family="Lexend Exa, sans-serif" font-size="13" fill="#00ccff" opacity="0.9">✓ Version control for all SysML v2 models</text>
+    <text x="100" y="705" font-family="Lexend Exa, sans-serif" font-size="13" fill="#00ccff" opacity="0.9">✓ Branch-based development workflows</text>
+    <text x="100" y="730" font-family="Lexend Exa, sans-serif" font-size="13" fill="#00ccff" opacity="0.9">✓ Automated traceability &amp; validation</text>
+    <text x="100" y="755" font-family="Lexend Exa, sans-serif" font-size="13" fill="#00ccff" opacity="0.9">✓ Collaborative model reviews via PRs</text>
   </g>
   
-  <!-- SysML v2 + Git logo combo - positioned on the right, next to benefits box -->
-  <g id="logo-combo" transform="translate(650, 750)">
-    <rect x="0" y="0" width="200" height="50" rx="8" fill="rgba(0,204,255,0.1)" stroke="#00ccff" stroke-width="2"/>
-    <text x="100" y="20" font-family="Lexend Exa, sans-serif" font-size="14" fill="#00ccff" font-weight="600" text-anchor="middle">SysML v2</text>
-    <text x="100" y="38" font-family="Lexend Exa, sans-serif" font-size="12" fill="#00ccff" text-anchor="middle" opacity="0.8">+ Git Integration</text>
+  <!-- SysML v2 + Git logo combo - aligned next to benefits box -->
+  <g id="logo-combo" transform="translate(600, 650)">
+    <rect x="0" y="0" width="180" height="45" rx="8" fill="rgba(0,204,255,0.12)" stroke="#00ccff" stroke-width="2" opacity="0.9"/>
+    <text x="90" y="18" font-family="Lexend Exa, sans-serif" font-size="13" fill="#00ccff" font-weight="600" text-anchor="middle">SysML v2</text>
+    <text x="90" y="35" font-family="Lexend Exa, sans-serif" font-size="11" fill="#00ccff" text-anchor="middle" opacity="0.85">+ Git Integration</text>
   </g>
 </svg>
