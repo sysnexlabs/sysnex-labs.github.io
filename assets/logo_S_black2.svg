@@ -4,12 +4,12 @@
 <svg
    version="1.1"
    id="svg1"
-   width="429.36539"
-   height="615.09772"
-   viewBox="0 0 429.36539 615.09772"
+   width="428.98941"
+   height="614.72174"
+   viewBox="0 0 428.98941 614.72177"
    sodipodi:docname="logo_S_black2.svg"
    inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
-   inkscape:export-filename="logo_S_black_tr.svg"
+   inkscape:export-filename="logo_S_black_big.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -47,26 +47,27 @@
      inkscape:deskcolor="#d1d1d1"
      showguides="true"
      inkscape:zoom="0.47447638"
-     inkscape:cx="197.05933"
+     inkscape:cx="197.05934"
      inkscape:cy="328.78349"
      inkscape:window-width="1440"
      inkscape:window-height="841"
      inkscape:window-x="0"
      inkscape:window-y="31"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g6-0">
+     inkscape:current-layer="g1"
+     inkscape:export-bgcolor="#00000000">
     <sodipodi:guide
-       position="212.28001,910.84468"
+       position="212.28,910.84469"
        orientation="1,0"
        id="guide1"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="-232.22006,673.76484"
+       position="-232.22007,673.76485"
        orientation="0,-1"
        id="guide2"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="-374.12251,386.0182"
+       position="-374.12252,386.01821"
        orientation="0,-1"
        id="guide3"
        inkscape:locked="false" />

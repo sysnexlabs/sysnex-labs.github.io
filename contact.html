@@ -9,41 +9,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <header class="navbar">
-    <div class="brand">
-      <img src="assets/logo_S_black2.svg" alt="Sysnex Labs" class="logo" />
-      <span class="brand-text"><span class="brand-text-primary">SYSNEX</span><span class="brand-text-secondary">Labs</span></span>
-    </div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="methods.html">Methods</a>
-      <a href="tools.html">Tools</a>
-      <a href="process.html">Process</a>
-      <a href="contact.html" class="active">Contact</a>
-    </nav>
-  </header>
+<body data-page="contact">
+  <div data-include="partials/header.html"></div>
 
   <main class="content">
-    <h1>Contact</h1>
-    <p>Interested in collaboration, research partnerships, or pilot projects?</p>
-    <p>Email: <a href="mailto:sysnex.labs.github@gmail.com">sysnex.labs.github@gmail.com</a></p>
+    <h1 data-i18n="contact.title">Contact</h1>
+    <p data-i18n="contact.intro">Interested in collaboration, research partnerships, or pilot projects?</p>
+    <p>
+      <span data-i18n="contact.email.label">Email:</span>
+      <a href="mailto:sysnex.labs.github@gmail.com" data-i18n="contact.email.address">sysnex.labs.github@gmail.com</a>
+    </p>
   </main>
 
-  <footer role="contentinfo">
-    <div class="foot-brand">
-      <img src="assets/logo_S_black2.svg" alt="Sysnex Labs logo" class="foot-logo" />
-      <span class="brand-text"><span class="brand-text-primary">SYSNEX</span><span class="brand-text-secondary">Labs</span></span>
-    </div>
-    <div class="foot-links">
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="methods.html">Methods</a>
-      <a href="tools.html">Tools</a>
-      <a href="process.html">Process</a>
-      <a href="contact.html">Contact</a>
-    </div>
-  </footer>
+  <div data-include="partials/footer.html"></div>
+  <script src="include.js" defer></script>
+  <script src="i18n.js" defer></script>
 </body>
 </html>
