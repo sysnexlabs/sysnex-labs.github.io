@@ -74,6 +74,18 @@ body { font-family: 'Lexend Exa',system-ui,-apple-system,Segoe UI,Roboto,sans-se
 .card:hover .card-icon { transform: scale(1.1) rotate(5deg);}
 .card h3 { margin:0 0 0.5rem 0; color:var(--aubergine);}
 .card p { margin:0;}
+.roadmap { padding:4rem 1.25rem 4.5rem; background: linear-gradient(180deg, rgba(0,204,255,0.02), rgba(13,13,13,0.85)); }
+.roadmap h2 { color:var(--turquoise); text-align:center; font-size: clamp(1.75rem, 3vw, 2.4rem); margin:0 0 1rem 0;}
+.roadmap-subtitle { max-width: 820px; margin:0 auto 2.5rem auto; text-align:center; line-height:1.7; opacity:0.9;}
+.roadmap-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:1.5rem; max-width:1200px; margin:0 auto;}
+.roadmap-card { padding:1.75rem; background: rgba(13,13,13,0.92); border:1px solid rgba(0,204,255,0.18); border-radius:14px; box-shadow:0 18px 40px rgba(0,0,0,0.35); transition: transform 0.3s ease, border-color 0.3s ease; display:grid; gap:1rem;}
+.roadmap-card:hover { transform: translateY(-4px); border-color: rgba(0,204,255,0.3);}
+.roadmap-card h3 { margin:0; color:var(--aubergine); font-size:1.3rem;}
+.roadmap-card ul { margin:0; padding-left:1.2rem; display:grid; gap:0.65rem; line-height:1.6;}
+.roadmap-note { margin:2.5rem auto 0 auto; text-align:center; font-size:0.95rem; opacity:0.85; max-width:720px;}
+.roadmap-note a { color:var(--turquoise); text-decoration:none; border-bottom:1px solid transparent; transition: border-color 0.2s ease, color 0.2s ease;}
+.roadmap-note a:hover { color:var(--aubergine); border-bottom-color:var(--aubergine);}
+.roadmap-note a:focus-visible { outline: 2px solid var(--turquoise); outline-offset:4px; border-radius:4px;}
 .content { padding:5rem 1.25rem 2rem; max-width:960px; margin:0 auto;}
 .content h1 { color:var(--turquoise);}
 .content h2 { color:var(--turquoise); margin-top: 3rem; margin-bottom: 1.5rem; font-size: clamp(1.5rem, 2.5vw, 2rem);}
@@ -130,6 +142,8 @@ footer { display:flex; justify-content:space-between; padding:1rem 1.25rem; bord
   .lang-toggle { align-self:flex-end; }
   .features{ grid-template-columns:1fr;}
   .benefits-grid { grid-template-columns: 1fr;}
+  .roadmap-grid { grid-template-columns:1fr;}
+  .roadmap-subtitle { margin-bottom:2rem;}
   footer { flex-direction: column; gap: 1rem; align-items: center; text-align: center;}
 }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;}
