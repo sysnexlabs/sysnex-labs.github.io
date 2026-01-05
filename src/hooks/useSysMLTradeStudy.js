@@ -19,6 +19,9 @@ export function useSysMLTradeStudy(code, fileUri = 'editor://current') {
       return null
     }
 
+    console.log('📊 [useSysMLTradeStudy] Starting trade study analysis')
+    console.log('📊 [useSysMLTradeStudy] Chapters:', documentation.chapters.length)
+
     // Extract variants (parts with specialization)
     const variants = []
     const baseTypes = new Set()
@@ -79,13 +82,27 @@ export function useSysMLTradeStudy(code, fileUri = 'editor://current') {
                 if (isAttribute) {
                   const nestedSig = nested.signature || nested.title || ''
                   // Try multiple patterns for numeric values
-                  const valueMatch = nestedSig.match(/=\s*([\d.]+)/) ||
+                  // Pattern 1: :>> attrName = value (redefinition)
+                  // Pattern 2: : Type = value (standard assignment)
+                  // Pattern 3: = value (direct assignment)
+                  // Pattern 4: value at end (fallback)
+                  const valueMatch = nestedSig.match(/:>>\s*\w+\s*=\s*([\d.]+)/) ||
+                                    nestedSig.match(/=\s*([\d.]+)/) ||
                                     nestedSig.match(/:\s*\w+\s*=\s*([\d.]+)/) ||
-                                    nestedSig.match(/([\d.]+)\s*$/)
+                                    nestedSig.match(/([\d.]+)\s*;?\s*(?:\/\/.*)?$/)
 
                   if (valueMatch) {
+                    // Extract attribute name - handle various patterns
+                    let attrName = nested.title || 'unnamed'
+
+                    // If signature has :>> pattern, extract the redefined name
+                    const redefMatch = nestedSig.match(/:>>\s*(\w+)/)
+                    if (redefMatch) {
+                      attrName = redefMatch[1]
+                    }
+
                     attributes.push({
-                      name: nested.title || 'unnamed',
+                      name: attrName,
                       value: parseFloat(valueMatch[1]),
                       signature: nestedSig
                     })
@@ -110,7 +127,15 @@ export function useSysMLTradeStudy(code, fileUri = 'editor://current') {
       }
     })
 
+    // Debug logging
+    console.log('🔍 [useSysMLTradeStudy] Extracted variants:', variants.length)
+    variants.forEach((v, i) => {
+      console.log(`  Variant ${i + 1}: ${v.name}, baseType: ${v.baseType}, attributes:`, v.attributes)
+    })
+    console.log('🔍 [useSysMLTradeStudy] Base types found:', Array.from(baseTypes))
+
     if (variants.length === 0) {
+      console.warn('⚠️ [useSysMLTradeStudy] No variants extracted!')
       return { variants: [], scores: [], comparisons: [], attributeNames: [], recommendation: null }
     }
 
