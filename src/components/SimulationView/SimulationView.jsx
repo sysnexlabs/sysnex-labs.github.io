@@ -1,7 +1,10 @@
 import React, { useState, useMemo } from 'react'
 import { useSysMLDocumentation } from '../../hooks/useSysMLWasm'
 import { useSysMLAnalytics } from '../../hooks/useSysMLAnalytics'
+import { useSysMLSimulation } from '../../hooks/useSysMLSimulation'
 import SpotlightCard from '../SpotlightCard'
+import ExecutionTimeline from './ExecutionTimeline'
+import StateTransitionGraph from './StateTransitionGraph'
 import './SimulationView.css'
 
 /**
@@ -12,7 +15,8 @@ import './SimulationView.css'
 export default function SimulationView({ code }) {
   const { documentation, loading: docLoading } = useSysMLDocumentation(code, 'editor://current')
   const { analytics, loading: analyticsLoading } = useSysMLAnalytics(code, 'editor://current')
-  const [activeTab, setActiveTab] = useState('states')
+  const { simulation, loading: simLoading } = useSysMLSimulation(code, 'editor://current')
+  const [activeTab, setActiveTab] = useState('execution')
 
   // Extract state definitions (state machines)
   const stateMachines = useMemo(() => {
@@ -95,7 +99,7 @@ export default function SimulationView({ code }) {
     return scenarioList
   }, [documentation])
 
-  if (docLoading || analyticsLoading) {
+  if (docLoading || analyticsLoading || simLoading) {
     return (
       <div className="simulation-view">
         <div className="simulation-loading">Extracting simulation data...</div>
@@ -118,19 +122,32 @@ export default function SimulationView({ code }) {
       <div className="simulation-header">
         <h3>Simulation Analysis</h3>
         <div className="simulation-stats">
-          <span className="sim-stat">
-            <strong>{stateMachines.length}</strong> State Machines
-          </span>
-          <span className="sim-stat">
-            <strong>{actions.length}</strong> Actions
-          </span>
-          <span className="sim-stat">
-            <strong>{scenarios.length}</strong> Scenarios
-          </span>
+          {simulation && simulation.stats && (
+            <>
+              <span className="sim-stat">
+                <strong>{simulation.stats.totalStates}</strong> States
+              </span>
+              <span className="sim-stat">
+                <strong>{simulation.stats.totalTransitions}</strong> Transitions
+              </span>
+              <span className="sim-stat">
+                <strong>{simulation.stats.totalActions}</strong> Actions
+              </span>
+              <span className="sim-stat">
+                <strong>{simulation.stats.estimatedExecutionTime}ms</strong> Est. Execution
+              </span>
+            </>
+          )}
         </div>
       </div>
 
       <div className="simulation-tabs">
+        <button
+          className={`sim-tab ${activeTab === 'execution' ? 'active' : ''}`}
+          onClick={() => setActiveTab('execution')}
+        >
+          Execution Flow
+        </button>
         <button
           className={`sim-tab ${activeTab === 'states' ? 'active' : ''}`}
           onClick={() => setActiveTab('states')}
@@ -149,15 +166,74 @@ export default function SimulationView({ code }) {
         >
           Calculations
         </button>
-        <button
-          className={`sim-tab ${activeTab === 'scenarios' ? 'active' : ''}`}
-          onClick={() => setActiveTab('scenarios')}
-        >
-          Scenarios
-        </button>
       </div>
 
       <div className="simulation-content">
+        {activeTab === 'execution' && (
+          <div className="execution-view">
+            {simulation && simulation.timeline && simulation.timeline.length > 0 ? (
+              <>
+                {/* Execution Statistics */}
+                <div className="execution-stats">
+                  <h4>Execution Statistics</h4>
+                  <div className="stats-grid">
+                    <SpotlightCard>
+                      <div className="stat-card">
+                        <div className="stat-label">Total Events</div>
+                        <div className="stat-value">{simulation.timeline.length}</div>
+                      </div>
+                    </SpotlightCard>
+                    <SpotlightCard>
+                      <div className="stat-card">
+                        <div className="stat-label">Execution Time</div>
+                        <div className="stat-value">{simulation.stats.estimatedExecutionTime}ms</div>
+                      </div>
+                    </SpotlightCard>
+                    <SpotlightCard>
+                      <div className="stat-card">
+                        <div className="stat-label">Avg Action Duration</div>
+                        <div className="stat-value">{Math.round(simulation.stats.averageActionDuration)}ms</div>
+                      </div>
+                    </SpotlightCard>
+                    <SpotlightCard>
+                      <div className="stat-card">
+                        <div className="stat-label">Max Calc Complexity</div>
+                        <div className="stat-value">{simulation.stats.maxCalculationComplexity}</div>
+                      </div>
+                    </SpotlightCard>
+                  </div>
+                </div>
+
+                {/* Execution Timeline */}
+                <SpotlightCard>
+                  <ExecutionTimeline
+                    timeline={simulation.timeline}
+                    totalDuration={simulation.stats.estimatedExecutionTime}
+                  />
+                </SpotlightCard>
+
+                {/* State Transition Graphs */}
+                {simulation.stateMachines && simulation.stateMachines.length > 0 && (
+                  <div className="state-graphs">
+                    <h4>State Transition Graphs</h4>
+                    <div className="graphs-grid">
+                      {simulation.stateMachines.map((sm, idx) => (
+                        <SpotlightCard key={idx}>
+                          <StateTransitionGraph stateMachine={sm} />
+                        </SpotlightCard>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="simulation-empty">
+                No execution flow found. Define state machines and actions to see simulation execution.
+              </div>
+            )}
+          </div>
+        )}
+
         {activeTab === 'states' && (
           <div className="state-machines-list">
             {stateMachines.length > 0 ? (
