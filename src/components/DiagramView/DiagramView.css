@@ -297,3 +297,74 @@
   margin: 0 0 1.5rem 0;
   font-size: 0.9rem;
 }
+
+/* State Machine Diagram Styles */
+.state-diagram-container {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.state-diagram-svg {
+  width: 100%;
+  height: auto;
+  min-height: 400px;
+  max-height: 800px;
+  background: #fafafa;
+  border-radius: 4px;
+}
+
+.state-node {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.state-node:hover {
+  transform: scale(1.05);
+}
+
+.state-node:hover rect {
+  filter: brightness(0.95);
+}
+
+/* Legend styles for state machines */
+.legend-symbol.initial-state {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #2c3e50;
+  border: 2px solid #2c3e50;
+}
+
+.legend-symbol.normal-state {
+  background: #e8f4f8;
+  border: 2px solid #2c3e50;
+  border-radius: 4px;
+}
+
+.legend-symbol.final-state {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #2c3e50;
+  border: 3px double #2c3e50;
+}
+
+.legend-symbol.transition-line {
+  background: linear-gradient(90deg, transparent 48%, #2c3e50 48%, #2c3e50 52%, transparent 52%);
+  position: relative;
+}
+
+.legend-symbol.transition-line::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid #2c3e50;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+}

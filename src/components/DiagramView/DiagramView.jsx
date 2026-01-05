@@ -4,6 +4,7 @@ import { useSysMLHir } from '../../hooks/useSysMLHir'
 import SpotlightCard from '../SpotlightCard'
 import TreeView from '../DocumentationTabs/TreeView'
 import BlockDiagram from './BlockDiagram'
+import StateMachineDiagram from './StateMachineDiagram'
 import './DiagramView.css'
 
 export default function DiagramView({ code }) {
@@ -151,47 +152,14 @@ export default function DiagramView({ code }) {
 
         {activeTab === 'behavior' && (
           <div className="behavior-view">
-            <h4>State Machines ({diagramElements.states.length})</h4>
-            {diagramElements.states.length > 0 ? (
-              <div className="diagram-elements-list">
-                {diagramElements.states.map((state, index) => (
-                  <SpotlightCard key={index}>
-                    <div className="diagram-element">
-                      <div className="element-header">
-                        <span className="element-badge state">{state.kind}</span>
-                        <h5>{state.title}</h5>
-                      </div>
-                      {state.doc_comment && (
-                        <div className="element-doc">{state.doc_comment}</div>
-                      )}
-                    </div>
-                  </SpotlightCard>
-                ))}
-              </div>
-            ) : (
-              <div className="diagram-empty">No state machines found.</div>
-            )}
-
-            <h4 style={{ marginTop: '2rem' }}>Actions ({diagramElements.actions.length})</h4>
-            {diagramElements.actions.length > 0 ? (
-              <div className="diagram-elements-list">
-                {diagramElements.actions.map((action, index) => (
-                  <SpotlightCard key={index}>
-                    <div className="diagram-element">
-                      <div className="element-header">
-                        <span className="element-badge action">{action.kind}</span>
-                        <h5>{action.title}</h5>
-                      </div>
-                      {action.doc_comment && (
-                        <div className="element-doc">{action.doc_comment}</div>
-                      )}
-                    </div>
-                  </SpotlightCard>
-                ))}
-              </div>
-            ) : (
-              <div className="diagram-empty">No actions found for activity diagrams.</div>
-            )}
+            <h4>State Machine Diagram (STM)</h4>
+            <p className="diagram-description">
+              Interactive visualization of state machines with transitions, entry/exit actions, and activities.
+            </p>
+            <StateMachineDiagram
+              states={diagramElements.states}
+              actions={diagramElements.actions}
+            />
           </div>
         )}
 

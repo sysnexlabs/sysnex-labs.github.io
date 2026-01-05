@@ -14,40 +14,42 @@ export default function BlockDiagram({ parts }) {
     const connections = []
 
     // Layout configuration
-    const blockWidth = 200
-    const blockHeaderHeight = 40
-    const blockAttributeHeight = 25
-    const horizontalSpacing = 80
-    const verticalSpacing = 120
-    const blocksPerRow = 3
+    const blockWidth = 220
+    const blockHeaderHeight = 50
+    const blockAttributeHeight = 22
+    const horizontalSpacing = 100
+    const verticalSpacing = 100
+    const blocksPerRow = Math.min(3, parts.length)
 
     parts.forEach((part, index) => {
       // Calculate position in grid layout
       const row = Math.floor(index / blocksPerRow)
       const col = index % blocksPerRow
-      const x = 50 + col * (blockWidth + horizontalSpacing)
-      const y = 50 + row * (blockHeaderHeight + blockAttributeHeight * 5 + verticalSpacing)
+      const x = 80 + col * (blockWidth + horizontalSpacing)
+      const y = 80 + row * (150 + verticalSpacing)
 
-      // Extract attributes and ports from nested elements
+      // Extract attributes, ports, and child parts from nested elements
       const attributes = []
       const ports = []
       let childParts = []
 
       if (part.nested_elements) {
         part.nested_elements.forEach(nested => {
-          if (nested.kind?.includes('Attribute')) {
+          const nestedKind = nested.kind?.toLowerCase() || ''
+
+          if (nestedKind.includes('attribute') || nestedKind.includes('value')) {
             attributes.push(nested)
-          } else if (nested.kind?.includes('Port')) {
+          } else if (nestedKind.includes('port') || nestedKind.includes('interface')) {
             ports.push(nested)
-          } else if (nested.kind?.includes('Part')) {
+          } else if (nestedKind.includes('part') || nestedKind.includes('usage')) {
             childParts.push(nested)
           }
         })
       }
 
       // Calculate block height based on content
-      const contentCount = Math.max(attributes.length, ports.length, 1)
-      const blockHeight = blockHeaderHeight + (contentCount * blockAttributeHeight) + 10
+      const contentCount = Math.max(attributes.length + ports.length, 2)
+      const blockHeight = blockHeaderHeight + (contentCount * blockAttributeHeight) + 20
 
       blocks.push({
         id: `block-${index}`,
@@ -61,29 +63,86 @@ export default function BlockDiagram({ parts }) {
         ports,
         childParts,
         packageName: part.packageName,
+        index,
       })
+    })
+
+    // Second pass: create connections after all blocks are positioned
+    parts.forEach((part, partIndex) => {
+      const block = blocks[partIndex]
 
       // Create composition connections for child parts
-      childParts.forEach(child => {
-        // Find if child part exists as a top-level block
-        const childIndex = parts.findIndex(p => p.title === child.title)
-        if (childIndex !== -1) {
-          const childRow = Math.floor(childIndex / blocksPerRow)
-          const childCol = childIndex % blocksPerRow
-          const childX = 50 + childCol * (blockWidth + horizontalSpacing)
-          const childY = 50 + childRow * (blockHeaderHeight + blockAttributeHeight * 5 + verticalSpacing)
+      block.childParts.forEach(child => {
+        // Try multiple matching strategies
+        const childName = child.title || child.name
+        const targetBlock = blocks.find(b => {
+          // Direct name match
+          if (b.name === childName) return true
+          // Case insensitive match
+          if (b.name.toLowerCase() === childName.toLowerCase()) return true
+          // Match without suffix/prefix
+          const baseName = childName.replace(/(Def|Usage)$/i, '')
+          if (b.name.replace(/(Def|Usage)$/i, '') === baseName) return true
+          return false
+        })
+
+        if (targetBlock && targetBlock.id !== block.id) {
+          // Calculate connection points
+          const fromX = block.x + block.width / 2
+          const fromY = block.y + block.height
+          const toX = targetBlock.x + targetBlock.width / 2
+          const toY = targetBlock.y
 
           connections.push({
-            from: `block-${index}`,
-            to: `block-${childIndex}`,
+            id: `conn-${block.id}-${targetBlock.id}`,
+            from: block.id,
+            to: targetBlock.id,
             type: 'composition',
-            fromX: x + blockWidth / 2,
-            fromY: y + blockHeight,
-            toX: childX + blockWidth / 2,
-            toY: childY,
+            fromX,
+            fromY,
+            toX,
+            toY,
+            label: childName,
           })
         }
       })
+
+      // Also check for reference/specialization relationships
+      if (part.signature) {
+        // Extract type references from signature (e.g., ": SomeType")
+        const typeMatch = part.signature.match(/:\s*([A-Za-z_][A-Za-z0-9_]*)/g)
+        if (typeMatch) {
+          typeMatch.forEach(match => {
+            const typeName = match.replace(/:\s*/, '')
+            const targetBlock = blocks.find(b => b.name === typeName)
+
+            if (targetBlock && targetBlock.id !== block.id) {
+              const fromX = block.x
+              const fromY = block.y + block.height / 2
+              const toX = targetBlock.x + targetBlock.width
+              const toY = targetBlock.y + targetBlock.height / 2
+
+              connections.push({
+                id: `ref-${block.id}-${targetBlock.id}`,
+                from: block.id,
+                to: targetBlock.id,
+                type: 'reference',
+                fromX,
+                fromY,
+                toX,
+                toY,
+                label: 'type',
+              })
+            }
+          })
+        }
+      }
+    })
+
+    console.log('📊 [BlockDiagram] Generated blocks:', blocks.length)
+    console.log('📊 [BlockDiagram] Generated connections:', connections.length)
+    connections.forEach(conn => {
+      console.log(`  ${conn.type}: ${conn.from} → ${conn.to}`)
     })
 
     return { blocks, connections }
@@ -121,40 +180,84 @@ export default function BlockDiagram({ parts }) {
         viewBox={`0 0 ${width} ${height}`}
         preserveAspectRatio="xMidYMid meet"
       >
-        {/* Define markers for composition diamond */}
+        {/* Define markers for relationships */}
         <defs>
+          {/* Composition diamond (filled) */}
           <marker
             id="composition-diamond"
-            markerWidth="12"
-            markerHeight="12"
-            refX="6"
-            refY="6"
+            markerWidth="14"
+            markerHeight="14"
+            refX="7"
+            refY="7"
             orient="auto"
           >
             <polygon
-              points="6,0 12,6 6,12 0,6"
-              fill="black"
-              stroke="black"
-              strokeWidth="1"
+              points="7,0 14,7 7,14 0,7"
+              fill="#2c3e50"
+              stroke="#2c3e50"
+              strokeWidth="1.5"
+            />
+          </marker>
+
+          {/* Reference arrow (open) */}
+          <marker
+            id="reference-arrow"
+            markerWidth="10"
+            markerHeight="10"
+            refX="5"
+            refY="5"
+            orient="auto"
+          >
+            <path
+              d="M 0,0 L 10,5 L 0,10"
+              fill="none"
+              stroke="#7f8c8d"
+              strokeWidth="1.5"
             />
           </marker>
         </defs>
 
         {/* Render connections first (behind blocks) */}
-        {diagram.connections.map((conn, index) => {
-          // Calculate connection path with some curve
-          const midY = (conn.fromY + conn.toY) / 2
-          const path = `M ${conn.fromX},${conn.fromY} L ${conn.fromX},${midY} L ${conn.toX},${midY} L ${conn.toX},${conn.toY}`
+        {diagram.connections.map((conn) => {
+          // Calculate connection path
+          const dx = conn.toX - conn.fromX
+          const dy = conn.toY - conn.fromY
+          const dist = Math.sqrt(dx * dx + dy * dy)
+
+          let path
+          if (conn.type === 'composition') {
+            // Vertical composition line
+            const midY = (conn.fromY + conn.toY) / 2
+            path = `M ${conn.fromX},${conn.fromY} L ${conn.fromX},${midY} L ${conn.toX},${midY} L ${conn.toX},${conn.toY}`
+          } else {
+            // Horizontal reference line with curve
+            const midX = (conn.fromX + conn.toX) / 2
+            path = `M ${conn.fromX},${conn.fromY} C ${midX},${conn.fromY} ${midX},${conn.toY} ${conn.toX},${conn.toY}`
+          }
+
+          const marker = conn.type === 'composition' ? 'url(#composition-diamond)' : 'url(#reference-arrow)'
+          const strokeStyle = conn.type === 'reference' ? '4,4' : 'none'
 
           return (
-            <g key={`conn-${index}`}>
+            <g key={conn.id}>
               <path
                 d={path}
-                stroke="#666"
+                stroke={conn.type === 'composition' ? '#2c3e50' : '#7f8c8d'}
                 strokeWidth="2"
+                strokeDasharray={strokeStyle}
                 fill="none"
-                markerStart="url(#composition-diamond)"
+                markerStart={marker}
               />
+              {conn.label && conn.type === 'composition' && (
+                <text
+                  x={(conn.fromX + conn.toX) / 2 + 10}
+                  y={(conn.fromY + conn.toY) / 2}
+                  fontSize="10"
+                  fill="#666"
+                >
+                  {conn.label}
+                </text>
+              )}
             </g>
           )
         })}
