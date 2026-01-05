@@ -40,7 +40,9 @@ export function useSysMLAnalytics(code, fileUri = 'editor://current') {
 
       if (wasm) {
         try {
-          const stats = await safeWasmCall(wasm.generate_analytics.bind(wasm), code, fileUri)
+          console.log('🔄 [useSysMLAnalytics] Calling generate_analytics...')
+          const stats = await safeWasmCall(() => wasm.generate_analytics(code, fileUri), 'generate_analytics')
+          console.log('✅ [useSysMLAnalytics] Analytics result:', stats)
           setAnalytics(stats)
           // Cache the result
           analyticsCache.set(cacheKey, stats)
@@ -51,9 +53,11 @@ export function useSysMLAnalytics(code, fileUri = 'editor://current') {
             analyticsCache.delete(firstKey)
           }
         } catch (err) {
+          console.error('❌ [useSysMLAnalytics] Error:', err)
           setError(err.message)
         }
       } else {
+        console.warn('⚠️ [useSysMLAnalytics] WASM module not available')
         setError('WASM module is not available')
       }
 
