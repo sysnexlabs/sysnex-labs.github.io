@@ -5,6 +5,7 @@
  * This should be called when the WASM module is loaded
  */
 export function init_panic_hook(): void;
+export function slugify(s: string): string;
 /**
  * Main SysML Parser and Documentation Provider
  */
@@ -23,6 +24,11 @@ export class SysMLWasm {
    * Generate analytics and statistics
    */
   generate_analytics(source: string, file_uri: string): any;
+  /**
+   * Extract requirements traceability matrix with satisfy/verify relationships
+   * This uses the proper backend traceability API instead of documentation reconstruction
+   */
+  extract_traceability(source: string, file_uri: string): any;
   /**
    * Generate documentation from SysML code
    * Uses Salsa queries which automatically trigger HIR lowering via registered HirLowerer
@@ -44,6 +50,7 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly __wbg_sysmlwasm_free: (a: number, b: number) => void;
+  readonly sysmlwasm_extract_traceability: (a: number, b: number, c: number, d: number, e: number) => [number, number, number];
   readonly sysmlwasm_generate_analytics: (a: number, b: number, c: number, d: number, e: number) => [number, number, number];
   readonly sysmlwasm_generate_cst: (a: number, b: number, c: number, d: number, e: number) => [number, number, number];
   readonly sysmlwasm_generate_documentation: (a: number, b: number, c: number, d: number, e: number) => [number, number, number];
@@ -51,6 +58,7 @@ export interface InitOutput {
   readonly sysmlwasm_new: () => number;
   readonly sysmlwasm_parse: (a: number, b: number, c: number) => [number, number, number];
   readonly init_panic_hook: () => void;
+  readonly slugify: (a: number, b: number) => [number, number];
   readonly __wbindgen_malloc_command_export: (a: number, b: number) => number;
   readonly __wbindgen_realloc_command_export: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_free_command_export: (a: number, b: number, c: number) => void;
