@@ -23,13 +23,22 @@ export default function TestingView({ code }) {
     // Iterate through HIR nodes to find VerificationDefinition nodes
     Object.entries(hirData.nodes).forEach(([nodeId, node]) => {
       if (node.kind && node.kind.includes('VerificationDefinition')) {
-        // Get package name from parent
-        let packageName = 'Unknown Package'
-        if (node.parent && hirData.nodes[node.parent]) {
-          const parent = hirData.nodes[node.parent]
-          if (parent.kind && parent.kind.includes('Package')) {
-            packageName = parent.name || 'Unnamed Package'
+        // Get package name from parent (traverse up the tree)
+        let packageName = 'Global'
+        let currentNode = node
+        let depth = 0
+        while (currentNode && currentNode.parent && depth < 10) {
+          const parentNode = hirData.nodes[currentNode.parent]
+          if (parentNode) {
+            if (parentNode.kind && parentNode.kind.includes('Package')) {
+              packageName = parentNode.name || 'Unnamed Package'
+              break
+            }
+            currentNode = parentNode
+          } else {
+            break
           }
+          depth++
         }
 
         // Extract objectives (verify statements within objective blocks)
@@ -69,9 +78,23 @@ export default function TestingView({ code }) {
           })
         }
 
+        // Clean kind string - extract just the type name
+        let kindDisplay = 'Verification Definition'
+        if (typeof node.kind === 'string') {
+          // If it's a simple string like "VerificationDefinition"
+          kindDisplay = node.kind.replace(/([A-Z])/g, ' $1').trim()
+        } else if (node.kind && typeof node.kind === 'object') {
+          // If it's an object like "VerificationDefinition { ... }"
+          const kindStr = String(node.kind)
+          const match = kindStr.match(/^(\w+)/)
+          if (match) {
+            kindDisplay = match[1].replace(/([A-Z])/g, ' $1').trim()
+          }
+        }
+
         verifList.push({
           title: node.name || 'Unnamed Verification',
-          kind: node.kind,
+          kind: kindDisplay,
           doc_comment: node.doc_comment,
           stable_id: node.stable_id,
           packageName,
@@ -93,21 +116,62 @@ export default function TestingView({ code }) {
     // Iterate through HIR nodes to find UseCase nodes
     Object.entries(hirData.nodes).forEach(([nodeId, node]) => {
       if (node.kind && (node.kind.includes('UseCaseDefinition') || node.kind.includes('UseCaseUsage'))) {
-        // Get package name from parent
-        let packageName = 'Unknown Package'
-        if (node.parent && hirData.nodes[node.parent]) {
-          const parent = hirData.nodes[node.parent]
-          if (parent.kind && parent.kind.includes('Package')) {
-            packageName = parent.name || 'Unnamed Package'
+        // Get package name from parent (traverse up the tree)
+        let packageName = 'Global'
+        let currentNode = node
+        let depth = 0
+        while (currentNode && currentNode.parent && depth < 10) {
+          const parentNode = hirData.nodes[currentNode.parent]
+          if (parentNode) {
+            if (parentNode.kind && parentNode.kind.includes('Package')) {
+              packageName = parentNode.name || 'Unnamed Package'
+              break
+            }
+            currentNode = parentNode
+          } else {
+            break
           }
+          depth++
+        }
+
+        // Clean kind string
+        let kindDisplay = 'Use Case'
+        if (typeof node.kind === 'string') {
+          kindDisplay = node.kind.replace(/([A-Z])/g, ' $1').trim()
+        } else if (node.kind && typeof node.kind === 'object') {
+          const kindStr = String(node.kind)
+          const match = kindStr.match(/^(\w+)/)
+          if (match) {
+            kindDisplay = match[1].replace(/([A-Z])/g, ' $1').trim()
+          }
+        }
+
+        // Extract actions/steps from use case
+        const actions = []
+        if (node.children && Array.isArray(node.children)) {
+          node.children.forEach(childId => {
+            const child = hirData.nodes[childId]
+            if (child && child.kind) {
+              const childKind = String(child.kind)
+              // Look for actions, steps, or any execution nodes
+              if (childKind.includes('Action') || childKind.includes('Step') || childKind.includes('Perform')) {
+                actions.push({
+                  name: child.name || 'unnamed step',
+                  kind: childKind,
+                  description: child.doc_comment || '',
+                })
+              }
+            }
+          })
         }
 
         caseList.push({
           title: node.name || 'Unnamed Use Case',
-          kind: node.kind,
+          kind: kindDisplay,
           doc_comment: node.doc_comment,
           stable_id: node.stable_id,
           packageName,
+          actions,
         })
       }
     })
@@ -125,18 +189,27 @@ export default function TestingView({ code }) {
     Object.entries(hirData.nodes).forEach(([nodeId, node]) => {
       if (node.kind && node.kind.includes('AssertUsage')) {
         // Get parent verification name
-        let parentName = 'Unknown Parent'
-        let packageName = 'Unknown Package'
+        let parentName = 'Global'
+        let packageName = 'Global'
         if (node.parent && hirData.nodes[node.parent]) {
           const parent = hirData.nodes[node.parent]
           parentName = parent.name || 'Unnamed Parent'
 
           // Traverse up to find package
-          if (parent.parent && hirData.nodes[parent.parent]) {
-            const grandParent = hirData.nodes[parent.parent]
-            if (grandParent.kind && grandParent.kind.includes('Package')) {
-              packageName = grandParent.name || 'Unnamed Package'
+          let currentNode = parent
+          let depth = 0
+          while (currentNode && currentNode.parent && depth < 10) {
+            const parentNode = hirData.nodes[currentNode.parent]
+            if (parentNode) {
+              if (parentNode.kind && parentNode.kind.includes('Package')) {
+                packageName = parentNode.name || 'Unnamed Package'
+                break
+              }
+              currentNode = parentNode
+            } else {
+              break
             }
+            depth++
           }
         }
 
@@ -151,9 +224,21 @@ export default function TestingView({ code }) {
 
         const isValid = hasConstraint
 
+        // Clean kind string
+        let kindDisplay = 'Assert'
+        if (typeof node.kind === 'string') {
+          kindDisplay = node.kind.replace(/([A-Z])/g, ' $1').trim()
+        } else if (node.kind && typeof node.kind === 'object') {
+          const kindStr = String(node.kind)
+          const match = kindStr.match(/^(\w+)/)
+          if (match) {
+            kindDisplay = match[1].replace(/([A-Z])/g, ' $1').trim()
+          }
+        }
+
         assertList.push({
           title: node.name || 'unnamed assertion',
-          kind: node.kind,
+          kind: kindDisplay,
           doc_comment: node.doc_comment,
           stable_id: node.stable_id,
           parentName,
@@ -479,18 +564,26 @@ export default function TestingView({ code }) {
                       <th>Type</th>
                       <th>Package</th>
                       <th>Description</th>
+                      <th>Actions</th>
                       <th>Status</th>
                     </tr>
                   </thead>
                   <tbody>
                     {useCases.map((useCase, index) => {
-                      // Check if scenario has description
-                      const status = useCase.doc_comment ? 'Documented' : 'Defined'
+                      // Check if scenario has actions and description
+                      const hasActions = useCase.actions && useCase.actions.length > 0
+                      const hasDescription = useCase.doc_comment
+                      const status = hasActions && hasDescription ? 'Complete' :
+                                     hasActions ? 'Partial' :
+                                     hasDescription ? 'Documented' : 'Defined'
 
                       return (
                         <tr key={index} className={`test-row status-${status.toLowerCase()}`}>
                           <td className="test-title">
                             <strong>{useCase.title}</strong>
+                            {hasDescription && (
+                              <div className="test-description">{useCase.doc_comment}</div>
+                            )}
                           </td>
                           <td className="test-type">
                             <span className="type-badge">{useCase.kind.replace(/[\[\]]/g, '')}</span>
@@ -499,7 +592,18 @@ export default function TestingView({ code }) {
                             <code>{useCase.packageName}</code>
                           </td>
                           <td className="test-description">
-                            {useCase.doc_comment || 'No description'}
+                            {hasDescription ? useCase.doc_comment : 'No description'}
+                          </td>
+                          <td className="test-actions">
+                            {hasActions ? (
+                              <ul className="compact-list">
+                                {useCase.actions.map((action, i) => (
+                                  <li key={i}><code>{action.name}</code></li>
+                                ))}
+                              </ul>
+                            ) : (
+                              <span className="empty-cell">-</span>
+                            )}
                           </td>
                           <td className="test-status">
                             <span className={`status-badge status-${status.toLowerCase()}`}>
