@@ -7,6 +7,210 @@
   overflow: hidden;
 }
 
+/* Table styles for test cases, assertions, and scenarios */
+.verifications-table-container,
+.assertions-table-container,
+.scenarios-table-container {
+  overflow: auto;
+  max-height: calc(100vh - 300px);
+}
+
+.testing-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.testing-table thead {
+  background: var(--bg-primary);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.testing-table th {
+  text-align: left;
+  padding: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.testing-table tbody tr {
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.2s;
+}
+
+.testing-table tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+.testing-table td {
+  padding: 0.75rem;
+  vertical-align: top;
+}
+
+.test-title {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.test-description {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
+
+.test-type .type-badge,
+.test-status .status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.type-badge {
+  background: var(--accent-secondary);
+  color: var(--bg-primary);
+}
+
+.status-badge {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.status-badge.status-complete,
+.status-badge.status-valid,
+.status-badge.status-documented {
+  background: var(--color-success);
+  color: white;
+}
+
+.status-badge.status-partial {
+  background: var(--color-warning);
+  color: white;
+}
+
+.status-badge.status-defined {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.status-badge.status-invalid {
+  background: var(--color-error);
+  color: white;
+}
+
+.test-package code {
+  font-size: 0.85rem;
+  color: var(--accent-primary);
+}
+
+.compact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.compact-list li {
+  padding: 0.125rem 0;
+  font-size: 0.85rem;
+}
+
+.empty-cell {
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+.action-count {
+  color: var(--accent-primary);
+  font-weight: 500;
+}
+
+.validation-message {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin-top: 0.25rem;
+}
+
+/* Traceability tab styles */
+.traceability-view h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary);
+}
+
+.traceability-description {
+  color: var(--text-secondary);
+  margin: 0 0 1.5rem 0;
+}
+
+.traceability-table-container {
+  overflow: auto;
+  max-height: calc(100vh - 400px);
+  margin-bottom: 1.5rem;
+}
+
+.relationship-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--accent-primary);
+  color: white;
+}
+
+.relationship-badge.verify {
+  background: var(--color-success);
+}
+
+.source-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.source-badge.objective {
+  background: var(--accent-secondary);
+  color: var(--bg-primary);
+}
+
+.traceability-summary {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.summary-card {
+  flex: 1;
+  background: var(--bg-primary);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.summary-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+}
+
+.summary-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
 .testing-header {
   padding: 1.5rem;
   border-bottom: 1px solid var(--border-color);

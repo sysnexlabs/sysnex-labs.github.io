@@ -332,6 +332,12 @@ export default function TestingView({ code }) {
           Scenarios
         </button>
         <button
+          className={`test-tab ${activeTab === 'traceability' ? 'active' : ''}`}
+          onClick={() => setActiveTab('traceability')}
+        >
+          Traceability
+        </button>
+        <button
           className={`test-tab ${activeTab === 'coverage' ? 'active' : ''}`}
           onClick={() => setActiveTab('coverage')}
         >
@@ -511,6 +517,77 @@ export default function TestingView({ code }) {
                 No test scenarios found. Define scenarios using <code>use case</code> syntax.
               </div>
             )}
+          </div>
+        )}
+
+        {activeTab === 'traceability' && (
+          <div className="traceability-view">
+            <h4>Test Traceability Matrix</h4>
+            <p className="traceability-description">
+              Bidirectional traceability showing relationships between requirements and verification cases.
+            </p>
+
+            {verifyRelationships.length > 0 ? (
+              <div className="traceability-table-container">
+                <table className="testing-table">
+                  <thead>
+                    <tr>
+                      <th>Verification</th>
+                      <th>Relationship</th>
+                      <th>Requirement</th>
+                      <th>Source</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {verifyRelationships.map((rel, index) => (
+                      <tr key={index} className="test-row">
+                        <td className="test-title">
+                          <strong>{rel.verification}</strong>
+                        </td>
+                        <td className="test-relationship">
+                          <span className="relationship-badge verify">verifies</span>
+                        </td>
+                        <td className="test-target">
+                          <code>{rel.requirement}</code>
+                        </td>
+                        <td className="test-source">
+                          <span className={`source-badge ${rel.source}`}>
+                            {rel.source === 'objective' ? 'Objective Block' : 'Standalone'}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="testing-empty">
+                <p>No traceability links found.</p>
+                <ul>
+                  <li>Use <code>verify requirement</code> in verification definitions</li>
+                  <li>Or use <code>objective</code> blocks with <code>verify</code> statements</li>
+                </ul>
+              </div>
+            )}
+
+            <div className="traceability-summary">
+              <div className="summary-card">
+                <span className="summary-value">{verifyRelationships.length}</span>
+                <span className="summary-label">Total Verification Links</span>
+              </div>
+              <div className="summary-card">
+                <span className="summary-value">
+                  {verifyRelationships.filter(r => r.source === 'objective').length}
+                </span>
+                <span className="summary-label">From Objectives</span>
+              </div>
+              <div className="summary-card">
+                <span className="summary-value">
+                  {verifyRelationships.filter(r => r.source === 'standalone').length}
+                </span>
+                <span className="summary-label">Standalone</span>
+              </div>
+            </div>
           </div>
         )}
 
