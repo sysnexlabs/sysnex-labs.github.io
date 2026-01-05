@@ -238,12 +238,6 @@ export default function RequirementsView({ code }) {
         >
           Coverage
         </button>
-        <button
-          className={`req-tab ${activeTab === 'debug' ? 'active' : ''}`}
-          onClick={() => setActiveTab('debug')}
-        >
-          Debug
-        </button>
       </div>
 
       <div className="requirements-content">
@@ -319,26 +313,50 @@ export default function RequirementsView({ code }) {
         {activeTab === 'verifications' && (
           <div className="verifications-list">
             {verifications.length > 0 ? (
-              verifications.map((verif, index) => (
-                <SpotlightCard key={index}>
-                  <div className="verification-item">
-                    <div className="verification-header">
-                      <span className="verification-kind">{verif.kind}</span>
-                      <h4 className="verification-title">{verif.title}</h4>
-                    </div>
-                    {(verif.doc_comment || verif.comment_text) && (
-                      <div className="verification-doc">{verif.doc_comment || verif.comment_text}</div>
-                    )}
-                    {!verif.doc_comment && !verif.comment_text && verif.doc_declarations && verif.doc_declarations.length > 0 && (
-                      <div className="verification-doc">
-                        {verif.doc_declarations.map((decl, i) => (
-                          <div key={i}>{decl[1]}</div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </SpotlightCard>
-              ))
+              <div className="verifications-table-container">
+                <table className="requirements-table">
+                  <thead>
+                    <tr>
+                      <th>Verification</th>
+                      <th>Type</th>
+                      <th>Package</th>
+                      <th>Description</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {verifications.map((verif, index) => {
+                      // Check if this verification is linked to any requirement
+                      const isLinked = relationships.verify.some(rel => rel.from === verif.title);
+                      const status = isLinked ? 'Active' : 'Defined';
+
+                      return (
+                        <tr key={index} className={`req-row status-${status.toLowerCase()}`}>
+                          <td className="req-title">
+                            <strong>{verif.title}</strong>
+                          </td>
+                          <td className="req-type">
+                            <span className="type-badge">{verif.kind.replace(/[\[\]]/g, '')}</span>
+                          </td>
+                          <td className="req-package">
+                            <code>{verif.packageName}</code>
+                          </td>
+                          <td className="req-description">
+                            {verif.doc_comment || verif.comment_text || (verif.doc_declarations && verif.doc_declarations.length > 0
+                              ? verif.doc_declarations[0][1]
+                              : 'No description')}
+                          </td>
+                          <td className="req-status">
+                            <span className={`status-badge status-${status.toLowerCase()}`}>
+                              {status}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             ) : (
               <div className="verifications-empty">
                 No verifications found. Define verification cases using <code>verification def</code> syntax.
@@ -513,72 +531,6 @@ export default function RequirementsView({ code }) {
               relationships={relationships}
               verifications={verifications}
             />
-          </div>
-        )}
-
-        {activeTab === 'debug' && (
-          <div className="debug-view">
-            <h4>Debug: Raw WASM Output</h4>
-
-            <details open>
-              <summary><strong>Documentation Chapters ({documentation?.chapters?.length || 0})</strong></summary>
-              <pre style={{
-                background: '#1e1e1e',
-                color: '#d4d4d4',
-                padding: '1rem',
-                borderRadius: '4px',
-                overflow: 'auto',
-                maxHeight: '300px',
-                fontSize: '0.85rem'
-              }}>
-                {JSON.stringify(documentation?.chapters, null, 2)}
-              </pre>
-            </details>
-
-            <details style={{ marginTop: '1rem' }}>
-              <summary><strong>Extracted Requirements ({requirements.length})</strong></summary>
-              <pre style={{
-                background: '#1e1e1e',
-                color: '#d4d4d4',
-                padding: '1rem',
-                borderRadius: '4px',
-                overflow: 'auto',
-                maxHeight: '300px',
-                fontSize: '0.85rem'
-              }}>
-                {JSON.stringify(requirements, null, 2)}
-              </pre>
-            </details>
-
-            <details style={{ marginTop: '1rem' }}>
-              <summary><strong>Extracted Verifications ({verifications.length})</strong></summary>
-              <pre style={{
-                background: '#1e1e1e',
-                color: '#d4d4d4',
-                padding: '1rem',
-                borderRadius: '4px',
-                overflow: 'auto',
-                maxHeight: '300px',
-                fontSize: '0.85rem'
-              }}>
-                {JSON.stringify(verifications, null, 2)}
-              </pre>
-            </details>
-
-            <details style={{ marginTop: '1rem' }}>
-              <summary><strong>Relationships</strong></summary>
-              <pre style={{
-                background: '#1e1e1e',
-                color: '#d4d4d4',
-                padding: '1rem',
-                borderRadius: '4px',
-                overflow: 'auto',
-                maxHeight: '300px',
-                fontSize: '0.85rem'
-              }}>
-                {JSON.stringify(relationships, null, 2)}
-              </pre>
-            </details>
           </div>
         )}
       </div>

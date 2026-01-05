@@ -83,11 +83,11 @@ export default function TraceabilityGraph({ requirements, relationships, verific
           verificationMap.set(rel.from, verifNode)
         }
 
-        // Create edge from requirement to verification
+        // Create edge from verification to requirement (verification verifies requirement)
         edges.push({
           id: `verify-${idx}`,
-          from: reqNode.id,
-          to: verifNode.id,
+          from: verifNode.id,
+          to: reqNode.id,
           type: 'verify',
           label: 'verifies',
         })
@@ -140,9 +140,15 @@ export default function TraceabilityGraph({ requirements, relationships, verific
           if (!fromNode || !toNode) return null
 
           // Calculate edge path (with arrow)
-          const x1 = fromNode.x + (fromNode.type === 'implementation' ? 120 : 0)
+          // Start point: right edge of implementation/verification nodes, left edge of requirement
+          const x1 = fromNode.type === 'implementation' ? fromNode.x + 120 :
+                     fromNode.type === 'verification' ? fromNode.x :
+                     fromNode.x + 180
           const y1 = fromNode.y + 20
-          const x2 = toNode.x + (toNode.type === 'verification' ? 0 : -20)
+          // End point: left edge of requirement nodes, right edge for verifications
+          const x2 = toNode.type === 'requirement' ?
+                     (fromNode.type === 'verification' ? toNode.x + 180 : toNode.x) :
+                     toNode.x
           const y2 = toNode.y + 20
 
           // Control point for curved edge
