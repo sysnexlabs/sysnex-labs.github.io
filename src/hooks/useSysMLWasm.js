@@ -24,9 +24,11 @@ export function useSysMLWasm() {
         // Fixed version for cache-busting - increment when WASM is updated
         // Version 3: Added satisfy/verify parser fix and name resolution (2026-01-05)
         const WASM_VERSION = '3'
+        // Add random component to force reload in development
+        const cacheBuster = import.meta.env.DEV ? `${WASM_VERSION}-${Math.random().toString(36).slice(2)}` : WASM_VERSION
         const wasmJsPath = import.meta.env.PROD
           ? `${baseUrl}wasm/sysml_wasm_bridge.js?v=${WASM_VERSION}`
-          : `../wasm/${'sysml_wasm_bridge'}.js?v=${WASM_VERSION}`
+          : `../wasm/${'sysml_wasm_bridge'}.js?v=${cacheBuster}`
         const wasmBinaryPath = import.meta.env.PROD
           ? `${baseUrl}wasm/sysml_wasm_bridge_bg.wasm?v=${WASM_VERSION}`
           : undefined // Use default path in development
