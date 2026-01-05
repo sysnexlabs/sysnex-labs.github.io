@@ -69,16 +69,28 @@ export default function RequirementsView({ code }) {
 
   // Extract satisfy and verify relationships from traceability data
   const relationships = useMemo(() => {
-    if (!traceability || !traceability.rows) return { satisfy: [], verify: [] }
+    console.log('🔍 [RequirementsView] relationships useMemo called');
+    console.log('🔍 [RequirementsView] traceability:', traceability);
+
+    if (!traceability || !traceability.rows) {
+      console.warn('⚠️ [RequirementsView] No traceability data!', { traceability });
+      return { satisfy: [], verify: [] }
+    }
 
     console.log('🔍 [RequirementsView] Processing traceability rows:', traceability.rows.length)
+    console.log('🔍 [RequirementsView] First row:', traceability.rows[0])
 
     const satisfy = []
     const verify = []
 
     // Extract relationships from traceability rows
     // Backend structure: { requirement_fqn, satisfied_by: [FQNs], verified_by: [FQNs] }
-    traceability.rows.forEach(row => {
+    traceability.rows.forEach((row, idx) => {
+      console.log(`🔍 [RequirementsView] Row ${idx}:`, {
+        req: row.requirement_fqn,
+        satisfied_by: row.satisfied_by,
+        verified_by: row.verified_by
+      });
       // satisfied_by contains FQNs of elements that satisfy this requirement
       if (row.satisfied_by && row.satisfied_by.length > 0) {
         row.satisfied_by.forEach(satisfyingFqn => {
@@ -102,7 +114,12 @@ export default function RequirementsView({ code }) {
       }
     })
 
-    console.log('🔍 [RequirementsView] Final relationships:', { satisfy, verify })
+    console.log('✅ [RequirementsView] Final relationships:', {
+      satisfy: satisfy.length,
+      verify: verify.length,
+      satisfyDetails: satisfy,
+      verifyDetails: verify
+    })
 
     return { satisfy, verify }
   }, [traceability])

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WASM Direct Test - NexReq</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #1e1e1e;
+            color: #d4d4d4;
+        }
+        h1 { color: #4ec9b0; }
+        h2 { color: #569cd6; margin-top: 30px; }
+        .success { color: #4ec9b0; }
+        .error { color: #f48771; }
+        .warning { color: #ce9178; }
+        pre {
+            background: #252526;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 3px solid #4ec9b0;
+        }
+        .result {
+            background: #252526;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .count {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4ec9b0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔬 WASM Direct Test - NexReq Traceability</h1>
+    <p>This page loads the WASM module directly and tests traceability extraction.</p>
+
+    <div id="status">⏳ Loading WASM...</div>
+
+    <h2>Results:</h2>
+    <div id="results"></div>
+
+    <h2>Console Output:</h2>
+    <pre id="console"></pre>
+
+    <script type="module">
+        const consoleOutput = [];
+        const originalLog = console.log;
+        const originalWarn = console.warn;
+        const originalError = console.error;
+
+        console.log = (...args) => {
+            consoleOutput.push(args.join(' '));
+            originalLog(...args);
+            updateConsole();
+        };
+        console.warn = (...args) => {
+            consoleOutput.push('⚠️ ' + args.join(' '));
+            originalWarn(...args);
+            updateConsole();
+        };
+        console.error = (...args) => {
+            consoleOutput.push('❌ ' + args.join(' '));
+            originalError(...args);
+            updateConsole();
+        };
+
+        function updateConsole() {
+            document.getElementById('console').textContent = consoleOutput.join('\n');
+        }
+
+        const TEST_CODE = `package 'Vehicle Safety Requirements' {
+    requirement vehicleSafety;
+    requirement performance;
+    requirement charging;
+    part testVehicle;
+    verification def CrashTestVerification { subject v; }
+    verification def PerformanceTestVerification { subject v; }
+    verification def ChargingTestVerification { subject b; }
+
+    satisfy vehicleSafety by testVehicle;
+    satisfy performance by testVehicle;
+    satisfy charging by testVehicle;
+
+    verify vehicleSafety by CrashTestVerification;
+    verify performance by PerformanceTestVerification;
+    verify charging by ChargingTestVerification;
+}`;
+
+        async function test() {
+            try {
+                console.log('Loading WASM module...');
+                document.getElementById('status').innerHTML = '⏳ Loading WASM module...';
+
+                // Import the WASM module
+                const wasmModule = await import('/wasm/sysml_wasm_bridge.js');
+                console.log('WASM module imported successfully');
+
+                // Initialize WASM
+                await wasmModule.default();
+                console.log('WASM initialized');
+
+                // Create instance
+                const wasm = new wasmModule.SysMLWasm();
+                console.log('SysMLWasm instance created');
+
+                document.getElementById('status').innerHTML = '<span class="success">✅ WASM Loaded Successfully</span>';
+
+                // Extract traceability
+                console.log('Extracting traceability...');
+                const trace = wasm.extract_traceability(TEST_CODE, 'test://direct');
+                console.log('Traceability extracted:', trace);
+
+                // Process results
+                const satisfy = [];
+                const verify = [];
+
+                trace.rows.forEach(row => {
+                    if (row.satisfied_by && row.satisfied_by.length > 0) {
+                        row.satisfied_by.forEach(satisfyingFqn => {
+                            satisfy.push({
+                                from: satisfyingFqn,
+                                to: row.requirement_fqn,
+                            });
+                        });
+                    }
+
+                    if (row.verified_by && row.verified_by.length > 0) {
+                        row.verified_by.forEach(verifyingFqn => {
+                            verify.push({
+                                from: verifyingFqn,
+                                to: row.requirement_fqn,
+                            });
+                        });
+                    }
+                });
+
+                // Display results
+                let html = `
+                    <div class="result">
+                        <h3>📊 Summary</h3>
+                        <p>Total Requirements: <span class="count">${trace.rows.length}</span></p>
+                        <p>Satisfaction Links: <span class="count">${satisfy.length}</span></p>
+                        <p>Verification Links: <span class="count">${verify.length}</span></p>
+                        <p>Total Traces: <span class="count">${satisfy.length + verify.length}</span></p>
+                    </div>
+                `;
+
+                if (satisfy.length > 0) {
+                    html += '<div class="result"><h3 class="success">✅ Satisfy Relationships</h3>';
+                    satisfy.forEach((rel, i) => {
+                        html += `<p>${i + 1}. ${rel.from} → <strong>satisfies</strong> → ${rel.to}</p>`;
+                    });
+                    html += '</div>';
+                }
+
+                if (verify.length > 0) {
+                    html += '<div class="result"><h3 class="success">✅ Verify Relationships</h3>';
+                    verify.forEach((rel, i) => {
+                        html += `<p>${i + 1}. ${rel.from} → <strong>verifies</strong> → ${rel.to}</p>`;
+                    });
+                    html += '</div>';
+                }
+
+                // Show all rows with details
+                html += '<div class="result"><h3>📋 All Traceability Rows</h3>';
+                trace.rows.forEach((row, i) => {
+                    html += `
+                        <div style="margin: 10px 0; padding: 10px; background: #1e1e1e; border-radius: 3px;">
+                            <strong>Row ${i + 1}:</strong> ${row.requirement_fqn}<br>
+                            <small>satisfied_by: [${row.satisfied_by.join(', ')}]</small><br>
+                            <small>verified_by: [${row.verified_by.join(', ')}]</small>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+
+                // Verdict
+                if (satisfy.length === 3 && verify.length === 3) {
+                    html += '<div class="result" style="border: 2px solid #4ec9b0;"><h3 class="success">🎉 SUCCESS!</h3><p>WASM is working correctly! All traceability links extracted.</p></div>';
+                } else {
+                    html += '<div class="result" style="border: 2px solid #f48771;"><h3 class="error">❌ UNEXPECTED RESULTS</h3><p>Expected 3 satisfy and 3 verify links.</p></div>';
+                }
+
+                document.getElementById('results').innerHTML = html;
+
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('status').innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+                document.getElementById('results').innerHTML = `<div class="result error"><h3>Error</h3><pre>${error.stack}</pre></div>`;
+            }
+        }
+
+        // Run test when page loads
+        test();
+    </script>
+</body>
+</html>
