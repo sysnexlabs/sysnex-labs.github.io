@@ -105,6 +105,24 @@ function takeFromExternrefTable0(idx) {
     wasm.__externref_table_dealloc_command_export(idx);
     return value;
 }
+/**
+ * @param {string} s
+ * @returns {string}
+ */
+export function slugify(s) {
+    let deferred2_0;
+    let deferred2_1;
+    try {
+        const ptr0 = passStringToWasm0(s, wasm.__wbindgen_malloc_command_export, wasm.__wbindgen_realloc_command_export);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.slugify(ptr0, len0);
+        deferred2_0 = ret[0];
+        deferred2_1 = ret[1];
+        return getStringFromWasm0(ret[0], ret[1]);
+    } finally {
+        wasm.__wbindgen_free_command_export(deferred2_0, deferred2_1, 1);
+    }
+}
 
 const SysMLWasmFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -171,6 +189,24 @@ export class SysMLWasm {
         const ptr1 = passStringToWasm0(file_uri, wasm.__wbindgen_malloc_command_export, wasm.__wbindgen_realloc_command_export);
         const len1 = WASM_VECTOR_LEN;
         const ret = wasm.sysmlwasm_generate_analytics(this.__wbg_ptr, ptr0, len0, ptr1, len1);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return takeFromExternrefTable0(ret[0]);
+    }
+    /**
+     * Extract requirements traceability matrix with satisfy/verify relationships
+     * This uses the proper backend traceability API instead of documentation reconstruction
+     * @param {string} source
+     * @param {string} file_uri
+     * @returns {any}
+     */
+    extract_traceability(source, file_uri) {
+        const ptr0 = passStringToWasm0(source, wasm.__wbindgen_malloc_command_export, wasm.__wbindgen_realloc_command_export);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(file_uri, wasm.__wbindgen_malloc_command_export, wasm.__wbindgen_realloc_command_export);
+        const len1 = WASM_VECTOR_LEN;
+        const ret = wasm.sysmlwasm_extract_traceability(this.__wbg_ptr, ptr0, len0, ptr1, len1);
         if (ret[2]) {
             throw takeFromExternrefTable0(ret[1]);
         }

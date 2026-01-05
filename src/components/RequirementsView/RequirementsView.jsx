@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import { useSysMLDocumentation } from '../../hooks/useSysMLWasm'
 import { useSysMLAnalytics } from '../../hooks/useSysMLAnalytics'
+import { useSysMLTraceability } from '../../hooks/useSysMLTraceability'
 import SpotlightCard from '../SpotlightCard'
 import TraceabilityGraph from './TraceabilityGraph'
 import './RequirementsView.css'
@@ -13,6 +14,7 @@ import './RequirementsView.css'
 export default function RequirementsView({ code }) {
   const { documentation, loading: docLoading } = useSysMLDocumentation(code, 'editor://current')
   const { analytics, loading: analyticsLoading } = useSysMLAnalytics(code, 'editor://current')
+  const { traceability, loading: traceLoading } = useSysMLTraceability(code, 'editor://current')
   const [activeTab, setActiveTab] = useState('requirements')
 
   // Extract requirements from documentation (excluding satisfy/verify relationship nodes)
@@ -48,7 +50,12 @@ export default function RequirementsView({ code }) {
     documentation.chapters.forEach(chapter => {
       if (chapter.subchapters) {
         chapter.subchapters.forEach(sub => {
-          if (sub.kind && (sub.kind.includes('Verification') || sub.kind.includes('verification'))) {
+          // Check both kind and stable_id for verification definitions
+          const isVerification =
+            (sub.kind && (sub.kind.includes('Verification') || sub.kind.includes('verification'))) ||
+            (sub.stable_id && sub.stable_id.includes('/VerificationDefinition'))
+
+          if (isVerification) {
             verifList.push({
               ...sub,
               packageName: chapter.title,
@@ -60,125 +67,41 @@ export default function RequirementsView({ code }) {
     return verifList
   }, [documentation])
 
-  // Extract satisfy and verify relationships
+  // Extract satisfy and verify relationships from traceability data
   const relationships = useMemo(() => {
-    if (!documentation || !documentation.chapters) return { satisfy: [], verify: [] }
+    if (!traceability || !traceability.rows) return { satisfy: [], verify: [] }
 
     const satisfy = []
     const verify = []
 
-    documentation.chapters.forEach(chapter => {
-      if (chapter.subchapters) {
-        chapter.subchapters.forEach(sub => {
-          // Check for Satisfy elements (these are statements like "satisfy req by impl")
-          if (sub.kind && (sub.kind.toLowerCase().includes('satisfy') || sub.kind === '[SatisfyRequirementUsage]')) {
-            // Extract from title or signature
-            // Title format: "satisfy vehicleSafety by testVehicle"
-            const titleMatch = sub.title?.match(/satisfy\s+(\w+)\s+by\s+(\w+)/i)
-            if (titleMatch) {
-              satisfy.push({
-                from: titleMatch[2], // implementation
-                to: titleMatch[1],   // requirement
-                kind: 'Satisfy',
-              })
-            } else if (sub.signature) {
-              // Try to extract from signature
-              const sigMatch = sub.signature.match(/satisfy\s+(\w+)\s+by\s+(\w+)/i)
-              if (sigMatch) {
-                satisfy.push({
-                  from: sigMatch[2],
-                  to: sigMatch[1],
-                  kind: 'Satisfy',
-                })
-              }
-            }
-          }
+    // Extract relationships from traceability rows
+    // Backend structure: { requirement_fqn, satisfied_by: [FQNs], verified_by: [FQNs] }
+    traceability.rows.forEach(row => {
+      // satisfied_by contains FQNs of elements that satisfy this requirement
+      if (row.satisfied_by && row.satisfied_by.length > 0) {
+        row.satisfied_by.forEach(satisfyingFqn => {
+          satisfy.push({
+            from: satisfyingFqn,
+            to: row.requirement_fqn,
+            kind: 'Satisfy',
+          })
+        })
+      }
 
-          // Check for Verify elements (standalone verify statements like "verify req by test")
-          if (sub.kind && (sub.kind === '[VerifyRequirementUsage]' || sub.kind.toLowerCase().includes('verifyrequirementusage'))) {
-            // Extract from title or signature
-            const titleMatch = sub.title?.match(/verify\s+(\w+)\s+by\s+(\w+)/i)
-            if (titleMatch) {
-              verify.push({
-                from: titleMatch[2], // verification
-                to: titleMatch[1],   // requirement
-                kind: 'Verify',
-              })
-            } else if (sub.signature) {
-              // Try to extract from signature
-              const sigMatch = sub.signature.match(/verify\s+(\w+)\s+by\s+(\w+)/i)
-              if (sigMatch) {
-                verify.push({
-                  from: sigMatch[2], // verification
-                  to: sigMatch[1],   // requirement
-                  kind: 'Verify',
-                })
-              }
-            }
-          }
-
-          // Check for Verify relationships in verification definitions
-          if (sub.kind && sub.kind.toLowerCase().includes('verification')) {
-            // Look in nested elements for verify statements in objective blocks
-            if (sub.nested_elements) {
-              sub.nested_elements.forEach(nested => {
-                // Check for objective blocks
-                if (nested.kind && nested.kind.toLowerCase().includes('objective')) {
-                  // Look for verify statements in objective
-                  if (nested.nested_elements) {
-                    nested.nested_elements.forEach(obj => {
-                      if (obj.kind && obj.kind.toLowerCase().includes('verify')) {
-                        verify.push({
-                          from: sub.title,
-                          to: obj.title || obj.signature || 'Unknown',
-                          kind: 'Verify',
-                        })
-                      }
-                    })
-                  }
-                } else if (nested.kind && nested.kind.toLowerCase().includes('verify')) {
-                  // Direct verify statement
-                  verify.push({
-                    from: sub.title,
-                    to: nested.title || nested.signature || 'Unknown',
-                    kind: 'Verify',
-                  })
-                }
-              })
-            }
-
-            // Also check for relationships array
-            if (sub.relationships && sub.relationships.length > 0) {
-              sub.relationships.forEach(rel => {
-                if (rel.kind && rel.kind.toLowerCase().includes('verify')) {
-                  verify.push({
-                    from: sub.title,
-                    to: rel.target || rel.target_name || 'Unknown',
-                    kind: 'Verify',
-                  })
-                }
-              })
-            }
-          }
-
-          // Also check relationships array for satisfy
-          if (sub.relationships && sub.relationships.length > 0) {
-            sub.relationships.forEach(rel => {
-              if (rel.kind && rel.kind.toLowerCase().includes('satisfy')) {
-                satisfy.push({
-                  from: sub.title,
-                  to: rel.target || rel.target_name || 'Unknown',
-                  kind: 'Satisfy',
-                })
-              }
-            })
-          }
+      // verified_by contains FQNs of verification cases
+      if (row.verified_by && row.verified_by.length > 0) {
+        row.verified_by.forEach(verifyingFqn => {
+          verify.push({
+            from: verifyingFqn,
+            to: row.requirement_fqn,
+            kind: 'Verify',
+          })
         })
       }
     })
 
     return { satisfy, verify }
-  }, [documentation])
+  }, [traceability])
 
   // Calculate coverage metrics with smart name matching
   const coverageMetrics = useMemo(() => {
@@ -219,7 +142,7 @@ export default function RequirementsView({ code }) {
     }
   }, [requirements, relationships])
 
-  if (docLoading || analyticsLoading) {
+  if (docLoading || analyticsLoading || traceLoading) {
     return (
       <div className="requirements-view">
         <div className="requirements-loading">Extracting requirements from code...</div>
@@ -287,6 +210,12 @@ export default function RequirementsView({ code }) {
         >
           Coverage
         </button>
+        <button
+          className={`req-tab ${activeTab === 'debug' ? 'active' : ''}`}
+          onClick={() => setActiveTab('debug')}
+        >
+          Debug
+        </button>
       </div>
 
       <div className="requirements-content">
@@ -336,7 +265,7 @@ export default function RequirementsView({ code }) {
                             <code>{req.packageName}</code>
                           </td>
                           <td className="req-description">
-                            {req.doc_comment || (req.doc_declarations && req.doc_declarations.length > 0
+                            {req.doc_comment || req.comment_text || (req.doc_declarations && req.doc_declarations.length > 0
                               ? req.doc_declarations[0][1]
                               : 'No description')}
                           </td>
@@ -369,10 +298,10 @@ export default function RequirementsView({ code }) {
                       <span className="verification-kind">{verif.kind}</span>
                       <h4 className="verification-title">{verif.title}</h4>
                     </div>
-                    {verif.doc_comment && (
-                      <div className="verification-doc">{verif.doc_comment}</div>
+                    {(verif.doc_comment || verif.comment_text) && (
+                      <div className="verification-doc">{verif.doc_comment || verif.comment_text}</div>
                     )}
-                    {verif.doc_declarations && verif.doc_declarations.length > 0 && (
+                    {!verif.doc_comment && !verif.comment_text && verif.doc_declarations && verif.doc_declarations.length > 0 && (
                       <div className="verification-doc">
                         {verif.doc_declarations.map((decl, i) => (
                           <div key={i}>{decl[1]}</div>
@@ -556,6 +485,72 @@ export default function RequirementsView({ code }) {
               relationships={relationships}
               verifications={verifications}
             />
+          </div>
+        )}
+
+        {activeTab === 'debug' && (
+          <div className="debug-view">
+            <h4>Debug: Raw WASM Output</h4>
+
+            <details open>
+              <summary><strong>Documentation Chapters ({documentation?.chapters?.length || 0})</strong></summary>
+              <pre style={{
+                background: '#1e1e1e',
+                color: '#d4d4d4',
+                padding: '1rem',
+                borderRadius: '4px',
+                overflow: 'auto',
+                maxHeight: '300px',
+                fontSize: '0.85rem'
+              }}>
+                {JSON.stringify(documentation?.chapters, null, 2)}
+              </pre>
+            </details>
+
+            <details style={{ marginTop: '1rem' }}>
+              <summary><strong>Extracted Requirements ({requirements.length})</strong></summary>
+              <pre style={{
+                background: '#1e1e1e',
+                color: '#d4d4d4',
+                padding: '1rem',
+                borderRadius: '4px',
+                overflow: 'auto',
+                maxHeight: '300px',
+                fontSize: '0.85rem'
+              }}>
+                {JSON.stringify(requirements, null, 2)}
+              </pre>
+            </details>
+
+            <details style={{ marginTop: '1rem' }}>
+              <summary><strong>Extracted Verifications ({verifications.length})</strong></summary>
+              <pre style={{
+                background: '#1e1e1e',
+                color: '#d4d4d4',
+                padding: '1rem',
+                borderRadius: '4px',
+                overflow: 'auto',
+                maxHeight: '300px',
+                fontSize: '0.85rem'
+              }}>
+                {JSON.stringify(verifications, null, 2)}
+              </pre>
+            </details>
+
+            <details style={{ marginTop: '1rem' }}>
+              <summary><strong>Relationships</strong></summary>
+              <pre style={{
+                background: '#1e1e1e',
+                color: '#d4d4d4',
+                padding: '1rem',
+                borderRadius: '4px',
+                overflow: 'auto',
+                maxHeight: '300px',
+                fontSize: '0.85rem'
+              }}>
+                {JSON.stringify(relationships, null, 2)}
+              </pre>
+            </details>
           </div>
         )}
       </div>

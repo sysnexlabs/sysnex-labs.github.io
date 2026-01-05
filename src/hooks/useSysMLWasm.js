@@ -21,11 +21,13 @@ export function useSysMLWasm() {
         // Use a template literal to prevent Vite from statically analyzing the path
         // In production (GitHub Pages), the path will be relative to the base URL
         const baseUrl = import.meta.env.BASE_URL || './'
-        const wasmJsPath = import.meta.env.PROD 
-          ? `${baseUrl}wasm/sysml_wasm_bridge.js`
-          : `../wasm/${'sysml_wasm_bridge'}.js`
-        const wasmBinaryPath = import.meta.env.PROD 
-          ? `${baseUrl}wasm/sysml_wasm_bridge_bg.wasm`
+        // Add cache-busting timestamp to force reload of updated WASM
+        const timestamp = Date.now()
+        const wasmJsPath = import.meta.env.PROD
+          ? `${baseUrl}wasm/sysml_wasm_bridge.js?v=${timestamp}`
+          : `../wasm/${'sysml_wasm_bridge'}.js?v=${timestamp}`
+        const wasmBinaryPath = import.meta.env.PROD
+          ? `${baseUrl}wasm/sysml_wasm_bridge_bg.wasm?v=${timestamp}`
           : undefined // Use default path in development
         
         // Try to load WASM module - catch import errors gracefully
