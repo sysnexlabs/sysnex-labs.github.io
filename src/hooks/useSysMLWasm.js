@@ -22,13 +22,15 @@ export function useSysMLWasm() {
         // In production (GitHub Pages), the path will be relative to the base URL
         const baseUrl = import.meta.env.BASE_URL || './'
         // Fixed version for cache-busting - increment when WASM is updated
-        // Version 4: Force reload - satisfy/verify parser fix and name resolution (2026-01-05)
-        const WASM_VERSION = '4'
-        // Add timestamp to force reload every time in development
-        const cacheBuster = import.meta.env.DEV ? `${WASM_VERSION}-${Date.now()}` : WASM_VERSION
+        // Version 5: CRITICAL FIX - Verify statement parser added (2026-01-05)
+        const WASM_VERSION = '5'
+        // CRITICAL: Use timestamp AND random component to break ALL caching
+        const timestamp = Date.now()
+        const random = Math.random().toString(36).substring(2, 15)
+        const cacheBuster = import.meta.env.DEV ? `${WASM_VERSION}-${timestamp}-${random}` : WASM_VERSION
         const wasmJsPath = import.meta.env.PROD
           ? `${baseUrl}wasm/sysml_wasm_bridge.js?v=${WASM_VERSION}`
-          : `../wasm/${'sysml_wasm_bridge'}.js?v=${cacheBuster}`
+          : `../wasm/sysml_wasm_bridge.js?v=${cacheBuster}&t=${timestamp}`
         const wasmBinaryPath = import.meta.env.PROD
           ? `${baseUrl}wasm/sysml_wasm_bridge_bg.wasm?v=${WASM_VERSION}`
           : undefined // Use default path in development
@@ -60,7 +62,15 @@ export function useSysMLWasm() {
         if (wasmModule.init_panic_hook) {
           wasmModule.init_panic_hook()
         }
-        
+
+        // Log successful WASM load with version info
+        console.log(`🎉 [useSysMLWasm] WASM module loaded successfully! Version: ${WASM_VERSION}, CacheBuster: ${cacheBuster}`)
+
+        // TEMPORARY DEBUG: Show alert to confirm new WASM is loaded
+        if (import.meta.env.DEV) {
+          alert(`✅ NEW WASM LOADED!\nVersion: ${WASM_VERSION}\nVerify statements are now supported!`)
+        }
+
         const SysMLWasm = wasmModule.SysMLWasm
         if (!SysMLWasm) {
           throw new Error('SysMLWasm class not found in WASM module')

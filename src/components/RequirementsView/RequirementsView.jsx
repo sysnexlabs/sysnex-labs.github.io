@@ -154,6 +154,13 @@ export default function RequirementsView({ code }) {
     )
   }
 
+  // TEMPORARY DEBUG: Show traceability data status
+  const debugInfo = traceability ? {
+    rows: traceability.rows?.length || 0,
+    hasRows: traceability.rows && traceability.rows.length > 0,
+    firstRow: traceability.rows?.[0]
+  } : null;
+
   if (!code || code.trim().length === 0) {
     return (
       <div className="requirements-view">
