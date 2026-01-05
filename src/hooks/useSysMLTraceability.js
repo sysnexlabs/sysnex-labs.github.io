@@ -54,37 +54,20 @@ export function useSysMLTraceability(code, fileUri = 'editor://current') {
         }
 
         // Call WASM extract_traceability function
+        // safeWasmCall returns the WASM result directly, not wrapped in { success, data }
         const result = await safeWasmCall(
           () => wasm.extract_traceability(code, fileUri),
           'extract_traceability'
         )
 
-        if (result.success) {
-          console.log('🎯 [useSysMLTraceability] Successfully extracted traceability:', result.data)
-          console.log('🎯 [useSysMLTraceability] Rows:', result.data.rows)
-          console.log('🎯 [useSysMLTraceability] Number of rows:', result.data.rows?.length || 0)
-          if (result.data.rows && result.data.rows.length > 0) {
-            console.log('🎯 [useSysMLTraceability] First row:', result.data.rows[0])
-          }
-          setTraceability(result.data)
-        } else {
-          console.warn('Traceability extraction failed:', result.error)
-          setError(result.error)
-          // Set empty traceability on error
-          setTraceability({
-            rows: [],
-            hierarchy: [],
-            stats: {
-              total_requirements: 0,
-              satisfied_count: 0,
-              partially_satisfied_count: 0,
-              not_satisfied_count: 0,
-              coverage_percentage: 0,
-            },
-            levels: [],
-          })
+        // result IS the traceability object directly from WASM
+        console.log('🎯 [useSysMLTraceability] Successfully extracted traceability:', result)
+        console.log('🎯 [useSysMLTraceability] Rows:', result.rows)
+        console.log('🎯 [useSysMLTraceability] Number of rows:', result.rows?.length || 0)
+        if (result.rows && result.rows.length > 0) {
+          console.log('🎯 [useSysMLTraceability] First row:', result.rows[0])
         }
-
+        setTraceability(result)
         setLoading(false)
       } catch (err) {
         console.error('Error in traceability extraction:', err)
