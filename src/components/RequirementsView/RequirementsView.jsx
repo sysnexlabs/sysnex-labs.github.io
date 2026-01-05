@@ -71,6 +71,8 @@ export default function RequirementsView({ code }) {
   const relationships = useMemo(() => {
     if (!traceability || !traceability.rows) return { satisfy: [], verify: [] }
 
+    console.log('🔍 [RequirementsView] Processing traceability rows:', traceability.rows.length)
+
     const satisfy = []
     const verify = []
 
@@ -99,6 +101,8 @@ export default function RequirementsView({ code }) {
         })
       }
     })
+
+    console.log('🔍 [RequirementsView] Final relationships:', { satisfy, verify })
 
     return { satisfy, verify }
   }, [traceability])

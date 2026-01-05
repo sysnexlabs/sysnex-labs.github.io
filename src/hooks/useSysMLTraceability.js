@@ -60,6 +60,12 @@ export function useSysMLTraceability(code, fileUri = 'editor://current') {
         )
 
         if (result.success) {
+          console.log('🎯 [useSysMLTraceability] Successfully extracted traceability:', result.data)
+          console.log('🎯 [useSysMLTraceability] Rows:', result.data.rows)
+          console.log('🎯 [useSysMLTraceability] Number of rows:', result.data.rows?.length || 0)
+          if (result.data.rows && result.data.rows.length > 0) {
+            console.log('🎯 [useSysMLTraceability] First row:', result.data.rows[0])
+          }
           setTraceability(result.data)
         } else {
           console.warn('Traceability extraction failed:', result.error)

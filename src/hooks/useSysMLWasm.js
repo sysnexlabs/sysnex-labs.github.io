@@ -22,10 +22,10 @@ export function useSysMLWasm() {
         // In production (GitHub Pages), the path will be relative to the base URL
         const baseUrl = import.meta.env.BASE_URL || './'
         // Fixed version for cache-busting - increment when WASM is updated
-        // Version 3: Added satisfy/verify parser fix and name resolution (2026-01-05)
-        const WASM_VERSION = '3'
-        // Add random component to force reload in development
-        const cacheBuster = import.meta.env.DEV ? `${WASM_VERSION}-${Math.random().toString(36).slice(2)}` : WASM_VERSION
+        // Version 4: Force reload - satisfy/verify parser fix and name resolution (2026-01-05)
+        const WASM_VERSION = '4'
+        // Add timestamp to force reload every time in development
+        const cacheBuster = import.meta.env.DEV ? `${WASM_VERSION}-${Date.now()}` : WASM_VERSION
         const wasmJsPath = import.meta.env.PROD
           ? `${baseUrl}wasm/sysml_wasm_bridge.js?v=${WASM_VERSION}`
           : `../wasm/${'sysml_wasm_bridge'}.js?v=${cacheBuster}`
