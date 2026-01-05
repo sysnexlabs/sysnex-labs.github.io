@@ -65,11 +65,7 @@ export function useSysMLWasm() {
 
         // Log successful WASM load with version info
         console.log(`🎉 [useSysMLWasm] WASM module loaded successfully! Version: ${WASM_VERSION}, CacheBuster: ${cacheBuster}`)
-
-        // TEMPORARY DEBUG: Show alert to confirm new WASM is loaded
-        if (import.meta.env.DEV) {
-          alert(`✅ NEW WASM LOADED!\nVersion: ${WASM_VERSION}\nVerify statements are now supported!`)
-        }
+        console.log(`🎉 [useSysMLWasm] Verify statements are NOW supported!`)
 
         const SysMLWasm = wasmModule.SysMLWasm
         if (!SysMLWasm) {
