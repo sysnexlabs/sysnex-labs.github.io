@@ -62,6 +62,11 @@ const NexReq = () => {
             <p className="page-hero-description" style={{ marginTop: '1.5rem' }}>
               {product.description}
             </p>
+            <div style={{ marginTop: '1.5rem' }}>
+              <Link to="/try-nexreq" className="btn primary">
+                Try Interactive Demo →
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>

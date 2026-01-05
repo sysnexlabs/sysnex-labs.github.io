@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { useSysMLDocumentation } from '../../hooks/useSysMLWasm'
+import { useSysMLHir } from '../../hooks/useSysMLHir'
 import { useSysMLAnalytics } from '../../hooks/useSysMLAnalytics'
 import SpotlightCard from '../SpotlightCard'
 import './TestingView.css'
@@ -7,199 +7,242 @@ import './TestingView.css'
 /**
  * Testing View Component
  *
- * Extracts and displays test cases, verification cases, and assertions from SysML v2 code using WASM
+ * Extracts and displays test cases, verification cases, and assertions from SysML v2 code using WASM HIR
  */
 export default function TestingView({ code }) {
-  const { documentation, loading: docLoading } = useSysMLDocumentation(code, 'editor://current')
+  const { hirData, loading: hirLoading } = useSysMLHir(code, 'editor://current')
   const { analytics, loading: analyticsLoading } = useSysMLAnalytics(code, 'editor://current')
   const [activeTab, setActiveTab] = useState('verifications')
 
-  // Extract verifications with objective blocks
+  // Extract verifications from HIR nodes
   const verifications = useMemo(() => {
-    if (!documentation || !documentation.chapters) return []
+    if (!hirData || !hirData.nodes) return []
 
     const verifList = []
-    documentation.chapters.forEach(chapter => {
-      if (chapter.subchapters) {
-        chapter.subchapters.forEach(sub => {
-          if (sub.kind && (sub.kind.includes('Verification') || sub.kind.includes('verification'))) {
-            // Extract objective blocks
-            const objectives = []
-            if (sub.nested_elements) {
-              sub.nested_elements.forEach(nested => {
-                // Check for objective blocks
-                if (nested.title === 'objective' || nested.kind?.toLowerCase().includes('objective')) {
-                  // Extract verify statements from objective
-                  if (nested.nested_elements) {
-                    nested.nested_elements.forEach(verifyStmt => {
-                      if (verifyStmt.signature?.includes('verify') || verifyStmt.title?.includes('verify')) {
-                        objectives.push({
-                          type: 'verify',
-                          target: verifyStmt.title || verifyStmt.signature,
-                        })
-                      }
-                    })
-                  }
-                }
-              })
-            }
 
-            // Extract test actions
-            const actions = []
-            if (sub.nested_elements) {
-              sub.nested_elements.forEach(nested => {
-                if (nested.kind && (nested.kind.includes('Action') || nested.kind.includes('action'))) {
-                  actions.push({
-                    name: nested.title,
-                    kind: nested.kind,
-                    description: nested.doc_comment || (nested.doc_declarations?.[0]?.[1]) || '',
-                  })
-                }
-              })
-            }
-
-            verifList.push({
-              ...sub,
-              packageName: chapter.title,
-              objectives,
-              actions,
-            })
-          }
-        })
-      }
-    })
-    return verifList
-  }, [documentation])
-
-  // Extract use cases (test scenarios)
-  const useCases = useMemo(() => {
-    if (!documentation || !documentation.chapters) return []
-
-    const caseList = []
-    documentation.chapters.forEach(chapter => {
-      if (chapter.subchapters) {
-        chapter.subchapters.forEach(sub => {
-          if (sub.kind && (sub.kind.includes('UseCase') || sub.kind.includes('use case'))) {
-            caseList.push({
-              ...sub,
-              packageName: chapter.title,
-            })
-          }
-        })
-      }
-    })
-    return caseList
-  }, [documentation])
-
-  // Extract assertions with validation status
-  const assertions = useMemo(() => {
-    if (!documentation || !documentation.chapters) return []
-
-    const assertList = []
-    documentation.chapters.forEach(chapter => {
-      if (chapter.subchapters) {
-        chapter.subchapters.forEach(sub => {
-          if (sub.nested_elements) {
-            sub.nested_elements.forEach(nested => {
-              if (nested.kind && nested.kind.includes('Assert')) {
-                // Validate assertion: check if it has a constraint
-                const hasConstraint = nested.nested_elements && nested.nested_elements.some(el =>
-                  el.kind && el.kind.toLowerCase().includes('constraint')
-                )
-                const isValid = hasConstraint || (nested.signature && nested.signature.includes('constraint'))
-
-                assertList.push({
-                  ...nested,
-                  parentName: sub.title,
-                  packageName: chapter.title,
-                  isValid,
-                  validationMessage: isValid ? 'Has constraint' : 'Missing constraint definition'
-                })
-              }
-            })
-          }
-        })
-      }
-    })
-    return assertList
-  }, [documentation])
-
-  // Extract requirements being verified
-  const requirements = useMemo(() => {
-    if (!documentation || !documentation.chapters) return []
-
-    const reqList = []
-    documentation.chapters.forEach(chapter => {
-      if (chapter.subchapters) {
-        chapter.subchapters.forEach(sub => {
-          // Only include actual requirement definitions/usages, not satisfy/verify relationships
-          if (sub.kind && sub.kind.includes('Requirement')) {
-            // Exclude SatisfyRequirementUsage and VerifyRequirementUsage
-            if (!sub.kind.includes('SatisfyRequirement') && !sub.kind.includes('VerifyRequirement')) {
-              reqList.push({
-                ...sub,
-                packageName: chapter.title,
-              })
-            }
-          }
-        })
-      }
-    })
-    return reqList
-  }, [documentation])
-
-  // Extract verify relationships from documentation
-  const verifyRelationships = useMemo(() => {
-    if (!documentation || !documentation.chapters) return []
-
-    const verify = []
-    documentation.chapters.forEach(chapter => {
-      if (chapter.subchapters) {
-        chapter.subchapters.forEach(sub => {
-          // Check for Verify elements (standalone verify statements like "verify req by test")
-          if (sub.kind && (sub.kind === '[VerifyRequirementUsage]' || sub.kind.toLowerCase().includes('verifyrequirementusage'))) {
-            // Extract from title or signature
-            const titleMatch = sub.title?.match(/verify\s+(\w+)\s+by\s+(\w+)/i)
-            if (titleMatch) {
-              verify.push({
-                requirement: titleMatch[1],
-                verification: titleMatch[2],
-                source: 'standalone',
-              })
-            } else if (sub.signature) {
-              const sigMatch = sub.signature.match(/verify\s+(\w+)\s+by\s+(\w+)/i)
-              if (sigMatch) {
-                verify.push({
-                  requirement: sigMatch[1],
-                  verification: sigMatch[2],
-                  source: 'standalone',
-                })
-              }
-            }
-          }
-        })
-      }
-    })
-
-    // Also extract from objective blocks within verifications
-    verifications.forEach(verif => {
-      verif.objectives?.forEach(obj => {
-        if (obj.type === 'verify') {
-          // Extract requirement name from "verify requirementName"
-          const match = obj.target.match(/verify\s+(\w+)/i)
-          if (match) {
-            verify.push({
-              requirement: match[1],
-              verification: verif.title,
-              source: 'objective',
-            })
+    // Iterate through HIR nodes to find VerificationDefinition nodes
+    Object.entries(hirData.nodes).forEach(([nodeId, node]) => {
+      if (node.kind && node.kind.includes('VerificationDefinition')) {
+        // Get package name from parent
+        let packageName = 'Unknown Package'
+        if (node.parent && hirData.nodes[node.parent]) {
+          const parent = hirData.nodes[node.parent]
+          if (parent.kind && parent.kind.includes('Package')) {
+            packageName = parent.name || 'Unnamed Package'
           }
         }
-      })
+
+        // Extract objectives (verify statements within objective blocks)
+        const objectives = []
+        if (node.children && Array.isArray(node.children)) {
+          node.children.forEach(childId => {
+            const child = hirData.nodes[childId]
+            if (child && child.kind && child.kind.includes('Objective')) {
+              // Look for verify statements within objective
+              if (child.children && Array.isArray(child.children)) {
+                child.children.forEach(verifyId => {
+                  const verifyNode = hirData.nodes[verifyId]
+                  if (verifyNode && verifyNode.kind && verifyNode.kind.includes('VerifyRequirementUsage')) {
+                    objectives.push({
+                      type: 'verify',
+                      target: verifyNode.name || 'unnamed',
+                    })
+                  }
+                })
+              }
+            }
+          })
+        }
+
+        // Extract test actions
+        const actions = []
+        if (node.children && Array.isArray(node.children)) {
+          node.children.forEach(childId => {
+            const child = hirData.nodes[childId]
+            if (child && child.kind && (child.kind.includes('ActionDefinition') || child.kind.includes('ActionUsage'))) {
+              actions.push({
+                name: child.name || 'unnamed action',
+                kind: child.kind,
+                description: child.doc_comment || '',
+              })
+            }
+          })
+        }
+
+        verifList.push({
+          title: node.name || 'Unnamed Verification',
+          kind: node.kind,
+          doc_comment: node.doc_comment,
+          stable_id: node.stable_id,
+          packageName,
+          objectives,
+          actions,
+        })
+      }
+    })
+
+    return verifList
+  }, [hirData])
+
+  // Extract use cases (test scenarios) from HIR nodes
+  const useCases = useMemo(() => {
+    if (!hirData || !hirData.nodes) return []
+
+    const caseList = []
+
+    // Iterate through HIR nodes to find UseCase nodes
+    Object.entries(hirData.nodes).forEach(([nodeId, node]) => {
+      if (node.kind && (node.kind.includes('UseCaseDefinition') || node.kind.includes('UseCaseUsage'))) {
+        // Get package name from parent
+        let packageName = 'Unknown Package'
+        if (node.parent && hirData.nodes[node.parent]) {
+          const parent = hirData.nodes[node.parent]
+          if (parent.kind && parent.kind.includes('Package')) {
+            packageName = parent.name || 'Unnamed Package'
+          }
+        }
+
+        caseList.push({
+          title: node.name || 'Unnamed Use Case',
+          kind: node.kind,
+          doc_comment: node.doc_comment,
+          stable_id: node.stable_id,
+          packageName,
+        })
+      }
+    })
+
+    return caseList
+  }, [hirData])
+
+  // Extract assertions from HIR nodes with validation status
+  const assertions = useMemo(() => {
+    if (!hirData || !hirData.nodes) return []
+
+    const assertList = []
+
+    // Iterate through HIR nodes to find AssertUsage nodes
+    Object.entries(hirData.nodes).forEach(([nodeId, node]) => {
+      if (node.kind && node.kind.includes('AssertUsage')) {
+        // Get parent verification name
+        let parentName = 'Unknown Parent'
+        let packageName = 'Unknown Package'
+        if (node.parent && hirData.nodes[node.parent]) {
+          const parent = hirData.nodes[node.parent]
+          parentName = parent.name || 'Unnamed Parent'
+
+          // Traverse up to find package
+          if (parent.parent && hirData.nodes[parent.parent]) {
+            const grandParent = hirData.nodes[parent.parent]
+            if (grandParent.kind && grandParent.kind.includes('Package')) {
+              packageName = grandParent.name || 'Unnamed Package'
+            }
+          }
+        }
+
+        // Validate assertion: check if it has a constraint child
+        let hasConstraint = false
+        if (node.children && Array.isArray(node.children)) {
+          hasConstraint = node.children.some(childId => {
+            const child = hirData.nodes[childId]
+            return child && child.kind && child.kind.includes('Constraint')
+          })
+        }
+
+        const isValid = hasConstraint
+
+        assertList.push({
+          title: node.name || 'unnamed assertion',
+          kind: node.kind,
+          doc_comment: node.doc_comment,
+          stable_id: node.stable_id,
+          parentName,
+          packageName,
+          isValid,
+          validationMessage: isValid ? 'Has constraint' : 'Missing constraint definition'
+        })
+      }
+    })
+
+    return assertList
+  }, [hirData])
+
+  // Extract requirements being verified from HIR nodes
+  const requirements = useMemo(() => {
+    if (!hirData || !hirData.nodes) return []
+
+    const reqList = []
+
+    // Iterate through HIR nodes to find Requirement nodes
+    Object.entries(hirData.nodes).forEach(([nodeId, node]) => {
+      if (node.kind && node.kind.includes('Requirement')) {
+        // Exclude SatisfyRequirementUsage and VerifyRequirementUsage
+        if (!node.kind.includes('SatisfyRequirement') && !node.kind.includes('VerifyRequirement')) {
+          // Get package name from parent
+          let packageName = 'Unknown Package'
+          if (node.parent && hirData.nodes[node.parent]) {
+            const parent = hirData.nodes[node.parent]
+            if (parent.kind && parent.kind.includes('Package')) {
+              packageName = parent.name || 'Unnamed Package'
+            }
+          }
+
+          reqList.push({
+            title: node.name || 'Unnamed Requirement',
+            kind: node.kind,
+            doc_comment: node.doc_comment,
+            stable_id: node.stable_id,
+            packageName,
+          })
+        }
+      }
+    })
+
+    return reqList
+  }, [hirData])
+
+  // Extract verify relationships from HIR nodes
+  const verifyRelationships = useMemo(() => {
+    if (!hirData || !hirData.nodes) return []
+
+    const verify = []
+
+    // Iterate through HIR nodes to find VerifyRequirementUsage nodes
+    Object.entries(hirData.nodes).forEach(([nodeId, node]) => {
+      if (node.kind && node.kind.includes('VerifyRequirementUsage')) {
+        // Get the requirement being verified (usually referenced in the node)
+        const requirementName = node.name || 'unnamed'
+
+        // Find the parent verification
+        let verificationName = 'Unknown Verification'
+        if (node.parent && hirData.nodes[node.parent]) {
+          const parent = hirData.nodes[node.parent]
+
+          // Check if parent is an Objective block
+          if (parent.kind && parent.kind.includes('Objective')) {
+            // Go up one more level to find the verification
+            if (parent.parent && hirData.nodes[parent.parent]) {
+              const grandParent = hirData.nodes[parent.parent]
+              if (grandParent.kind && grandParent.kind.includes('Verification')) {
+                verificationName = grandParent.name || 'Unnamed Verification'
+              }
+            }
+          } else if (parent.kind && parent.kind.includes('Verification')) {
+            // Direct child of verification
+            verificationName = parent.name || 'Unnamed Verification'
+          }
+        }
+
+        verify.push({
+          requirement: requirementName,
+          verification: verificationName,
+          source: node.parent && hirData.nodes[node.parent]?.kind?.includes('Objective') ? 'objective' : 'standalone',
+        })
+      }
     })
 
     return verify
-  }, [documentation, verifications])
+  }, [hirData])
 
   // Calculate test coverage using actual verify relationships with smart matching
   const testCoverage = useMemo(() => {
@@ -231,7 +274,7 @@ export default function TestingView({ code }) {
     }
   }, [requirements, verifyRelationships])
 
-  if (docLoading || analyticsLoading) {
+  if (hirLoading || analyticsLoading) {
     return (
       <div className="testing-view">
         <div className="testing-loading">Extracting test cases from code...</div>
@@ -300,53 +343,69 @@ export default function TestingView({ code }) {
         {activeTab === 'verifications' && (
           <div className="verifications-list">
             {verifications.length > 0 ? (
-              verifications.map((verif, index) => (
-                <SpotlightCard key={index}>
-                  <div className="verification-item">
-                    <div className="verification-header">
-                      <span className="verification-badge">{verif.kind}</span>
-                      <h4 className="verification-title">{verif.title}</h4>
-                    </div>
-                    <div className="verification-package">
-                      Package: <code>{verif.packageName}</code>
-                    </div>
-                    {verif.doc_comment && (
-                      <div className="verification-doc">{verif.doc_comment}</div>
-                    )}
-                    {verif.doc_declarations && verif.doc_declarations.length > 0 && (
-                      <div className="verification-doc">
-                        {verif.doc_declarations.map((decl, i) => (
-                          <div key={i}>{decl[1]}</div>
-                        ))}
-                      </div>
-                    )}
-                    {verif.objectives && verif.objectives.length > 0 && (
-                      <div className="verification-objectives">
-                        <strong>Objectives:</strong>
-                        <ul>
-                          {verif.objectives.map((obj, i) => (
-                            <li key={i}>
-                              <code>{obj.target}</code> ({obj.type})
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    {verif.actions && verif.actions.length > 0 && (
-                      <div className="verification-actions">
-                        <strong>Test Steps:</strong>
-                        <ul>
-                          {verif.actions.map((action, i) => (
-                            <li key={i}>
-                              <code>{action.name}</code> - {action.description}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                </SpotlightCard>
-              ))
+              <div className="verifications-table-container">
+                <table className="testing-table">
+                  <thead>
+                    <tr>
+                      <th>Test Case</th>
+                      <th>Type</th>
+                      <th>Package</th>
+                      <th>Objectives</th>
+                      <th>Actions</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {verifications.map((verif, index) => {
+                      // Check if verification has objectives or actions
+                      const hasObjectives = verif.objectives && verif.objectives.length > 0
+                      const hasActions = verif.actions && verif.actions.length > 0
+                      const status = hasObjectives && hasActions ? 'Complete' :
+                                     hasObjectives ? 'Partial' : 'Defined'
+
+                      return (
+                        <tr key={index} className={`test-row status-${status.toLowerCase()}`}>
+                          <td className="test-title">
+                            <strong>{verif.title}</strong>
+                            {verif.doc_comment && (
+                              <div className="test-description">{verif.doc_comment}</div>
+                            )}
+                          </td>
+                          <td className="test-type">
+                            <span className="type-badge">{verif.kind.replace(/[\[\]]/g, '')}</span>
+                          </td>
+                          <td className="test-package">
+                            <code>{verif.packageName}</code>
+                          </td>
+                          <td className="test-objectives">
+                            {hasObjectives ? (
+                              <ul className="compact-list">
+                                {verif.objectives.map((obj, i) => (
+                                  <li key={i}><code>{obj.target}</code></li>
+                                ))}
+                              </ul>
+                            ) : (
+                              <span className="empty-cell">-</span>
+                            )}
+                          </td>
+                          <td className="test-actions">
+                            {hasActions ? (
+                              <span className="action-count">{verif.actions.length} steps</span>
+                            ) : (
+                              <span className="empty-cell">-</span>
+                            )}
+                          </td>
+                          <td className="test-status">
+                            <span className={`status-badge status-${status.toLowerCase()}`}>
+                              {status}
+                            </span>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
             ) : (
               <div className="testing-empty">
                 No test cases found. Define verifications using <code>verification def</code> syntax.
@@ -358,40 +417,43 @@ export default function TestingView({ code }) {
         {activeTab === 'assertions' && (
           <div className="assertions-list">
             {assertions.length > 0 ? (
-              assertions.map((assertion, index) => (
-                <SpotlightCard key={index}>
-                  <div className="assertion-item">
-                    <div className="assertion-header">
-                      <span className="assertion-badge">{assertion.kind}</span>
-                      <h4 className="assertion-title">{assertion.title}</h4>
-                      <span className={`assertion-validation-badge ${assertion.isValid ? 'valid' : 'invalid'}`}>
-                        {assertion.isValid ? '✓ Valid' : '✗ Invalid'}
-                      </span>
-                    </div>
-                    <div className="assertion-context">
-                      Test: <code>{assertion.parentName}</code>
-                      <span className="assertion-validation-message">
-                        {assertion.validationMessage}
-                      </span>
-                    </div>
-                    {assertion.doc_comment && (
-                      <div className="assertion-doc">{assertion.doc_comment}</div>
-                    )}
-                    {assertion.doc_declarations && assertion.doc_declarations.length > 0 && (
-                      <div className="assertion-doc">
-                        {assertion.doc_declarations.map((decl, i) => (
-                          <div key={i}>{decl[1]}</div>
-                        ))}
-                      </div>
-                    )}
-                    {assertion.signature && (
-                      <div className="assertion-signature">
-                        <code>{assertion.signature}</code>
-                      </div>
-                    )}
-                  </div>
-                </SpotlightCard>
-              ))
+              <div className="assertions-table-container">
+                <table className="testing-table">
+                  <thead>
+                    <tr>
+                      <th>Assertion</th>
+                      <th>Test Case</th>
+                      <th>Package</th>
+                      <th>Description</th>
+                      <th>Validation</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {assertions.map((assertion, index) => (
+                      <tr key={index} className={`test-row status-${assertion.isValid ? 'valid' : 'invalid'}`}>
+                        <td className="test-title">
+                          <strong>{assertion.title}</strong>
+                        </td>
+                        <td className="test-parent">
+                          <code>{assertion.parentName}</code>
+                        </td>
+                        <td className="test-package">
+                          <code>{assertion.packageName}</code>
+                        </td>
+                        <td className="test-description">
+                          {assertion.doc_comment || 'No description'}
+                        </td>
+                        <td className="test-validation">
+                          <span className={`status-badge status-${assertion.isValid ? 'valid' : 'invalid'}`}>
+                            {assertion.isValid ? '✓ Valid' : '✗ Invalid'}
+                          </span>
+                          <div className="validation-message">{assertion.validationMessage}</div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             ) : (
               <div className="testing-empty">
                 No assertions found. Add <code>assert</code> statements to verification cases.
@@ -403,26 +465,47 @@ export default function TestingView({ code }) {
         {activeTab === 'scenarios' && (
           <div className="scenarios-list">
             {useCases.length > 0 ? (
-              useCases.map((useCase, index) => (
-                <SpotlightCard key={index}>
-                  <div className="scenario-item">
-                    <div className="scenario-header">
-                      <span className="scenario-badge">{useCase.kind}</span>
-                      <h4 className="scenario-title">{useCase.title}</h4>
-                    </div>
-                    {useCase.doc_comment && (
-                      <div className="scenario-doc">{useCase.doc_comment}</div>
-                    )}
-                    {useCase.doc_declarations && useCase.doc_declarations.length > 0 && (
-                      <div className="scenario-doc">
-                        {useCase.doc_declarations.map((decl, i) => (
-                          <div key={i}>{decl[1]}</div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </SpotlightCard>
-              ))
+              <div className="scenarios-table-container">
+                <table className="testing-table">
+                  <thead>
+                    <tr>
+                      <th>Scenario</th>
+                      <th>Type</th>
+                      <th>Package</th>
+                      <th>Description</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {useCases.map((useCase, index) => {
+                      // Check if scenario has description
+                      const status = useCase.doc_comment ? 'Documented' : 'Defined'
+
+                      return (
+                        <tr key={index} className={`test-row status-${status.toLowerCase()}`}>
+                          <td className="test-title">
+                            <strong>{useCase.title}</strong>
+                          </td>
+                          <td className="test-type">
+                            <span className="type-badge">{useCase.kind.replace(/[\[\]]/g, '')}</span>
+                          </td>
+                          <td className="test-package">
+                            <code>{useCase.packageName}</code>
+                          </td>
+                          <td className="test-description">
+                            {useCase.doc_comment || 'No description'}
+                          </td>
+                          <td className="test-status">
+                            <span className={`status-badge status-${status.toLowerCase()}`}>
+                              {status}
+                            </span>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
             ) : (
               <div className="testing-empty">
                 No test scenarios found. Define scenarios using <code>use case</code> syntax.

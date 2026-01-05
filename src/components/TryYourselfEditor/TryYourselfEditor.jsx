@@ -10,26 +10,36 @@ export const DEFAULT_EXAMPLE = `package 'Vehicle System' {
      * A simple vehicle system example demonstrating
      * SysML v2 structural modeling.
      */
-    
+
     private import ScalarValues::*;
-    
+
     part def Vehicle {
-        doc /* Here follow Vehicle description ... */
-        doc Tip /* you can also write Tips */
+        doc /*
+         * Electric vehicle with powertrain components.
+         * Demonstrates hierarchical part decomposition.
+         */
         attribute speed :> Real;
         attribute mass : Real = 1000.0;
-        
+
         part engine : Engine;
         part wheels : Wheel[4];
-        part transmission;
+        part transmission : Transmission;
     }
-    
+
     part def Engine {
+        doc /* Electric motor propulsion system */
         attribute power : Real = 150.0;
+        attribute voltage : Real = 400.0;
     }
-    
+
     part def Wheel {
+        doc /* Vehicle wheel assembly */
         attribute diameter : Real = 0.5;
+    }
+
+    part def Transmission {
+        doc /* Power transmission system */
+        attribute gearRatio : Real = 3.5;
     }
 }`
 
@@ -53,17 +63,35 @@ const EXAMPLES = [
   {
     name: 'Requirements',
     code: `package 'Requirements Example' {
-    requirement def 'Vehicle Safety' {
+    private import ScalarValues::*;
+
+    requirement def VehicleSafetyReq {
         doc /*
          * The vehicle must meet all safety standards
          */
+        subject vehicle : Vehicle;
     }
-    
-    requirement def 'Performance' {
+
+    requirement def PerformanceReq {
         doc /*
          * The vehicle must achieve 0-60 mph in under 6 seconds
          */
+        subject vehicle : Vehicle;
+        attribute targetTime : Real = 6.0;
     }
+
+    part def Vehicle {
+        attribute acceleration : Real;
+    }
+
+    // Requirement instances
+    requirement safety : VehicleSafetyReq;
+    requirement performance : PerformanceReq;
+    part testVehicle : Vehicle;
+
+    // Satisfaction
+    satisfy safety by testVehicle;
+    satisfy performance by testVehicle;
 }`
   },
   {
@@ -104,7 +132,7 @@ constraints
   }
 ]
 
-export default function TryYourselfEditor({ onCodeChange, defaultCode, defaultExample = 'Vehicle System' }) {
+export default function TryYourselfEditor({ onCodeChange, defaultCode, defaultExample = 'Vehicle System', showExamples = false }) {
   const [code, setCode] = useState(defaultCode || DEFAULT_EXAMPLE)
   const [selectedExample, setSelectedExample] = useState(defaultExample)
   const [editorHeight, setEditorHeight] = useState(500)
@@ -682,19 +710,21 @@ export default function TryYourselfEditor({ onCodeChange, defaultCode, defaultEx
     <div className="try-yourself-editor">
       <div className="editor-header">
         <h3>SysML v2 Editor</h3>
-        <div className="example-selector">
-          <label htmlFor="example-select">Example: </label>
-          <select
-            id="example-select"
-            value={selectedExample}
-            onChange={(e) => handleExampleSelect(e.target.value)}
-            className="example-select"
-          >
-            {EXAMPLES.map(ex => (
-              <option key={ex.name} value={ex.name}>{ex.name}</option>
-            ))}
-          </select>
-        </div>
+        {showExamples && (
+          <div className="example-selector">
+            <label htmlFor="example-select">Example: </label>
+            <select
+              id="example-select"
+              value={selectedExample}
+              onChange={(e) => handleExampleSelect(e.target.value)}
+              className="example-select"
+            >
+              {EXAMPLES.map(ex => (
+                <option key={ex.name} value={ex.name}>{ex.name}</option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
       
       <div className="editor-container" ref={containerRef}>

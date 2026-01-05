@@ -62,6 +62,11 @@ const NexAnalytics = () => {
             <p className="page-hero-description" style={{ marginTop: '1.5rem' }}>
               {product.description}
             </p>
+            <div style={{ marginTop: '1.5rem' }}>
+              <Link to="/try-nexanalytics" className="btn primary">
+                Preview Demo (Coming Soon) →
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>

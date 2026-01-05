@@ -8,6 +8,15 @@ import Contact from './pages/Contact'
 // Lazy load heavy components for better code splitting
 const TryYourself = lazy(() => import('./pages/TryYourself'))
 const Product = lazy(() => import('./pages/Product'))
+// Demo pages
+const TryNexDocs = lazy(() => import('./pages/demos/TryNexDocs'))
+const TryNexVar = lazy(() => import('./pages/demos/TryNexVar'))
+const TryNexViz = lazy(() => import('./pages/demos/TryNexViz'))
+const TryNexAnalytics = lazy(() => import('./pages/demos/TryNexAnalytics'))
+const TryNexReq = lazy(() => import('./pages/demos/TryNexReq'))
+const TryNexTest = lazy(() => import('./pages/demos/TryNexTest'))
+const TryNexTrade = lazy(() => import('./pages/demos/TryNexTrade'))
+const TryNexSim = lazy(() => import('./pages/demos/TryNexSim'))
 const Pricing = lazy(() => import('./pages/Pricing'))
 const Legal = lazy(() => import('./pages/Legal'))
 const HeroAlternative = lazy(() => import('./pages/HeroAlternative'))
@@ -101,6 +110,15 @@ function AppContent() {
             <Route path="/product" element={<Product />} />
             <Route path="/product/try-yourself" element={<TryYourself />} />
             <Route path="/try-yourself" element={<TryYourself />} />
+            {/* Demo pages */}
+            <Route path="/try-nexdocs" element={<TryNexDocs />} />
+            <Route path="/try-nexvar" element={<TryNexVar />} />
+            <Route path="/try-nexviz" element={<TryNexViz />} />
+            <Route path="/try-nexanalytics" element={<TryNexAnalytics />} />
+            <Route path="/try-nexreq" element={<TryNexReq />} />
+            <Route path="/try-nextest" element={<TryNexTest />} />
+            <Route path="/try-nextrade" element={<TryNexTrade />} />
+            <Route path="/try-nexsim" element={<TryNexSim />} />
             <Route path="/hero-alternative" element={<HeroAlternative />} />
             {/* Competences pages */}
             <Route path="/about" element={<About />} />

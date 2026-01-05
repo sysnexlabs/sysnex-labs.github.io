@@ -42,6 +42,11 @@ const NexVar = () => {
             <p className="product-subtitle">{product.subtitle}</p>
             <StatusBadge status={product.status} />
             <p className="page-hero-description" style={{ marginTop: '1.5rem' }}>{product.description}</p>
+            <div style={{ marginTop: '1.5rem' }}>
+              <Link to="/try-nexvar" className="btn primary">
+                Try Interactive Demo →
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>

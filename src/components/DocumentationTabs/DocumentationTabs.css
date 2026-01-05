@@ -7,20 +7,29 @@
 .doc-tabs-header {
   display: flex;
   gap: 0.5rem;
-  padding: 1rem 1.5rem;
+  padding: 0.625rem 1rem;
   background: rgba(0, 0, 0, 0.3);
   border-bottom: 1px solid rgba(0, 180, 216, 0.1);
+  min-height: 44px;
+  height: 44px;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .doc-tab-button {
-  padding: 0.5rem 1rem;
+  padding: 0.375rem 0.75rem;
   background: transparent;
   border: 1px solid rgba(0, 180, 216, 0.2);
   border-radius: 6px;
   color: rgba(255, 255, 255, 0.7);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .doc-tab-button:hover {
