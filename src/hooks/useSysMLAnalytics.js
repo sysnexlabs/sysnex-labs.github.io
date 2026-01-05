@@ -42,10 +42,34 @@ export function useSysMLAnalytics(code, fileUri = 'editor://current') {
         try {
           console.log('🔄 [useSysMLAnalytics] Calling generate_analytics...')
           const stats = await safeWasmCall(() => wasm.generate_analytics(code, fileUri), 'generate_analytics')
-          console.log('✅ [useSysMLAnalytics] Analytics result:', stats)
-          setAnalytics(stats)
+          console.log('✅ [useSysMLAnalytics] Analytics result (raw):', stats)
+
+          // Convert Map to plain object (WASM returns Map, but React needs plain object)
+          const convertMapToObject = (value) => {
+            if (value instanceof Map) {
+              const obj = {}
+              for (const [key, val] of value.entries()) {
+                obj[key] = convertMapToObject(val)
+              }
+              return obj
+            } else if (Array.isArray(value)) {
+              return value.map(convertMapToObject)
+            } else if (value && typeof value === 'object') {
+              const obj = {}
+              for (const [key, val] of Object.entries(value)) {
+                obj[key] = convertMapToObject(val)
+              }
+              return obj
+            }
+            return value
+          }
+
+          const analyticsObj = convertMapToObject(stats)
+          console.log('✅ [useSysMLAnalytics] Analytics result (converted):', analyticsObj)
+
+          setAnalytics(analyticsObj)
           // Cache the result
-          analyticsCache.set(cacheKey, stats)
+          analyticsCache.set(cacheKey, analyticsObj)
           cacheKeyRef.current = cacheKey
           // Limit cache size
           if (analyticsCache.size > 10) {
