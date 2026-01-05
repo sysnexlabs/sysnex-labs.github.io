@@ -1,7 +1,9 @@
 import React, { useState, useMemo } from 'react'
 import { useSysMLDocumentation } from '../../hooks/useSysMLWasm'
 import { useSysMLAnalytics } from '../../hooks/useSysMLAnalytics'
+import { useSysMLTradeStudy } from '../../hooks/useSysMLTradeStudy'
 import SpotlightCard from '../SpotlightCard'
+import ComparisonChart from './ComparisonChart'
 import './TradeStudyView.css'
 
 /**
@@ -12,6 +14,7 @@ import './TradeStudyView.css'
 export default function TradeStudyView({ code }) {
   const { documentation, loading: docLoading } = useSysMLDocumentation(code, 'editor://current')
   const { analytics, loading: analyticsLoading } = useSysMLAnalytics(code, 'editor://current')
+  const { tradeStudy, loading: tradeStudyLoading } = useSysMLTradeStudy(code, 'editor://current')
   const [activeTab, setActiveTab] = useState('variants')
 
   // Extract analysis definitions (trade studies)
@@ -160,7 +163,7 @@ export default function TradeStudyView({ code }) {
     }
   }, [variants, objectives])
 
-  if (docLoading || analyticsLoading) {
+  if (docLoading || analyticsLoading || tradeStudyLoading) {
     return (
       <div className="trade-study-view">
         <div className="trade-study-loading">Extracting trade study data...</div>
@@ -300,37 +303,88 @@ export default function TradeStudyView({ code }) {
 
         {activeTab === 'matrix' && (
           <div className="decision-matrix-view">
-            <h4>Decision Matrix</h4>
-            {decisionMatrix && decisionMatrix.variants.length > 0 ? (
-              <div className="matrix-container">
-                <table className="decision-matrix">
-                  <thead>
-                    <tr>
-                      <th>Variant</th>
-                      {decisionMatrix.attributes.map((attr, i) => (
-                        <th key={i}>{attr}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {decisionMatrix.variants.map((variant, i) => (
-                      <tr key={i}>
-                        <td className="variant-name">{variant}</td>
-                        {decisionMatrix.attributes.map((attr, j) => (
-                          <td key={j} className="matrix-value">
-                            {decisionMatrix.data[i][attr] !== undefined
-                              ? decisionMatrix.data[i][attr].toFixed(1)
-                              : '-'}
-                          </td>
-                        ))}
-                      </tr>
+            <h4>Visual Decision Matrix</h4>
+            {tradeStudy && tradeStudy.scores && tradeStudy.scores.length > 0 ? (
+              <>
+                {/* Recommendation */}
+                {tradeStudy.recommendation && (
+                  <SpotlightCard>
+                    <div className="trade-recommendation">
+                      <strong>Recommendation:</strong> {tradeStudy.recommendation}
+                    </div>
+                  </SpotlightCard>
+                )}
+
+                {/* Overall Scores */}
+                <div className="overall-scores">
+                  <h5>Overall Rankings</h5>
+                  <div className="scores-grid">
+                    {tradeStudy.scores.map((score, i) => (
+                      <SpotlightCard key={i}>
+                        <div className="score-item">
+                          <div className="score-header">
+                            <span className="score-rank">#{score.rank}</span>
+                            <h4>{score.variantName}</h4>
+                          </div>
+                          <div className="score-bar-container">
+                            <div
+                              className="score-bar"
+                              style={{ width: `${score.overallScore * 100}%` }}
+                            />
+                          </div>
+                          <div className="score-value">{(score.overallScore * 100).toFixed(0)}%</div>
+                        </div>
+                      </SpotlightCard>
                     ))}
-                  </tbody>
-                </table>
-                <div className="matrix-note">
-                  Comparing {decisionMatrix.variants.length} variants across {decisionMatrix.attributes.length} attributes
+                  </div>
                 </div>
-              </div>
+
+                {/* Comparison Charts */}
+                <div className="comparison-charts">
+                  <h5>Attribute Comparisons</h5>
+                  <div className="charts-grid">
+                    {tradeStudy.comparisons.map((comparison, i) => (
+                      <SpotlightCard key={i}>
+                        <ComparisonChart
+                          comparison={comparison}
+                          scores={tradeStudy.scores}
+                        />
+                      </SpotlightCard>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Data Table */}
+                {decisionMatrix && decisionMatrix.variants.length > 0 && (
+                  <div className="matrix-container">
+                    <h5>Data Table</h5>
+                    <table className="decision-matrix">
+                      <thead>
+                        <tr>
+                          <th>Variant</th>
+                          {decisionMatrix.attributes.map((attr, i) => (
+                            <th key={i}>{attr}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {decisionMatrix.variants.map((variant, i) => (
+                          <tr key={i}>
+                            <td className="variant-name">{variant}</td>
+                            {decisionMatrix.attributes.map((attr, j) => (
+                              <td key={j} className="matrix-value">
+                                {decisionMatrix.data[i][attr] !== undefined
+                                  ? decisionMatrix.data[i][attr].toFixed(1)
+                                  : '-'}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </>
             ) : (
               <div className="trade-study-empty">
                 <p>Decision matrix requires variants with comparable attributes.</p>
