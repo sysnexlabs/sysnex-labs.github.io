@@ -115,11 +115,13 @@ export function useSysMLTradeStudy(code, fileUri = 'editor://current') {
             // This makes it work even if specialization detection fails
             if ((baseType && baseTypes.has(baseType)) || attributes.length > 0) {
               variants.push({
-                name: sub.title,
+                title: sub.title,           // Match documentation structure
+                kind: sub.kind,             // Match documentation structure
                 baseType: baseType || 'unknown',
                 attributes,
-                documentation: sub.doc_comment,
-                packageName: chapter.title
+                doc_comment: sub.doc_comment,  // Match documentation structure
+                packageName: chapter.title,
+                signature: sub.signature    // Include for reference
               })
             }
           }
@@ -130,7 +132,7 @@ export function useSysMLTradeStudy(code, fileUri = 'editor://current') {
     // Debug logging
     console.log('🔍 [useSysMLTradeStudy] Extracted variants:', variants.length)
     variants.forEach((v, i) => {
-      console.log(`  Variant ${i + 1}: ${v.name}, baseType: ${v.baseType}, attributes:`, v.attributes)
+      console.log(`  Variant ${i + 1}: ${v.title}, baseType: ${v.baseType}, attributes:`, v.attributes)
     })
     console.log('🔍 [useSysMLTradeStudy] Base types found:', Array.from(baseTypes))
 
@@ -194,7 +196,7 @@ export function useSysMLTradeStudy(code, fileUri = 'editor://current') {
     attributeNames.forEach(attrName => {
       const values = variants
         .map(v => ({
-          name: v.name,
+          name: v.title,
           value: v.attributes.find(a => a.name === attrName)?.value
         }))
         .filter(v => v.value !== undefined)

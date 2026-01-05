@@ -37,78 +37,11 @@ export default function TradeStudyView({ code }) {
     return studies
   }, [documentation])
 
-  // Extract part variants (different configurations)
+  // Use variants from tradeStudy hook (has proper :>> pattern matching)
   const variants = useMemo(() => {
-    if (!documentation || !documentation.chapters) return []
-
-    const variantList = []
-    const baseTypes = new Set()
-
-    // First pass: identify base types
-    documentation.chapters.forEach(chapter => {
-      if (chapter.subchapters) {
-        chapter.subchapters.forEach(sub => {
-          if (sub.kind && (sub.kind.includes('PartDef') || sub.kind.includes('part def'))) {
-            // Check if it's a specialization (has :> in signature)
-            if (sub.signature && sub.signature.includes(':>')) {
-              const match = sub.signature.match(/:>\s*(\w+)/)
-              if (match) {
-                baseTypes.add(match[1])
-              }
-            }
-          }
-        })
-      }
-    })
-
-    // Second pass: extract variants
-    documentation.chapters.forEach(chapter => {
-      if (chapter.subchapters) {
-        chapter.subchapters.forEach(sub => {
-          if (sub.kind && (sub.kind.includes('PartDef') || sub.kind.includes('part def'))) {
-            // Extract base type
-            let baseType = null
-            if (sub.signature && sub.signature.includes(':>')) {
-              const match = sub.signature.match(/:>\s*(\w+)/)
-              if (match) {
-                baseType = match[1]
-              }
-            }
-
-            // Extract attributes with values
-            const attributes = []
-            if (sub.nested_elements) {
-              sub.nested_elements.forEach(nested => {
-                if (nested.kind && nested.kind.toLowerCase().includes('attribute')) {
-                  // Extract attribute name and value from signature
-                  if (nested.signature) {
-                    const valueMatch = nested.signature.match(/=\s*([\d.]+)/)
-                    if (valueMatch) {
-                      attributes.push({
-                        name: nested.title,
-                        value: parseFloat(valueMatch[1]),
-                        signature: nested.signature
-                      })
-                    }
-                  }
-                }
-              })
-            }
-
-            if (baseType && baseTypes.has(baseType)) {
-              variantList.push({
-                ...sub,
-                baseType,
-                attributes,
-                packageName: chapter.title,
-              })
-            }
-          }
-        })
-      }
-    })
-    return variantList
-  }, [documentation])
+    if (!tradeStudy || !tradeStudy.variants) return []
+    return tradeStudy.variants
+  }, [tradeStudy])
 
   // Extract objectives from analysis definitions
   const objectives = useMemo(() => {

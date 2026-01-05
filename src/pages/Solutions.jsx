@@ -22,7 +22,7 @@ const Solutions = () => {
       iconText: 'MIGRATE',
       iconColor: '#00bcd4',
       title: 'Accelerate SysML v2 Migration',
-      tagline: 'Reduce migration effort by 60%, accelerate time-to-value',
+      tagline: 'Significantly reduce migration effort and accelerate time-to-value',
       challenge: 'Legacy SysML 1.x models locked in proprietary tools. High migration costs, vendor lock-in, uncertain ROI.',
       solution: [
         'NexDocs for automated documentation generation',
@@ -31,9 +31,9 @@ const Solutions = () => {
         'AI-assisted model transformation and refactoring'
       ],
       outcome: {
-        metric1: { value: '60%', label: 'Faster Migration' },
-        metric2: { value: '40%', label: 'Cost Reduction' },
-        metric3: { value: '3-6 mo', label: 'Payback Period' }
+        metric1: { value: 'High', label: 'Migration Velocity' },
+        metric2: { value: '40%', label: 'Efficiency Gain (Pilot)' },
+        metric3: { value: 'Fast', label: 'Time to Value' }
       },
       products: ['NexDocs', 'NexReq', 'NexSuite'],
       cta: {
@@ -46,7 +46,7 @@ const Solutions = () => {
       iconText: 'COMPLY',
       iconColor: '#4caf50',
       title: 'Achieve ISO 26262 Compliance',
-      tagline: 'Automate compliance workflows, reduce audit time by 40%',
+      tagline: 'Automate compliance workflows and improve audit readiness',
       challenge: 'Manual work products, traceability gaps, expensive compliance consultants. Late-stage compliance issues delay releases.',
       solution: [
         'Automotive compliance variant with ISO 26262 templates',
@@ -55,9 +55,9 @@ const Solutions = () => {
         'Safety analysis integration (ASIL decomposition)'
       ],
       outcome: {
-        metric1: { value: '40%', label: 'Less Compliance Time' },
-        metric2: { value: '100%', label: 'Automated Traceability' },
-        metric3: { value: '2-4 mo', label: 'Payback Period' }
+        metric1: { value: 'High', label: 'Audit Readiness' },
+        metric2: { value: '100%', label: 'Traceability Coverage' },
+        metric3: { value: 'Rapid', label: 'Implementation' }
       },
       products: ['Automotive Compliance Edition', 'NexReq', 'NexTest'],
       cta: {
@@ -79,9 +79,9 @@ const Solutions = () => {
         'CI/CD pipelines for automated validation'
       ],
       outcome: {
-        metric1: { value: '50%', label: 'Better Collaboration' },
-        metric2: { value: '30%', label: 'Less Context Switching' },
-        metric3: { value: '1-2 mo', label: 'Payback Period' }
+        metric1: { value: 'High', label: 'Collaboration' },
+        metric2: { value: 'Low', label: 'Context Switching' },
+        metric3: { value: 'Fast', label: 'Onboarding' }
       },
       products: ['Platform Edition', 'Workspaces', 'CLI'],
       cta: {
@@ -103,9 +103,9 @@ const Solutions = () => {
         'No mandatory support contracts - flexible licensing'
       ],
       outcome: {
-        metric1: { value: '60%', label: 'Cost Savings' },
+        metric1: { value: 'Significant', label: 'Cost Optimization' },
         metric2: { value: '$0', label: 'Essential Edition' },
-        metric3: { value: '1-3 mo', label: 'Payback Period' }
+        metric3: { value: 'Flexible', label: 'Licensing' }
       },
       products: ['Essential (Free)', 'Standard', 'Platform'],
       cta: {
@@ -136,7 +136,7 @@ const Solutions = () => {
             <div className="hero-badge">Business Outcomes</div>
             <h1>Solutions by Business Need</h1>
             <p className="page-hero-description">
-              From SysML v2 migration to compliance automation, see how NexSuite
+              From SysML v2 migration to compliance automation, see how SysNex
               solves your specific business challenges with measurable outcomes.
             </p>
           </motion.div>
@@ -148,10 +148,10 @@ const Solutions = () => {
         <div className="container">
           <StatsGrid
             stats={[
-              { number: '60%', label: 'Faster Migration' },
-              { number: '40%', label: 'Less Compliance Time' },
-              { number: '50%', label: 'Better Collaboration' },
-              { number: '60%', label: 'Cost Savings' }
+              { number: 'High', label: 'Migration Velocity' },
+              { number: '100%', label: 'Traceability' },
+              { number: 'Git', label: 'Native Workflow' },
+              { number: 'Open', label: 'Standard Based' }
             ]}
             maxWidth="900px"
           />

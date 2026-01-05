@@ -37,11 +37,11 @@ const Overview = () => {
             transition={{ duration: 0.8 }}
             className="product-hero-content"
           >
-            <div className="hero-badge">Enterprise SysML v2 Tooling</div>
-            <h1>NexSuite</h1>
+            <div className="hero-badge">The SysNex Ecosystem</div>
+            <h1>SysNex</h1>
             <p className="page-hero-description">
               Production-ready SysML v2 Language Server technology with VS Code integration, AI assistance, and compliance variants.
-              Built for OEM/Tier-1 teams who demand performance, reliability, and regulatory compliance.
+              Built for performance-critical engineering teams who demand reliability and regulatory compliance.
             </p>
             <div className="hero-cta">
               <Link to="/try-yourself" className="btn primary">Try Yourself</Link>
@@ -58,7 +58,7 @@ const Overview = () => {
                 <div className="stat-item">
                   <div className="stat-number">18/18</div>
                   <div className="stat-label">LSP Features</div>
-                  <div className="stat-explanation">All Language Server Protocol features implemented and tested.</div>
+                  <div className="stat-explanation">Standard Language Server Protocol features implemented and pilot-tested.</div>
                 </div>
               </div>
             </details>
@@ -70,9 +70,9 @@ const Overview = () => {
       <section className="page-content-section">
         <div className="container">
           <div className="section-header">
-            <h2>Why Choose NexSuite</h2>
+            <h2>Why Choose SysNex</h2>
             <p className="section-subtitle">
-              Built for OEM/Tier-1 systems engineering teams who demand performance, reliability, and regulatory compliance
+              Built for performance-critical systems engineering teams
             </p>
           </div>
           <div className="differentiators-grid">
@@ -89,7 +89,7 @@ const Overview = () => {
                       <img
                         src={item.icon}
                         alt={item.title}
-                        style={{height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain'}}
+                        style={{ height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain' }}
                       />
                     ) : (
                       item.icon
@@ -115,7 +115,7 @@ const Overview = () => {
           <div className="section-header">
             <h2>Modern Development Experience</h2>
             <p className="section-subtitle">
-              Production-ready features that set NexSuite apart
+              Production-ready features that set SysNex apart
             </p>
           </div>
 
@@ -125,7 +125,7 @@ const Overview = () => {
                 <img
                   src="/assets/capability_wasm.svg"
                   alt="Browser-Based WASM"
-                  style={{height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain'}}
+                  style={{ height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain' }}
                 />
               </div>
               <h3>Browser-Based WASM</h3>
@@ -142,7 +142,7 @@ const Overview = () => {
                 <img
                   src="/assets/feature_ai_first.svg"
                   alt="AI-Powered Development"
-                  style={{height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain'}}
+                  style={{ height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain' }}
                 />
               </div>
               <h3>AI-Powered Development</h3>
@@ -157,7 +157,7 @@ const Overview = () => {
                 <img
                   src="/assets/capability_desktop.svg"
                   alt="Standalone Desktop App"
-                  style={{height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain'}}
+                  style={{ height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain' }}
                 />
               </div>
               <h3>Standalone Desktop App</h3>
@@ -172,7 +172,7 @@ const Overview = () => {
                 <img
                   src="/assets/feature_git_native.svg"
                   alt="Git-Native Workflows"
-                  style={{height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain'}}
+                  style={{ height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain' }}
                 />
               </div>
               <h3>Git-Native Workflows</h3>
@@ -187,7 +187,7 @@ const Overview = () => {
                 <img
                   src="/assets/capability_edge.svg"
                   alt="Edge Deployment"
-                  style={{height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain'}}
+                  style={{ height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain' }}
                 />
               </div>
               <h3>Edge Deployment</h3>
@@ -202,7 +202,7 @@ const Overview = () => {
                 <img
                   src="/assets/capability_foundation.svg"
                   alt="ISO/IEC 15288 Foundation"
-                  style={{height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain'}}
+                  style={{ height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain' }}
                 />
               </div>
               <h3>ISO/IEC 15288 Foundation</h3>
@@ -241,7 +241,7 @@ const Overview = () => {
                 Choose how you want to use NexSuite
               </p>
               <ul className="variant-features">
-                <li>VS Code Extension (50M+ users)</li>
+                <li>VS Code Extension (Standard API)</li>
                 <li>Desktop App (Tauri)</li>
                 <li>Cloud/SaaS</li>
                 <li>CLI & CI/CD</li>

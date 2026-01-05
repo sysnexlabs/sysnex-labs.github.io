@@ -84,20 +84,47 @@ const DEFAULT_TESTING_EXAMPLE = `package 'Battery Management Testing' {
         then action verifyDisconnect : VerifyDisconnect;
         then done;
 
-        // Assertions
-        assert { testBMS.voltage <= 4.2 }
-        assert disconnectActive { testBMS.voltage > 4.2 }
+        // Assertions with constraint expressions
+        assert voltageWithinLimit { testBMS.voltage <= 4.2 }
+        assert disconnectActive { testBMS.voltage > 4.2 implies testBMS.disconnectSignal == true }
+        assert currentZero { testBMS.current == 0.0 }
     }
 
     verification def ThermalShutdownTest {
         doc /*
          * Verify thermal protection activates at 60°C
+         *
+         * Test procedure:
+         * 1. Initialize BMS at normal temperature (25°C)
+         * 2. Gradually increase temperature to 65°C
+         * 3. Assert that shutdown is triggered at 60°C
          */
         subject testBMS : BatteryManagementSystem;
 
         objective {
             verify thermalProtection;
         }
+
+        action def InitializeNormalTemp {
+            doc /* Set initial temperature to 25°C */
+        }
+
+        action def IncreaseTemperature {
+            doc /* Ramp temperature to 65°C */
+        }
+
+        action def VerifyShutdown {
+            doc /* Confirm shutdown signal is active */
+        }
+
+        first action initializeNormalTemp : InitializeNormalTemp;
+        then action increaseTemperature : IncreaseTemperature;
+        then action verifyShutdown : VerifyShutdown;
+        then done;
+
+        // Assertions
+        assert tempWithinLimit { testBMS.temperature <= 60.0 }
+        assert shutdownTriggered { testBMS.temperature > 60.0 implies testBMS.shutdownSignal == true }
     }
 
     verification def ChargeCycleTest {
@@ -123,14 +150,25 @@ const DEFAULT_TESTING_EXAMPLE = `package 'Battery Management Testing' {
             doc /* Execute charging algorithm */
         }
 
+        action def MonitorCharging {
+            doc /* Monitor voltage and temperature during charge */
+        }
+
         action def ValidateResults {
             doc /* Check final state */
         }
 
         first action initializeCharge : InitializeCharge;
         then action performCharge : PerformCharge;
+        then action monitorCharging : MonitorCharging;
         then action validateResults : ValidateResults;
         then done;
+
+        // Assertions for charge cycle
+        assert socReached { testBMS.stateOfCharge >= 100.0 }
+        assert noVoltageViolation { testBMS.voltage <= 4.2 }
+        assert noTempViolation { testBMS.temperature <= 60.0 }
+        assert chargingComplete { testBMS.chargingState == 'complete' }
     }
 
     verification def IntegrationTest {
@@ -248,8 +286,9 @@ export default function TryNexTest() {
             <h1>Try NexTest</h1>
           </div>
           <p className="page-hero-description">
-            Experience model-based testing with live verification case extraction, test coverage analysis,
-            and assertion tracking. Write SysML v2 test cases and see automatic test suite generation using WASM.
+            Experience comprehensive model-based testing with live extraction of test cases, assertions, scenarios, 
+            and succession flows. See real-time coverage analysis, traceability mapping, and constraint expression 
+            evaluation. All powered by Rust/WASM backend for maximum performance.
           </p>
           <div style={{ marginTop: '1rem' }}>
             <Link to="/products/nextest" className="btn ghost">
@@ -276,8 +315,18 @@ export default function TryNexTest() {
 
           <div className="try-yourself-footer">
             <p className="try-yourself-note">
-              <strong>NexTest Features:</strong> WASM-powered verification extraction, test case generation,
-              assertion validation, coverage metrics, scenario analysis, and automated test suite creation.
+              <strong>NexTest Features:</strong> Backend-powered test management with real assertion extraction,
+              succession flow analysis, scenario extraction, and coverage calculation. All processing happens in
+              Rust/WASM for maximum performance. Features include:
+            </p>
+            <ul style={{ marginTop: '0.5rem', paddingLeft: '1.5rem', fontSize: '0.9em' }}>
+              <li><strong>Assertion Extraction:</strong> Automatically extracts assertions with constraint expressions</li>
+              <li><strong>Succession Flows:</strong> Extracts action sequences with "first/then" relationships</li>
+              <li><strong>Scenario Analysis:</strong> Extracts use case scenarios with included verifications</li>
+              <li><strong>Coverage Analysis:</strong> Calculates requirement coverage with gap identification</li>
+              <li><strong>Backend Processing:</strong> All logic runs in Rust/WASM, web is frontend-only</li>
+            </ul>
+            <p style={{ marginTop: '0.75rem', fontSize: '0.85em', opacity: 0.8 }}>
               For full test automation with CI/CD integration, check out the{' '}
               <Link to="/platforms">VS Code Extension</Link>.
             </p>

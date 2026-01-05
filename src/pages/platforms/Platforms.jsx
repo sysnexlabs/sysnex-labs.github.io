@@ -66,7 +66,7 @@ const Platforms = () => {
             <h1>Choose Your Platform</h1>
             <p className="page-hero-description">
               NexSuite is available across multiple platforms to fit your team's workflow.
-              From VS Code extensions with 50M+ users to enterprise cloud deployments and CI/CD integration.
+              From VS Code extensions (Standard API) to enterprise cloud deployments and CI/CD integration.
             </p>
           </motion.div>
         </div>
