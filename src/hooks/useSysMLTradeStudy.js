@@ -27,9 +27,18 @@ export function useSysMLTradeStudy(code, fileUri = 'editor://current') {
     documentation.chapters.forEach(chapter => {
       if (chapter.subchapters) {
         chapter.subchapters.forEach(sub => {
-          if (sub.kind && (sub.kind.includes('PartDef') || sub.kind.includes('part def'))) {
-            if (sub.signature && sub.signature.includes(':>')) {
-              const match = sub.signature.match(/:>\s*(\w+)/)
+          // More flexible kind matching
+          const kind = (sub.kind || '').toLowerCase()
+          const isPart = kind.includes('part') && (kind.includes('def') || kind.includes('definition'))
+
+          if (isPart) {
+            // Check for specialization in both signature and kind
+            const sigText = sub.signature || ''
+            const kindText = sub.kind || ''
+
+            if (sigText.includes(':>') || kindText.includes(':>')) {
+              const text = sigText + ' ' + kindText
+              const match = text.match(/:>\s*([A-Za-z_]\w*)/)
               if (match) {
                 baseTypes.add(match[1])
               }
@@ -43,10 +52,18 @@ export function useSysMLTradeStudy(code, fileUri = 'editor://current') {
     documentation.chapters.forEach(chapter => {
       if (chapter.subchapters) {
         chapter.subchapters.forEach(sub => {
-          if (sub.kind && (sub.kind.includes('PartDef') || sub.kind.includes('part def'))) {
+          // More flexible kind matching
+          const kind = (sub.kind || '').toLowerCase()
+          const isPart = kind.includes('part') && (kind.includes('def') || kind.includes('definition'))
+
+          if (isPart) {
             let baseType = null
-            if (sub.signature && sub.signature.includes(':>')) {
-              const match = sub.signature.match(/:>\s*(\w+)/)
+            const sigText = sub.signature || ''
+            const kindText = sub.kind || ''
+            const text = sigText + ' ' + kindText
+
+            if (sigText.includes(':>') || kindText.includes(':>')) {
+              const match = text.match(/:>\s*([A-Za-z_]\w*)/)
               if (match) {
                 baseType = match[1]
               }
@@ -56,25 +73,33 @@ export function useSysMLTradeStudy(code, fileUri = 'editor://current') {
             const attributes = []
             if (sub.nested_elements) {
               sub.nested_elements.forEach(nested => {
-                if (nested.kind && nested.kind.toLowerCase().includes('attribute')) {
-                  if (nested.signature) {
-                    const valueMatch = nested.signature.match(/=\s*([\d.]+)/)
-                    if (valueMatch) {
-                      attributes.push({
-                        name: nested.title,
-                        value: parseFloat(valueMatch[1]),
-                        signature: nested.signature
-                      })
-                    }
+                const nestedKind = (nested.kind || '').toLowerCase()
+                const isAttribute = nestedKind.includes('attribute') || nestedKind.includes('value')
+
+                if (isAttribute) {
+                  const nestedSig = nested.signature || nested.title || ''
+                  // Try multiple patterns for numeric values
+                  const valueMatch = nestedSig.match(/=\s*([\d.]+)/) ||
+                                    nestedSig.match(/:\s*\w+\s*=\s*([\d.]+)/) ||
+                                    nestedSig.match(/([\d.]+)\s*$/)
+
+                  if (valueMatch) {
+                    attributes.push({
+                      name: nested.title || 'unnamed',
+                      value: parseFloat(valueMatch[1]),
+                      signature: nestedSig
+                    })
                   }
                 }
               })
             }
 
-            if (baseType && baseTypes.has(baseType) && attributes.length > 0) {
+            // Include parts that either have a base type OR have attributes
+            // This makes it work even if specialization detection fails
+            if ((baseType && baseTypes.has(baseType)) || attributes.length > 0) {
               variants.push({
                 name: sub.title,
-                baseType,
+                baseType: baseType || 'unknown',
                 attributes,
                 documentation: sub.doc_comment,
                 packageName: chapter.title
