@@ -3,6 +3,7 @@ import { useSysMLDocumentation } from '../../hooks/useSysMLWasm'
 import { useSysMLHir } from '../../hooks/useSysMLHir'
 import SpotlightCard from '../SpotlightCard'
 import TreeView from '../DocumentationTabs/TreeView'
+import BlockDiagram from './BlockDiagram'
 import './DiagramView.css'
 
 export default function DiagramView({ code }) {
@@ -140,41 +141,11 @@ export default function DiagramView({ code }) {
 
         {activeTab === 'structure' && (
           <div className="structure-view">
-            <h4>Block Definitions ({diagramElements.parts.length})</h4>
-            {diagramElements.parts.length > 0 ? (
-              <div className="diagram-elements-list">
-                {diagramElements.parts.map((part, index) => (
-                  <SpotlightCard key={index}>
-                    <div className="diagram-element">
-                      <div className="element-header">
-                        <span className="element-badge">{part.kind}</span>
-                        <h5>{part.title}</h5>
-                      </div>
-                      {part.doc_comment && (
-                        <div className="element-doc">{part.doc_comment}</div>
-                      )}
-                      {part.nested_elements && part.nested_elements.length > 0 && (
-                        <div className="element-children">
-                          <strong>Contains:</strong>
-                          <ul>
-                            {part.nested_elements.slice(0, 5).map((el, i) => (
-                              <li key={i}>
-                                <code>{el.title}</code> : {el.kind}
-                              </li>
-                            ))}
-                            {part.nested_elements.length > 5 && (
-                              <li>... and {part.nested_elements.length - 5} more</li>
-                            )}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  </SpotlightCard>
-                ))}
-              </div>
-            ) : (
-              <div className="diagram-empty">No parts found for BDD visualization.</div>
-            )}
+            <h4>Block Definition Diagram (BDD)</h4>
+            <p className="diagram-description">
+              Interactive visualization of parts, their attributes, ports, and composition relationships.
+            </p>
+            <BlockDiagram parts={diagramElements.parts} />
           </div>
         )}
 

@@ -216,3 +216,84 @@
   margin: 0 0 1rem 0;
   color: var(--accent-primary);
 }
+
+/* Block Diagram Styles */
+.block-diagram-container {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.diagram-legend {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.legend-symbol {
+  width: 40px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.legend-symbol.block-header {
+  background: #4a90e2;
+  border: 2px solid #2c3e50;
+}
+
+.legend-symbol.composition-line {
+  background: linear-gradient(90deg, transparent 45%, #666 45%, #666 55%, transparent 55%);
+  position: relative;
+}
+
+.legend-symbol.composition-line::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 8px;
+  height: 8px;
+  background: black;
+  border: 1px solid black;
+}
+
+.block-diagram-svg {
+  width: 100%;
+  height: auto;
+  min-height: 400px;
+  max-height: 800px;
+  background: #fafafa;
+  border-radius: 4px;
+}
+
+.diagram-block {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.diagram-block:hover {
+  transform: scale(1.02);
+}
+
+.diagram-block:hover rect {
+  filter: brightness(1.1);
+}
+
+.diagram-description {
+  color: var(--text-secondary);
+  margin: 0 0 1.5rem 0;
+  font-size: 0.9rem;
+}
