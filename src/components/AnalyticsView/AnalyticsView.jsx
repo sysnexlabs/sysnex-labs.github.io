@@ -8,6 +8,10 @@ export default function AnalyticsView({ code }) {
   const { analytics, loading: analyticsLoading } = useSysMLAnalytics(code, 'editor://current')
   const { documentation, loading: docLoading } = useSysMLDocumentation(code, 'editor://current')
 
+  // Debug: Log analytics data
+  console.log('📊 [AnalyticsView] analytics:', analytics)
+  console.log('📊 [AnalyticsView] documentation:', documentation)
+
   if (analyticsLoading || docLoading) {
     return (
       <div className="analytics-view">
@@ -94,15 +98,43 @@ export default function AnalyticsView({ code }) {
               </SpotlightCard>
 
               <SpotlightCard>
+                <div className="metric-card">
+                  <div className="metric-label">Relationships</div>
+                  <div className="metric-value">{analytics.metrics.total_relationships || 0}</div>
+                  <div className="metric-progress">
+                    <div
+                      className="metric-progress-bar"
+                      style={{ width: `${Math.min(100, ((analytics.metrics.total_relationships || 0) / 30) * 100)}%` }}
+                    />
+                  </div>
+                </div>
+              </SpotlightCard>
+
+              <SpotlightCard>
                 <div className="metric-card metric-card-highlight">
                   <div className="metric-label">Documentation Coverage</div>
                   <div className="metric-value metric-value-large">
-                    {analytics.metrics.doc_coverage?.toFixed(1) || 0}%
+                    {analytics.metrics.documentation_coverage?.toFixed(1) || 0}%
                   </div>
                   <div className="metric-progress">
                     <div
                       className="metric-progress-bar metric-progress-bar-coverage"
-                      style={{ width: `${analytics.metrics.doc_coverage || 0}%` }}
+                      style={{ width: `${analytics.metrics.documentation_coverage || 0}%` }}
+                    />
+                  </div>
+                </div>
+              </SpotlightCard>
+
+              <SpotlightCard>
+                <div className="metric-card metric-card-highlight">
+                  <div className="metric-label">Naming Quality</div>
+                  <div className="metric-value metric-value-large">
+                    {analytics.metrics.naming_quality?.toFixed(1) || 0}%
+                  </div>
+                  <div className="metric-progress">
+                    <div
+                      className="metric-progress-bar metric-progress-bar-quality"
+                      style={{ width: `${analytics.metrics.naming_quality || 0}%` }}
                     />
                   </div>
                 </div>
@@ -111,20 +143,136 @@ export default function AnalyticsView({ code }) {
           </div>
         )}
 
+        {/* Element Distribution */}
+        {analytics?.metrics?.element_distribution && Object.keys(analytics.metrics.element_distribution).length > 0 && (
+          <div className="analytics-section">
+            <h4>Element Distribution</h4>
+            <div className="distribution-grid">
+              {Object.entries(analytics.metrics.element_distribution)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 8)
+                .map(([type, count]) => (
+                  <SpotlightCard key={type}>
+                    <div className="distribution-card">
+                      <div className="distribution-type">{type}</div>
+                      <div className="distribution-count">{count}</div>
+                    </div>
+                  </SpotlightCard>
+                ))}
+            </div>
+          </div>
+        )}
+
+        {/* Coupling & Inheritance Metrics */}
+        {(analytics?.metrics?.coupling || analytics?.metrics?.inheritance) && (
+          <div className="analytics-section">
+            <h4>Advanced Metrics</h4>
+            <div className="advanced-metrics-grid">
+              {analytics.metrics.coupling && (
+                <SpotlightCard>
+                  <div className="advanced-metric-card">
+                    <h5>Coupling Analysis</h5>
+                    <div className="metric-row">
+                      <span>Avg Afferent (Ca):</span>
+                      <strong>{analytics.metrics.coupling.avg_afferent?.toFixed(2) || '0.00'}</strong>
+                    </div>
+                    <div className="metric-row">
+                      <span>Avg Efferent (Ce):</span>
+                      <strong>{analytics.metrics.coupling.avg_efferent?.toFixed(2) || '0.00'}</strong>
+                    </div>
+                    <div className="metric-row">
+                      <span>Avg Instability:</span>
+                      <strong>{analytics.metrics.coupling.avg_instability?.toFixed(2) || '0.00'}</strong>
+                    </div>
+                    <div className="metric-row">
+                      <span>High Coupling:</span>
+                      <strong className="warning">{analytics.metrics.coupling.high_coupling_count || 0}</strong>
+                    </div>
+                  </div>
+                </SpotlightCard>
+              )}
+
+              {analytics.metrics.inheritance && (
+                <SpotlightCard>
+                  <div className="advanced-metric-card">
+                    <h5>Inheritance Analysis</h5>
+                    <div className="metric-row">
+                      <span>Specializations:</span>
+                      <strong>{analytics.metrics.inheritance.total_specializations || 0}</strong>
+                    </div>
+                    <div className="metric-row">
+                      <span>Redefinitions:</span>
+                      <strong>{analytics.metrics.inheritance.total_redefinitions || 0}</strong>
+                    </div>
+                    <div className="metric-row">
+                      <span>Max Depth:</span>
+                      <strong>{analytics.metrics.inheritance.max_inheritance_depth || 0}</strong>
+                    </div>
+                    <div className="metric-row">
+                      <span>Multiple Inheritance:</span>
+                      <strong className="warning">{analytics.metrics.inheritance.multiple_inheritance_count || 0}</strong>
+                    </div>
+                  </div>
+                </SpotlightCard>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Complexity Analysis */}
         {analytics?.complexity && (
           <div className="analytics-section">
             <h4>Complexity Analysis</h4>
-            <SpotlightCard>
-              <div className="complexity-card">
-                <div className="complexity-score">
-                  <div className="complexity-label">Overall Complexity Score</div>
-                  <div className="complexity-value">
-                    {analytics.complexity.overall_score?.toFixed(1) || 'N/A'}
-                  </div>
+            <div className="complexity-grid">
+              <SpotlightCard>
+                <div className="complexity-card">
+                  <div className="complexity-label">Overall Score</div>
+                  <div className="complexity-value">{analytics.complexity.overall_score?.toFixed(1) || 'N/A'}</div>
+                </div>
+              </SpotlightCard>
+              <SpotlightCard>
+                <div className="complexity-card">
+                  <div className="complexity-label">Cyclomatic</div>
+                  <div className="complexity-value">{analytics.complexity.cyclomatic?.score?.toFixed(1) || 'N/A'}</div>
+                  <div className="complexity-detail">Avg: {analytics.complexity.cyclomatic?.average?.toFixed(1) || '0'}</div>
+                </div>
+              </SpotlightCard>
+              <SpotlightCard>
+                <div className="complexity-card">
+                  <div className="complexity-label">Structural</div>
+                  <div className="complexity-value">{analytics.complexity.structural?.score?.toFixed(1) || 'N/A'}</div>
+                  <div className="complexity-detail">Avg: {analytics.complexity.structural?.average?.toFixed(1) || '0'}</div>
+                </div>
+              </SpotlightCard>
+              <SpotlightCard>
+                <div className="complexity-card">
+                  <div className="complexity-label">Cognitive</div>
+                  <div className="complexity-value">{analytics.complexity.cognitive?.score?.toFixed(1) || 'N/A'}</div>
+                  <div className="complexity-detail">Avg: {analytics.complexity.cognitive?.average?.toFixed(1) || '0'}</div>
+                </div>
+              </SpotlightCard>
+            </div>
+
+            {/* Complexity Hotspots */}
+            {analytics.complexity.hotspots && analytics.complexity.hotspots.length > 0 && (
+              <div style={{ marginTop: '1rem' }}>
+                <h5>Complexity Hotspots</h5>
+                <div className="hotspots-list">
+                  {analytics.complexity.hotspots.slice(0, 5).map((hotspot, index) => (
+                    <div key={index} className={`hotspot-card severity-${hotspot.severity?.toLowerCase() || 'info'}`}>
+                      <div className="hotspot-header">
+                        <strong>{hotspot.name}</strong>
+                        <span className="hotspot-type">{hotspot.kind}</span>
+                      </div>
+                      <div className="hotspot-score">
+                        {hotspot.complexity_type}: {hotspot.score?.toFixed(1)}
+                      </div>
+                      <div className="hotspot-recommendation">{hotspot.recommendation}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </SpotlightCard>
+            )}
           </div>
         )}
 

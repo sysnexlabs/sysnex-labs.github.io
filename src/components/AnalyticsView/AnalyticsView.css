@@ -240,3 +240,144 @@
   font-size: 0.85rem;
   color: var(--text-secondary);
 }
+/* Element Distribution */
+.distribution-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.distribution-card {
+  padding: 1rem;
+  text-align: center;
+}
+
+.distribution-type {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.distribution-count {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: var(--accent-primary);
+}
+
+/* Advanced Metrics Grid */
+.advanced-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.advanced-metric-card {
+  padding: 1.5rem;
+}
+
+.advanced-metric-card h5 {
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+  font-size: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.metric-row span {
+  color: var(--text-secondary);
+}
+
+.metric-row strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.metric-row strong.warning {
+  color: var(--color-warning);
+}
+
+/* Complexity Grid */
+.complexity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.complexity-detail {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  margin-top: 0.25rem;
+}
+
+/* Hotspots List */
+.hotspots-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.hotspot-card {
+  padding: 1rem;
+  background: var(--bg-primary);
+  border-radius: 4px;
+  border-left: 3px solid var(--border-color);
+}
+
+.hotspot-card.severity-warning {
+  border-left-color: var(--color-warning);
+}
+
+.hotspot-card.severity-error {
+  border-left-color: var(--color-error);
+}
+
+.hotspot-card.severity-critical {
+  border-left-color: #d32f2f;
+}
+
+.hotspot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.hotspot-header strong {
+  color: var(--text-primary);
+}
+
+.hotspot-type {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  background: var(--bg-tertiary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.hotspot-score {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.hotspot-recommendation {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Quality Grade Colors */
+.metric-progress-bar-quality {
+  background: linear-gradient(90deg, var(--color-warning), var(--color-success));
+}
