@@ -69,7 +69,21 @@
 
                 // Call the function
                 output.innerHTML += '<p class="info">Calling generate_trade_study...</p>';
-                const result = bridge.generate_trade_study(testCode, 'test://file');
+                let result;
+                try {
+                    result = bridge.generate_trade_study(testCode, 'test://file');
+                    output.innerHTML += '<p class="info">Function returned: ' + (typeof result) + '</p>';
+
+                    if (result === undefined || result === null) {
+                        throw new Error('Function returned ' + result);
+                    }
+                } catch (innerError) {
+                    output.innerHTML += '<p class="error">❌ Function call error: ' + innerError.message + '</p>';
+                    if (innerError.stack) {
+                        output.innerHTML += '<pre>' + innerError.stack + '</pre>';
+                    }
+                    throw innerError;
+                }
 
                 output.innerHTML += '<p class="success">✅ Function executed successfully!</p>';
                 output.innerHTML += '<h2>Results:</h2>';
