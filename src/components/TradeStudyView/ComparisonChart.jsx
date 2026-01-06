@@ -5,24 +5,18 @@ import React from 'react'
  *
  * Visualizes attribute comparisons across variants using SVG bar charts
  */
-export default function ComparisonChart({ comparison, scores }) {
+export default function ComparisonChart({ comparison }) {
   if (!comparison || !comparison.allValues || comparison.allValues.length === 0) {
     return null
   }
 
-  const { attributeName, allValues, bestVariant, worstVariant } = comparison
+  const { attributeName, allValues } = comparison
 
   // Chart dimensions
   const width = 600
   const height = 300
   const margin = { top: 40, right: 30, bottom: 80, left: 120 }
   const chartWidth = width - margin.left - margin.right
-  const chartHeight = height - margin.top - margin.bottom
-
-  // Calculate scales
-  const maxValue = Math.max(...allValues.map(v => v.value))
-  const minValue = Math.min(...allValues.map(v => v.value))
-  const valueRange = maxValue - minValue || 1
   const barHeight = 30
   const barSpacing = 15
 
@@ -45,13 +39,20 @@ export default function ComparisonChart({ comparison, scores }) {
         {/* Bars */}
         {allValues.map((item, index) => {
           const y = margin.top + index * (barHeight + barSpacing)
-          const barWidth = ((item.value - minValue) / valueRange) * chartWidth
-          const isBest = item.name === bestVariant
-          const isWorst = item.name === worstVariant
-
-          // Get rank for this variant
-          const score = scores?.find(s => s.variantName === item.name)
-          const rank = score?.rank || 0
+          // Use pre-calculated bar width from backend (0-100%)
+          // Ensure barWidthPercent is a valid number, default to 0 if invalid
+          const barWidthPercent = typeof item.barWidthPercent === 'number' && !isNaN(item.barWidthPercent) 
+            ? item.barWidthPercent 
+            : 0
+          const barWidth = Math.max(0, (barWidthPercent / 100) * chartWidth)
+          const isBest = item.isBest
+          const isWorst = item.isWorst
+          const rank = item.rank || 0
+          
+          // Ensure value is valid for display
+          const displayValue = typeof item.value === 'number' && !isNaN(item.value) 
+            ? item.value 
+            : 0
 
           return (
             <g key={index}>
@@ -92,20 +93,20 @@ export default function ComparisonChart({ comparison, scores }) {
 
               {/* Value label */}
               <text
-                x={margin.left + barWidth + 5}
+                x={Math.max(margin.left, margin.left + barWidth + 5)}
                 y={y + barHeight / 2}
                 alignmentBaseline="middle"
                 fontSize="11"
                 fill="var(--text-secondary)"
                 fontWeight="600"
               >
-                {item.value.toFixed(1)}
+                {displayValue.toFixed(1)}
               </text>
 
               {/* Best/Worst indicator */}
               {isBest && (
                 <text
-                  x={margin.left + barWidth + 50}
+                  x={Math.max(margin.left, margin.left + barWidth + 50)}
                   y={y + barHeight / 2}
                   alignmentBaseline="middle"
                   fontSize="10"
@@ -117,7 +118,7 @@ export default function ComparisonChart({ comparison, scores }) {
               )}
               {isWorst && (
                 <text
-                  x={margin.left + barWidth + 50}
+                  x={Math.max(margin.left, margin.left + barWidth + 50)}
                   y={y + barHeight / 2}
                   alignmentBaseline="middle"
                   fontSize="10"

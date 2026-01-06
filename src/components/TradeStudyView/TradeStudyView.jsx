@@ -17,59 +17,35 @@ export default function TradeStudyView({ code }) {
   const { tradeStudy, loading: tradeStudyLoading } = useSysMLTradeStudy(code, 'editor://current')
   const [activeTab, setActiveTab] = useState('variants')
 
-  // Extract analysis definitions (trade studies)
+  // Extract analysis definitions (trade studies) from WASM backend
   const tradeStudies = useMemo(() => {
-    if (!documentation || !documentation.chapters) return []
-
-    const studies = []
-    documentation.chapters.forEach(chapter => {
-      if (chapter.subchapters) {
-        chapter.subchapters.forEach(sub => {
-          if (sub.kind && (sub.kind.toLowerCase().includes('analysis') || sub.kind.includes('AnalysisDef'))) {
-            studies.push({
-              ...sub,
-              packageName: chapter.title,
-            })
-          }
-        })
-      }
-    })
-    return studies
-  }, [documentation])
+    if (!tradeStudy || !tradeStudy.analysisDefs) {
+      console.log('⚠️ [TradeStudyView] No analysisDefs from tradeStudy hook')
+      return []
+    }
+    console.log('✅ [TradeStudyView] Analysis defs from hook:', tradeStudy.analysisDefs)
+    return tradeStudy.analysisDefs
+  }, [tradeStudy])
 
   // Use variants from tradeStudy hook (has proper :>> pattern matching)
   const variants = useMemo(() => {
-    if (!tradeStudy || !tradeStudy.variants) return []
+    if (!tradeStudy || !tradeStudy.variants) {
+      console.log('⚠️ [TradeStudyView] No tradeStudy or variants:', { tradeStudy })
+      return []
+    }
+    console.log('✅ [TradeStudyView] Variants from hook:', tradeStudy.variants)
     return tradeStudy.variants
   }, [tradeStudy])
 
-  // Extract objectives from analysis definitions
+  // Extract objectives from WASM backend
   const objectives = useMemo(() => {
-    if (!documentation || !documentation.chapters) return []
-
-    const objList = []
-    documentation.chapters.forEach(chapter => {
-      if (chapter.subchapters) {
-        chapter.subchapters.forEach(sub => {
-          if (sub.kind && sub.kind.toLowerCase().includes('analysis')) {
-            // Extract objectives from nested elements
-            if (sub.nested_elements) {
-              sub.nested_elements.forEach(nested => {
-                if (nested.kind && nested.kind.toLowerCase().includes('objective')) {
-                  objList.push({
-                    ...nested,
-                    analysisName: sub.title,
-                    packageName: chapter.title,
-                  })
-                }
-              })
-            }
-          }
-        })
-      }
-    })
-    return objList
-  }, [documentation])
+    if (!tradeStudy || !tradeStudy.objectives) {
+      console.log('⚠️ [TradeStudyView] No objectives from tradeStudy hook')
+      return []
+    }
+    console.log('✅ [TradeStudyView] Objectives from hook:', tradeStudy.objectives)
+    return tradeStudy.objectives
+  }, [tradeStudy])
 
   // Build decision matrix
   const decisionMatrix = useMemo(() => {
@@ -175,7 +151,7 @@ export default function TradeStudyView({ code }) {
                     {variant.doc_comment && (
                       <div className="variant-doc">{variant.doc_comment}</div>
                     )}
-                    {variant.attributes.length > 0 && (
+                    {variant.attributes && variant.attributes.length > 0 && (
                       <div className="variant-attributes">
                         <strong>Attributes:</strong>
                         <table className="attributes-table">
@@ -278,10 +254,7 @@ export default function TradeStudyView({ code }) {
                   <div className="charts-grid">
                     {tradeStudy.comparisons.map((comparison, i) => (
                       <SpotlightCard key={i}>
-                        <ComparisonChart
-                          comparison={comparison}
-                          scores={tradeStudy.scores}
-                        />
+                        <ComparisonChart comparison={comparison} />
                       </SpotlightCard>
                     ))}
                   </div>

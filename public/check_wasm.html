@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head><title>Check WASM Functions</title></head>
+<body>
+    <h1>WASM Module Function Check</h1>
+    <pre id="output"></pre>
+    <script type="module">
+        const output = document.getElementById('output');
+        try {
+            const wasm = await import('/wasm/sysml_wasm_bridge.js');
+            await wasm.default();
+
+            const bridge = new wasm.SysMLWasmBridge();
+
+            output.textContent = 'SysMLWasmBridge methods:\n';
+            output.textContent += Object.getOwnPropertyNames(Object.getPrototypeOf(bridge))
+                .filter(m => typeof bridge[m] === 'function')
+                .sort()
+                .map(m => `  - ${m}`)
+                .join('\n');
+
+            const hasFunction = typeof bridge.generate_trade_study === 'function';
+            output.textContent += '\n\n';
+            output.textContent += hasFunction
+                ? '✅ generate_trade_study EXISTS'
+                : '❌ generate_trade_study MISSING';
+        } catch (error) {
+            output.textContent = 'Error: ' + error.message + '\n' + error.stack;
+        }
+    </script>
+</body>
+</html>

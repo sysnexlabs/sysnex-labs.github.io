@@ -22,8 +22,8 @@ export function useSysMLWasm() {
         // In production (GitHub Pages), the path will be relative to the base URL
         const baseUrl = import.meta.env.BASE_URL || './'
         // Fixed version for cache-busting - increment when WASM is updated
-        // Version 5: CRITICAL FIX - Verify statement parser added (2026-01-05)
-        const WASM_VERSION = '5'
+        // Version 13: Test management enabled - assertions, scenarios, coverage extraction (2026-01-05)
+        const WASM_VERSION = '13'  // Test management features now available
         // CRITICAL: Use timestamp AND random component to break ALL caching
         const timestamp = Date.now()
         const random = Math.random().toString(36).substring(2, 15)

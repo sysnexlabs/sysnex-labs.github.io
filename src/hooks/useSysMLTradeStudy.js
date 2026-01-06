@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSysMLWasm } from './useSysMLWasm'
+import { safeWasmCall } from '../utils/wasmErrorHandler'
 
 /**
  * Trade Study Analysis Hook (WASM-powered)
@@ -29,13 +30,33 @@ export function useSysMLTradeStudy(code, fileUri = 'editor://current') {
 
       if (wasm) {
         try {
-          const result = wasm.generate_trade_study(code, fileUri)
+          const rawResult = wasm.generate_trade_study(code, fileUri)
+
+          // Recursively convert Maps to plain objects
+          const convertMapToObject = (obj) => {
+            if (obj instanceof Map) {
+              return Object.fromEntries(
+                Array.from(obj.entries()).map(([key, value]) => [key, convertMapToObject(value)])
+              )
+            } else if (Array.isArray(obj)) {
+              return obj.map(item => convertMapToObject(item))
+            } else if (obj && typeof obj === 'object') {
+              return Object.fromEntries(
+                Object.entries(obj).map(([key, value]) => [key, convertMapToObject(value)])
+              )
+            }
+            return obj
+          }
+
+          const result = convertMapToObject(rawResult)
 
           console.log('✅ [useSysMLTradeStudy] Received trade study from WASM:', {
             variants: result.variants?.length || 0,
             scores: result.scores?.length || 0,
             comparisons: result.comparisons?.length || 0,
-            attributeNames: result.attributeNames?.length || 0
+            attributeNames: result.attributeNames?.length || 0,
+            objectives: result.objectives?.length || 0,
+            analysisDefs: result.analysisDefs?.length || 0
           })
 
           // Log detailed variant info
@@ -55,6 +76,8 @@ export function useSysMLTradeStudy(code, fileUri = 'editor://current') {
             scores: [],
             comparisons: [],
             attributeNames: [],
+            objectives: [],
+            analysisDefs: [],
             recommendation: null
           })
           setLoading(false)
@@ -66,6 +89,8 @@ export function useSysMLTradeStudy(code, fileUri = 'editor://current') {
           scores: [],
           comparisons: [],
           attributeNames: [],
+          objectives: [],
+          analysisDefs: [],
           recommendation: null
         })
         setLoading(false)

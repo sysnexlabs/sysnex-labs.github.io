@@ -178,6 +178,74 @@ export class SysMLWasm {
         return takeFromExternrefTable0(ret[0]);
     }
     /**
+     * Run state machine simulation and return execution trace (Phase 1: Static Analysis)
+     * Extracts state machines from HIR and simulates execution by following transitions
+     * Simulation execution - currently uses placeholder implementation
+     * Phase 2 will integrate with sysml-exec engine once WASM-compatible
+     * @param {string} source
+     * @param {string} file_uri
+     * @param {number} max_steps
+     * @returns {any}
+     */
+    run_simulation(source, file_uri, max_steps) {
+        const ptr0 = passStringToWasm0(source, wasm.__wbindgen_malloc_command_export, wasm.__wbindgen_realloc_command_export);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(file_uri, wasm.__wbindgen_malloc_command_export, wasm.__wbindgen_realloc_command_export);
+        const len1 = WASM_VECTOR_LEN;
+        const ret = wasm.sysmlwasm_run_simulation(this.__wbg_ptr, ptr0, len0, ptr1, len1, max_steps);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return takeFromExternrefTable0(ret[0]);
+    }
+    /**
+     * Extract scenarios (use cases) from source
+     * @param {string} source
+     * @returns {any}
+     */
+    extract_scenarios(source) {
+        const ptr0 = passStringToWasm0(source, wasm.__wbindgen_malloc_command_export, wasm.__wbindgen_realloc_command_export);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.sysmlwasm_extract_scenarios(this.__wbg_ptr, ptr0, len0);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return takeFromExternrefTable0(ret[0]);
+    }
+    /**
+     * Evaluate an assertion (placeholder - needs HIR-to-ConstraintExpression conversion)
+     * @param {string} source
+     * @param {bigint} assertion_id
+     * @param {string} context_json
+     * @returns {any}
+     */
+    evaluate_assertion(source, assertion_id, context_json) {
+        const ptr0 = passStringToWasm0(source, wasm.__wbindgen_malloc_command_export, wasm.__wbindgen_realloc_command_export);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(context_json, wasm.__wbindgen_malloc_command_export, wasm.__wbindgen_realloc_command_export);
+        const len1 = WASM_VECTOR_LEN;
+        const ret = wasm.sysmlwasm_evaluate_assertion(this.__wbg_ptr, ptr0, len0, assertion_id, ptr1, len1);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return takeFromExternrefTable0(ret[0]);
+    }
+    /**
+     * Extract assertions from a verification case
+     * @param {string} source
+     * @param {bigint} verification_id
+     * @returns {any}
+     */
+    extract_assertions(source, verification_id) {
+        const ptr0 = passStringToWasm0(source, wasm.__wbindgen_malloc_command_export, wasm.__wbindgen_realloc_command_export);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.sysmlwasm_extract_assertions(this.__wbg_ptr, ptr0, len0, verification_id);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return takeFromExternrefTable0(ret[0]);
+    }
+    /**
      * Generate analytics and statistics
      * @param {string} source
      * @param {string} file_uri
@@ -213,6 +281,24 @@ export class SysMLWasm {
         return takeFromExternrefTable0(ret[0]);
     }
     /**
+     * Generate trade study analysis with variant extraction and scoring
+     * Extracts variants, normalizes attributes, scores alternatives, and generates comparisons
+     * @param {string} source
+     * @param {string} file_uri
+     * @returns {any}
+     */
+    generate_trade_study(source, file_uri) {
+        const ptr0 = passStringToWasm0(source, wasm.__wbindgen_malloc_command_export, wasm.__wbindgen_realloc_command_export);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(file_uri, wasm.__wbindgen_malloc_command_export, wasm.__wbindgen_realloc_command_export);
+        const len1 = WASM_VECTOR_LEN;
+        const ret = wasm.sysmlwasm_generate_trade_study(this.__wbg_ptr, ptr0, len0, ptr1, len1);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return takeFromExternrefTable0(ret[0]);
+    }
+    /**
      * Generate documentation from SysML code
      * Uses Salsa queries which automatically trigger HIR lowering via registered HirLowerer
      * @param {string} source
@@ -225,6 +311,35 @@ export class SysMLWasm {
         const ptr1 = passStringToWasm0(file_uri, wasm.__wbindgen_malloc_command_export, wasm.__wbindgen_realloc_command_export);
         const len1 = WASM_VECTOR_LEN;
         const ret = wasm.sysmlwasm_generate_documentation(this.__wbg_ptr, ptr0, len0, ptr1, len1);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return takeFromExternrefTable0(ret[0]);
+    }
+    /**
+     * Calculate test coverage for requirements
+     * @param {string} source
+     * @returns {any}
+     */
+    calculate_test_coverage(source) {
+        const ptr0 = passStringToWasm0(source, wasm.__wbindgen_malloc_command_export, wasm.__wbindgen_realloc_command_export);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.sysmlwasm_calculate_test_coverage(this.__wbg_ptr, ptr0, len0);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return takeFromExternrefTable0(ret[0]);
+    }
+    /**
+     * Extract succession flows from a verification case
+     * @param {string} source
+     * @param {bigint} verification_id
+     * @returns {any}
+     */
+    extract_succession_flows(source, verification_id) {
+        const ptr0 = passStringToWasm0(source, wasm.__wbindgen_malloc_command_export, wasm.__wbindgen_realloc_command_export);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.sysmlwasm_extract_succession_flows(this.__wbg_ptr, ptr0, len0, verification_id);
         if (ret[2]) {
             throw takeFromExternrefTable0(ret[1]);
         }

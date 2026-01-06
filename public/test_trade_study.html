@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test WASM Trade Study</title>
+</head>
+<body>
+    <h1>Testing WASM generate_trade_study</h1>
+    <div id="output"></div>
+
+    <script type="module">
+        const testCode = `package 'Vehicle Powertrain Trade Study' {
+    part def Powertrain {
+        attribute cost : Real;
+        attribute range : Real;
+        attribute power : Real;
+        attribute emissions : Real;
+    }
+
+    part def ElectricPowertrain :> Powertrain {
+        :>> cost = 35000.0;
+        :>> range = 400.0;
+        :>> power = 150.0;
+        :>> emissions = 0.0;
+    }
+
+    part def HybridPowertrain :> Powertrain {
+        :>> cost = 28000.0;
+        :>> range = 600.0;
+        :>> power = 130.0;
+        :>> emissions = 95.0;
+    }
+}`;
+
+        async function test() {
+            const output = document.getElementById('output');
+
+            try {
+                // Load WASM from public folder
+                const wasm = await import('http://localhost:5173/wasm/sysml_wasm_bridge.js');
+                await wasm.default();
+
+                output.innerHTML += '<p>✅ WASM module loaded</p>';
+
+                // Check if function exists
+                if (typeof wasm.SysMLWasmBridge.prototype.generate_trade_study === 'function') {
+                    output.innerHTML += '<p>✅ generate_trade_study function exists</p>';
+                } else {
+                    output.innerHTML += '<p>❌ generate_trade_study function NOT found</p>';
+                    output.innerHTML += '<p>Available methods: ' + Object.keys(wasm.SysMLWasmBridge.prototype).join(', ') + '</p>';
+                    return;
+                }
+
+                // Create instance and call function
+                const bridge = new wasm.SysMLWasmBridge();
+                output.innerHTML += '<p>✅ SysMLWasmBridge instance created</p>';
+
+                const result = bridge.generate_trade_study(testCode, 'test://file');
+                output.innerHTML += '<p>✅ generate_trade_study called successfully</p>';
+
+                output.innerHTML += '<h2>Results:</h2>';
+                output.innerHTML += '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+
+                if (result.variants && result.variants.length > 0) {
+                    output.innerHTML += '<p style="color: green; font-weight: bold;">✅ SUCCESS: ' + result.variants.length + ' variants extracted!</p>';
+                } else {
+                    output.innerHTML += '<p style="color: red; font-weight: bold;">❌ FAIL: No variants extracted</p>';
+                }
+
+            } catch (error) {
+                output.innerHTML += '<p style="color: red;">❌ Error: ' + error.message + '</p>';
+                output.innerHTML += '<pre>' + error.stack + '</pre>';
+            }
+        }
+
+        test();
+    </script>
+</body>
+</html>

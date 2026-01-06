@@ -18,66 +18,23 @@ export default function SimulationView({ code }) {
   const { simulation, loading: simLoading } = useSysMLSimulation(code, 'editor://current')
   const [activeTab, setActiveTab] = useState('execution')
 
-  // Extract state definitions (state machines)
+  // Get state machines from WASM backend
   const stateMachines = useMemo(() => {
-    if (!documentation || !documentation.chapters) return []
+    if (!simulation || !simulation.stateMachines) return []
+    return simulation.stateMachines
+  }, [simulation])
 
-    const states = []
-    documentation.chapters.forEach(chapter => {
-      if (chapter.subchapters) {
-        chapter.subchapters.forEach(sub => {
-          if (sub.kind && (sub.kind.includes('StateDefinition') || sub.kind.includes('StateDef'))) {
-            states.push({
-              ...sub,
-              packageName: chapter.title,
-            })
-          }
-        })
-      }
-    })
-    return states
-  }, [documentation])
-
-  // Extract action definitions (simulation actions)
+  // Get actions from WASM backend
   const actions = useMemo(() => {
-    if (!documentation || !documentation.chapters) return []
+    if (!simulation || !simulation.actions) return []
+    return simulation.actions
+  }, [simulation])
 
-    const actionList = []
-    documentation.chapters.forEach(chapter => {
-      if (chapter.subchapters) {
-        chapter.subchapters.forEach(sub => {
-          if (sub.kind && (sub.kind.includes('ActionDefinition') || sub.kind.includes('ActionDef'))) {
-            actionList.push({
-              ...sub,
-              packageName: chapter.title,
-            })
-          }
-        })
-      }
-    })
-    return actionList
-  }, [documentation])
-
-  // Extract calc definitions (calculations)
+  // Get calculations from WASM backend
   const calculations = useMemo(() => {
-    if (!documentation || !documentation.chapters) return []
-
-    const calcList = []
-    documentation.chapters.forEach(chapter => {
-      if (chapter.subchapters) {
-        chapter.subchapters.forEach(sub => {
-          // CalcDefinitions appear as anonymous Element types with CalcDefinition in stable_id
-          if (sub.kind && (sub.kind.includes('CalcDefinition') || sub.kind.includes('CalculationDef'))) {
-            calcList.push({
-              ...sub,
-              packageName: chapter.title,
-            })
-          }
-        })
-      }
-    })
-    return calcList
-  }, [documentation])
+    if (!simulation || !simulation.calculations) return []
+    return simulation.calculations
+  }, [simulation])
 
   // Extract scenario elements (action/state usages)
   const scenarios = useMemo(() => {

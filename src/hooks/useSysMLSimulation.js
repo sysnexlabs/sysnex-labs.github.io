@@ -1,205 +1,103 @@
-import { useMemo } from 'react'
-import { useSysMLDocumentation } from './useSysMLWasm'
+import { useState, useEffect } from 'react'
+import { useSysMLWasm } from './useSysMLWasm'
 
 /**
- * Simulation Analysis Hook
+ * Simulation Analysis Hook (WASM-powered)
  *
- * Analyzes SysML state machines, actions, and calculations to extract:
- * - State transition sequences
- * - Execution flows
- * - Timing estimates
- * - Event traces
+ * Calls WASM backend for complete simulation analysis:
+ * - Extracts state machines with transitions
+ * - Extracts actions with flow definitions
+ * - Extracts calculations
+ * - Simulates execution timeline
+ * - Provides statistics
  */
-export function useSysMLSimulation(code, fileUri = 'editor://current') {
-  const { documentation, loading } = useSysMLDocumentation(code, fileUri)
+export function useSysMLSimulation(code, fileUri = 'editor://current', maxSteps = 20) {
+  const { wasm } = useSysMLWasm()
+  const [simulation, setSimulation] = useState(null)
+  const [loading, setLoading] = useState(false)
 
-  const simulation = useMemo(() => {
-    if (!documentation || !documentation.chapters) {
-      return null
+  useEffect(() => {
+    if (!code || code.trim().length === 0) {
+      setSimulation(null)
+      setLoading(false)
+      return
     }
 
-    // Extract state machines with transitions
-    const stateMachines = []
-    documentation.chapters.forEach(chapter => {
-      if (chapter.subchapters) {
-        chapter.subchapters.forEach(sub => {
-          if (sub.kind && (sub.kind.includes('StateDefinition') || sub.kind.includes('StateDef'))) {
-            const states = []
-            const transitions = []
+    const runSimulation = async () => {
+      setLoading(true)
+      console.log('🎮 [useSysMLSimulation] Calling WASM backend for simulation')
 
-            if (sub.nested_elements) {
-              sub.nested_elements.forEach((el, idx) => {
-                if (el.kind && el.kind.toLowerCase().includes('state')) {
-                  states.push({
-                    id: idx,
-                    name: el.title,
-                    type: el.kind,
-                    doc: el.doc_comment
-                  })
-                }
-              })
+      if (wasm) {
+        try {
+          const rawResult = wasm.run_simulation(code, fileUri, maxSteps)
 
-              // Infer transitions between sequential states
-              for (let i = 0; i < states.length - 1; i++) {
-                transitions.push({
-                  from: states[i].id,
-                  to: states[i + 1].id,
-                  event: `transition_${i + 1}`,
-                  fromName: states[i].name,
-                  toName: states[i + 1].name
-                })
-              }
+          // Recursively convert Maps to plain objects
+          const convertMapToObject = (obj) => {
+            if (obj instanceof Map) {
+              return Object.fromEntries(
+                Array.from(obj.entries()).map(([key, value]) => [key, convertMapToObject(value)])
+              )
+            } else if (Array.isArray(obj)) {
+              return obj.map(item => convertMapToObject(item))
+            } else if (obj && typeof obj === 'object') {
+              return Object.fromEntries(
+                Object.entries(obj).map(([key, value]) => [key, convertMapToObject(value)])
+              )
             }
+            return obj
+          }
 
-            if (states.length > 0) {
-              stateMachines.push({
-                name: sub.title,
-                states,
-                transitions,
-                doc: sub.doc_comment,
-                packageName: chapter.title
-              })
+          const result = convertMapToObject(rawResult)
+
+          console.log('✅ [useSysMLSimulation] Received simulation from WASM:', {
+            stateMachines: result.stateMachines?.length || 0,
+            actions: result.actions?.length || 0,
+            calculations: result.calculations?.length || 0,
+            timeline: result.timeline?.length || 0
+          })
+
+          setSimulation(result)
+          setLoading(false)
+        } catch (error) {
+          console.error('❌ [useSysMLSimulation] WASM error:', error)
+          setSimulation({
+            stateMachines: [],
+            actions: [],
+            calculations: [],
+            timeline: [],
+            stats: {
+              totalStates: 0,
+              totalTransitions: 0,
+              totalActions: 0,
+              estimatedExecutionTime: 0,
+              averageActionDuration: 0,
+              maxCalculationComplexity: 0
             }
+          })
+          setLoading(false)
+        }
+      } else {
+        console.warn('⚠️ [useSysMLSimulation] WASM module not available')
+        setSimulation({
+          stateMachines: [],
+          actions: [],
+          calculations: [],
+          timeline: [],
+          stats: {
+            totalStates: 0,
+            totalTransitions: 0,
+            totalActions: 0,
+            estimatedExecutionTime: 0,
+            averageActionDuration: 0,
+            maxCalculationComplexity: 0
           }
         })
+        setLoading(false)
       }
-    })
-
-    // Extract actions with execution sequences
-    const actions = []
-    documentation.chapters.forEach(chapter => {
-      if (chapter.subchapters) {
-        chapter.subchapters.forEach(sub => {
-          if (sub.kind && (sub.kind.includes('ActionDefinition') || sub.kind.includes('ActionDef'))) {
-            const steps = []
-            if (sub.nested_elements) {
-              sub.nested_elements.forEach((el, idx) => {
-                steps.push({
-                  id: idx,
-                  name: el.title,
-                  type: el.kind,
-                  doc: el.doc_comment
-                })
-              })
-            }
-
-            actions.push({
-              name: sub.title,
-              steps,
-              doc: sub.doc_comment,
-              packageName: chapter.title,
-              estimatedDuration: steps.length * 100 // Simple estimate: 100ms per step
-            })
-          }
-        })
-      }
-    })
-
-    // Extract calculations with dependencies
-    const calculations = []
-    documentation.chapters.forEach(chapter => {
-      if (chapter.subchapters) {
-        chapter.subchapters.forEach(sub => {
-          if (sub.kind && (sub.kind.includes('CalcDefinition') || sub.kind.includes('CalculationDef'))) {
-            // Extract inputs/outputs from signature
-            const inputs = []
-            const outputs = []
-
-            if (sub.signature) {
-              // Simple parsing: look for parameter patterns
-              const inMatch = sub.signature.match(/in\s+(\w+)/g)
-              const outMatch = sub.signature.match(/out\s+(\w+)/g)
-
-              if (inMatch) {
-                inMatch.forEach(m => inputs.push(m.replace('in ', '')))
-              }
-              if (outMatch) {
-                outMatch.forEach(m => outputs.push(m.replace('out ', '')))
-              }
-            }
-
-            calculations.push({
-              name: sub.title,
-              inputs,
-              outputs,
-              signature: sub.signature,
-              doc: sub.doc_comment,
-              packageName: chapter.title,
-              complexity: inputs.length + outputs.length // Simple complexity metric
-            })
-          }
-        })
-      }
-    })
-
-    // Generate execution timeline
-    const timeline = []
-    let time = 0
-
-    // Add state machine transitions
-    stateMachines.forEach(sm => {
-      sm.transitions.forEach(trans => {
-        timeline.push({
-          time,
-          type: 'transition',
-          from: trans.fromName,
-          to: trans.toName,
-          event: trans.event,
-          machine: sm.name
-        })
-        time += 50 // 50ms per transition
-      })
-    })
-
-    // Add action executions
-    actions.forEach(action => {
-      timeline.push({
-        time,
-        type: 'action_start',
-        action: action.name,
-        duration: action.estimatedDuration
-      })
-      time += action.estimatedDuration
-    })
-
-    // Add calculation executions
-    calculations.forEach(calc => {
-      timeline.push({
-        time,
-        type: 'calculation',
-        calculation: calc.name,
-        inputs: calc.inputs,
-        outputs: calc.outputs
-      })
-      time += 10 // 10ms per calculation
-    })
-
-    // Sort timeline by time
-    timeline.sort((a, b) => a.time - b.time)
-
-    // Calculate execution statistics
-    const stats = {
-      totalStates: stateMachines.reduce((sum, sm) => sum + sm.states.length, 0),
-      totalTransitions: stateMachines.reduce((sum, sm) => sum + sm.transitions.length, 0),
-      totalActions: actions.length,
-      totalCalculations: calculations.length,
-      estimatedExecutionTime: time,
-      averageActionDuration: actions.length > 0
-        ? actions.reduce((sum, a) => sum + a.estimatedDuration, 0) / actions.length
-        : 0,
-      maxCalculationComplexity: calculations.length > 0
-        ? Math.max(...calculations.map(c => c.complexity))
-        : 0
     }
 
-    return {
-      stateMachines,
-      actions,
-      calculations,
-      timeline,
-      stats
-    }
-  }, [documentation])
+    runSimulation()
+  }, [code, fileUri, maxSteps, wasm])
 
   return { simulation, loading }
 }

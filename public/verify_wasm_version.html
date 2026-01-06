@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head><title>Verify WASM Version</title></head>
+<body>
+    <h1>WASM Version Check</h1>
+    <pre id="output">Loading...</pre>
+    <script type="module">
+        const output = document.getElementById('output');
+        try {
+            const start = Date.now();
+            const wasm = await import('http://localhost:5173/wasm/sysml_wasm_bridge.js');
+            await wasm.default();
+
+            const bridge = new wasm.SysMLWasm();
+            const elapsed = Date.now() - start;
+
+            output.textContent = `✅ WASM loaded in ${elapsed}ms\n\n`;
+
+            // Check for generate_trade_study
+            if (typeof bridge.generate_trade_study === 'function') {
+                output.textContent += '✅ generate_trade_study EXISTS\n\n';
+
+                // Try calling it with test data
+                const testCode = `package 'Test' {
+    part def Base {
+        attribute cost : Real;
+    }
+    part def Option1 :> Base {
+        :>> cost = 100.0;
+    }
+}`;
+                const result = bridge.generate_trade_study(testCode, 'test://file');
+                output.textContent += `✅ Function called successfully\n`;
+                output.textContent += `   Variants: ${result.variants?.length || 0}\n`;
+                output.textContent += `   Scores: ${result.scores?.length || 0}\n\n`;
+                output.textContent += `Result:\n${JSON.stringify(result, null, 2)}`;
+            } else {
+                output.textContent += '❌ generate_trade_study NOT FOUND\n\n';
+                output.textContent += 'Available methods:\n';
+                output.textContent += Object.getOwnPropertyNames(Object.getPrototypeOf(bridge))
+                    .filter(m => typeof bridge[m] === 'function')
+                    .map(m => `  - ${m}`)
+                    .join('\n');
+            }
+        } catch (error) {
+            output.textContent = '❌ Error: ' + error.message + '\n\n' + error.stack;
+        }
+    </script>
+</body>
+</html>

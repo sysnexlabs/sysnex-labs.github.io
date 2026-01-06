@@ -43,7 +43,17 @@ export function useSysMLTestManagement(code, fileUri = 'editor://current') {
 
       try {
         // Check if WASM methods are available (they may not be in older WASM builds)
-        if (!wasm.extract_scenarios || !wasm.calculate_test_coverage) {
+        // Debug: Log available methods
+        const availableMethods = wasm ? Object.getOwnPropertyNames(Object.getPrototypeOf(wasm)).filter(m => !m.startsWith('_') && m !== 'constructor' && m !== 'free') : []
+        console.log('🔍 [useSysMLTestManagement] Available WASM methods:', availableMethods)
+        console.log('🔍 [useSysMLTestManagement] Checking methods:', {
+          hasExtractScenarios: typeof wasm?.extract_scenarios === 'function',
+          hasCalculateTestCoverage: typeof wasm?.calculate_test_coverage === 'function',
+          hasExtractAssertions: typeof wasm?.extract_assertions === 'function',
+          hasExtractSuccessionFlows: typeof wasm?.extract_succession_flows === 'function',
+        })
+        
+        if (!wasm || !wasm.extract_scenarios || !wasm.calculate_test_coverage) {
           // Silently fall back - don't set error, just use empty data
           // The UI will fall back to HIR extraction automatically
           console.info('Test management WASM methods not available. Using fallback HIR extraction.')
@@ -54,17 +64,21 @@ export function useSysMLTestManagement(code, fileUri = 'editor://current') {
         }
 
         // Extract scenarios (use cases) - doesn't need verification ID
+        console.log('🔄 [useSysMLTestManagement] Calling extract_scenarios...')
         const scenariosData = await safeWasmCall(
           wasm.extract_scenarios.bind(wasm),
           code
         )
+        console.log('✅ [useSysMLTestManagement] extract_scenarios result:', scenariosData)
         setScenarios(scenariosData || [])
 
         // Calculate coverage
+        console.log('🔄 [useSysMLTestManagement] Calling calculate_test_coverage...')
         const coverageData = await safeWasmCall(
           wasm.calculate_test_coverage.bind(wasm),
           code
         )
+        console.log('✅ [useSysMLTestManagement] calculate_test_coverage result:', coverageData)
         setCoverage(coverageData)
 
         // Extract assertions and succession flows for each verification
@@ -126,10 +140,12 @@ export function useAssertions(code, verificationId) {
           return
         }
 
+        // Convert verificationId to BigInt (WASM expects u64)
+        const verificationIdBigInt = BigInt(verificationId)
         const data = await safeWasmCall(
           wasm.extract_assertions.bind(wasm),
           code,
-          verificationId
+          verificationIdBigInt
         )
         setAssertions(data || [])
       } catch (err) {
@@ -176,10 +192,12 @@ export function useSuccessionFlows(code, verificationId) {
           return
         }
 
+        // Convert verificationId to BigInt (WASM expects u64)
+        const verificationIdBigInt = BigInt(verificationId)
         const data = await safeWasmCall(
           wasm.extract_succession_flows.bind(wasm),
           code,
-          verificationId
+          verificationIdBigInt
         )
         setActionSequence(data)
       } catch (err) {
@@ -196,5 +214,59 @@ export function useSuccessionFlows(code, verificationId) {
   }, [code, verificationId, wasm])
 
   return { actionSequence, loading, error }
+}
+
+/**
+ * Hook to evaluate a single assertion with context variables
+ */
+export function useAssertionEvaluation(code, assertionId, context = null) {
+  const { wasm } = useSysMLWasm()
+  const [evaluationResult, setEvaluationResult] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    if (!code || !assertionId || !wasm || !context) {
+      setEvaluationResult(null)
+      return
+    }
+
+    const evaluate = async () => {
+      setLoading(true)
+      setError(null)
+
+      try {
+        if (!wasm.evaluate_assertion) {
+          setEvaluationResult(null)
+          setLoading(false)
+          return
+        }
+
+        // Convert assertionId to BigInt (WASM expects u64)
+        const assertionIdBigInt = BigInt(assertionId)
+        // Convert context to JSON string
+        const contextJson = JSON.stringify(context)
+        
+        const result = await safeWasmCall(
+          wasm.evaluate_assertion.bind(wasm),
+          code,
+          assertionIdBigInt,
+          contextJson
+        )
+        setEvaluationResult(result)
+      } catch (err) {
+        console.error('Assertion evaluation error:', err)
+        setError(err.message)
+        setEvaluationResult(null)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    const timeoutId = setTimeout(evaluate, 200)
+    return () => clearTimeout(timeoutId)
+  }, [code, assertionId, context, wasm])
+
+  return { evaluationResult, loading, error }
 }
 
