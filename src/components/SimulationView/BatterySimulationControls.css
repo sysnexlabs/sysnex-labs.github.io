@@ -1,0 +1,114 @@
+.battery-sim-controls {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.controls-header h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.2em;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.control-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.control-label {
+  font-size: 0.9em;
+  font-weight: 500;
+  color: #475569;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.control-button {
+  transition: all 0.3s ease;
+}
+
+.control-button:hover {
+  transform: translateY(-2px);
+}
+
+.control-button:active {
+  transform: translateY(0);
+}
+
+.speed-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.speed-slider {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.speed-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.5);
+  border: 3px solid #667eea;
+  transition: all 0.3s ease;
+}
+
+.speed-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.7);
+}
+
+.speed-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.5);
+  border: 3px solid #667eea;
+  transition: all 0.3s ease;
+}
+
+.speed-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.7);
+}
+
+.speed-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.25rem;
+}
+
+.speed-label {
+  transition: all 0.3s ease;
+}
+
+.controls-info {
+  margin-top: 1rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .controls-grid {
+    grid-template-columns: 1fr;
+  }
+}

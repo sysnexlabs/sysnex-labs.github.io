@@ -5,18 +5,60 @@ import { useSysMLSimulation } from '../../hooks/useSysMLSimulation'
 import SpotlightCard from '../SpotlightCard'
 import ExecutionTimeline from './ExecutionTimeline'
 import StateTransitionGraph from './StateTransitionGraph'
+import BatterySimulationControls from './BatterySimulationControls'
+import PhysicsGauges from './PhysicsGauges'
 import './SimulationView.css'
 
 /**
  * Simulation View Component
  *
  * Extracts and displays simulations, state machines, and scenarios from SysML v2 code using WASM
+ * Enhanced with interactive simulation controls and real-time physics visualization
  */
 export default function SimulationView({ code }) {
   const { documentation, loading: docLoading } = useSysMLDocumentation(code, 'editor://current')
   const { analytics, loading: analyticsLoading } = useSysMLAnalytics(code, 'editor://current')
   const { simulation, loading: simLoading } = useSysMLSimulation(code, 'editor://current')
   const [activeTab, setActiveTab] = useState('execution')
+
+  // Simulation control state
+  const [isSimulationRunning, setIsSimulationRunning] = useState(false)
+  const [simulationSpeed, setSimulationSpeed] = useState(1)
+  const [physicsData, setPhysicsData] = useState({
+    soc: 20,
+    voltage: 350,
+    current: 120,
+    temperature: 25,
+    phase: 'Idle'
+  })
+
+  // Handle simulation controls
+  const handleToggleSimulation = () => {
+    setIsSimulationRunning(!isSimulationRunning)
+    if (!isSimulationRunning) {
+      // Start simulation - in a real implementation, this would trigger physics calculations
+      console.log('Starting simulation at speed:', simulationSpeed)
+    } else {
+      console.log('Pausing simulation')
+    }
+  }
+
+  const handleSpeedChange = (newSpeed) => {
+    setSimulationSpeed(newSpeed)
+    console.log('Simulation speed changed to:', newSpeed)
+  }
+
+  const handleRestart = () => {
+    setPhysicsData({
+      soc: 20,
+      voltage: 350,
+      current: 120,
+      temperature: 25,
+      phase: 'Idle'
+    })
+    setIsSimulationRunning(false)
+    console.log('Simulation restarted')
+  }
 
   // Get state machines from WASM backend
   const stateMachines = useMemo(() => {
@@ -128,6 +170,18 @@ export default function SimulationView({ code }) {
       <div className="simulation-content">
         {activeTab === 'execution' && (
           <div className="execution-view">
+            {/* Interactive Simulation Controls */}
+            <BatterySimulationControls
+              isRunning={isSimulationRunning}
+              speed={simulationSpeed}
+              onToggleRunning={handleToggleSimulation}
+              onSpeedChange={handleSpeedChange}
+              onRestart={handleRestart}
+            />
+
+            {/* Real-Time Physics Gauges */}
+            <PhysicsGauges physicsData={physicsData} />
+
             {simulation && simulation.timeline && simulation.timeline.length > 0 ? (
               <>
                 {/* Execution Statistics */}
@@ -184,9 +238,22 @@ export default function SimulationView({ code }) {
                 )}
               </>
             ) : (
-              <div className="simulation-empty">
-                No execution flow found. Define state machines and actions to see simulation execution.
-              </div>
+              <>
+                <div style={{
+                  marginTop: '1rem',
+                  padding: '1rem',
+                  background: 'rgba(59, 130, 246, 0.1)',
+                  borderRadius: '8px',
+                  borderLeft: '4px solid #3b82f6'
+                }}>
+                  <strong>Interactive Demo:</strong> The simulation controls and physics gauges above demonstrate
+                  the kind of real-time visualization capabilities available with NexSim. Define state machines
+                  and actions in the editor to see actual execution flow and timeline analysis.
+                </div>
+                <div className="simulation-empty" style={{ marginTop: '1rem' }}>
+                  No execution flow found. Define state machines and actions to see simulation execution.
+                </div>
+              </>
             )}
           </div>
         )}

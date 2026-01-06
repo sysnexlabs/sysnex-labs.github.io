@@ -851,12 +851,95 @@ export default function TestingView({ code }) {
     )
   }
 
+  // Calculate assertion stats for the stunning stats cards
+  const assertionStats = useMemo(() => {
+    const total = assertions.length
+    const valid = assertions.filter(a => a.isValid && a.constraintExpression).length
+    const expressionsCaptured = assertions.filter(a => a.constraintExpression).length
+
+    return {
+      total,
+      valid,
+      expressionsCaptured,
+      validPercentage: total > 0 ? Math.round((valid / total) * 100) : 0
+    }
+  }, [assertions])
+
   return (
     <div className="testing-view">
       <div className="testing-header">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
           <h3>Test Analysis</h3>
         </div>
+
+        {/* Stunning Stats Cards - inspired by validation page */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+          gap: '1rem',
+          marginBottom: '1.5rem'
+        }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            padding: '1.5rem',
+            borderRadius: '12px',
+            boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)'
+          }}>
+            <div style={{ fontSize: '2.5em', fontWeight: '700', lineHeight: '1', marginBottom: '0.5rem' }}>
+              {assertionStats.total}
+            </div>
+            <div style={{ fontSize: '0.85em', opacity: '0.95', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              Total Assertions
+            </div>
+          </div>
+
+          <div style={{
+            background: 'linear-gradient(135deg, #10b981 0%, #34d399 100%)',
+            color: 'white',
+            padding: '1.5rem',
+            borderRadius: '12px',
+            boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)'
+          }}>
+            <div style={{ fontSize: '2.5em', fontWeight: '700', lineHeight: '1', marginBottom: '0.5rem' }}>
+              {assertionStats.valid}
+            </div>
+            <div style={{ fontSize: '0.85em', opacity: '0.95', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              Valid Assertions
+            </div>
+          </div>
+
+          <div style={{
+            background: 'linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%)',
+            color: 'white',
+            padding: '1.5rem',
+            borderRadius: '12px',
+            boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+          }}>
+            <div style={{ fontSize: '2.5em', fontWeight: '700', lineHeight: '1', marginBottom: '0.5rem' }}>
+              {assertionStats.expressionsCaptured}
+            </div>
+            <div style={{ fontSize: '0.85em', opacity: '0.95', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              Expressions Captured
+            </div>
+          </div>
+
+          <div style={{
+            background: 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%)',
+            color: 'white',
+            padding: '1.5rem',
+            borderRadius: '12px',
+            boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)'
+          }}>
+            <div style={{ fontSize: '2.5em', fontWeight: '700', lineHeight: '1', marginBottom: '0.5rem' }}>
+              {testCoverage.percentage.toFixed(0)}%
+            </div>
+            <div style={{ fontSize: '0.85em', opacity: '0.95', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              Test Coverage
+            </div>
+          </div>
+        </div>
+
         <div className="testing-stats">
           <span className="test-stat">
             <strong>{verifications.length}</strong> Tests
@@ -869,9 +952,6 @@ export default function TestingView({ code }) {
           </span>
           <span className="test-stat">
             <strong>{verifyRelationships.length}</strong> Links
-          </span>
-          <span className="test-stat">
-            <strong>{testCoverage.percentage.toFixed(0)}%</strong> Coverage
           </span>
         </div>
       </div>
@@ -1047,11 +1127,11 @@ export default function TestingView({ code }) {
         {activeTab === 'assertions' && (
           <div className="assertions-list">
             {extractedAssertions.length > 0 && (
-              <div style={{ 
-                marginBottom: '1rem', 
-                padding: '0.75rem', 
-                background: 'rgba(16, 185, 129, 0.1)', 
-                borderRadius: '6px', 
+              <div style={{
+                marginBottom: '1rem',
+                padding: '0.75rem',
+                background: 'rgba(16, 185, 129, 0.1)',
+                borderRadius: '6px',
                 fontSize: '0.9em',
                 borderLeft: '3px solid #10b981'
               }}>
@@ -1060,97 +1140,117 @@ export default function TestingView({ code }) {
             )}
             {assertions.length > 0 ? (
               <div className="assertions-table-container">
-                <table className="testing-table">
+                {/* Beautiful table inspired by validation page */}
+                <table style={{
+                  width: '100%',
+                  borderCollapse: 'collapse',
+                  margin: '20px 0',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                  borderRadius: '8px',
+                  overflow: 'hidden'
+                }}>
                   <thead>
                     <tr>
-                      <th>Assertion</th>
-                      <th>Test Case</th>
-                      <th>Package</th>
-                      <th>Constraint Expression</th>
-                      <th>Validation</th>
+                      <th style={{
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        color: 'white',
+                        padding: '15px',
+                        textAlign: 'left',
+                        fontWeight: '600',
+                        fontSize: '0.9em',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px'
+                      }}>Assertion Name</th>
+                      <th style={{
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        color: 'white',
+                        padding: '15px',
+                        textAlign: 'left',
+                        fontWeight: '600',
+                        fontSize: '0.9em',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px'
+                      }}>Constraint Expression</th>
+                      <th style={{
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        color: 'white',
+                        padding: '15px',
+                        textAlign: 'left',
+                        fontWeight: '600',
+                        fontSize: '0.9em',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px'
+                      }}>Is Negated</th>
+                      <th style={{
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        color: 'white',
+                        padding: '15px',
+                        textAlign: 'left',
+                        fontWeight: '600',
+                        fontSize: '0.9em',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px'
+                      }}>Status</th>
                     </tr>
                   </thead>
                   <tbody>
                     {assertions.map((assertion, index) => (
-                      <tr key={index} className={`test-row status-${assertion.isValid ? 'valid' : 'invalid'}`}>
-                        <td className="test-title">
+                      <tr key={index} style={{
+                        borderBottom: '1px solid #e5e7eb',
+                        transition: 'background 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.background = '#f9fafb'}
+                      onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
+                        <td style={{ padding: '15px' }}>
                           <strong>{assertion.title}</strong>
                           {assertion.doc_comment && (
-                            <div className="test-description" style={{ fontSize: '0.85em', marginTop: '0.25rem' }}>
+                            <div style={{ fontSize: '0.85em', marginTop: '0.25rem', opacity: 0.7 }}>
                               {assertion.doc_comment}
                             </div>
                           )}
+                          <div style={{ fontSize: '0.75em', marginTop: '0.25rem', opacity: 0.6 }}>
+                            <code>{assertion.parentName}</code>
+                          </div>
                         </td>
-                        <td className="test-parent">
-                          <code>{assertion.parentName}</code>
-                        </td>
-                        <td className="test-package">
-                          <code>{assertion.packageName}</code>
-                        </td>
-                        <td className="test-description">
+                        <td style={{ padding: '15px' }}>
                           {assertion.constraintExpression ? (
-                            <div>
-                              <code style={{ 
-                                fontFamily: 'monospace', 
-                                fontSize: '0.9em',
-                                padding: '0.25rem 0.5rem',
-                                background: 'rgba(0, 0, 0, 0.05)',
-                                borderRadius: '3px',
-                                display: 'inline-block'
-                              }}>
-                                {assertion.isNegated && <span style={{ color: '#ef4444' }}>NOT </span>}
-                                {assertion.constraintExpression}
-                              </code>
-                              {extractedAssertions.length > 0 && (
-                                <div style={{ fontSize: '0.7em', marginTop: '0.25rem', color: '#10b981' }}>
-                                  ✓ Extracted
-                                </div>
-                              )}
+                            <div style={{
+                              fontFamily: 'monospace',
+                              background: '#f3f4f6',
+                              padding: '8px 12px',
+                              borderRadius: '6px',
+                              borderLeft: '3px solid #667eea',
+                              display: 'block',
+                              margin: '5px 0'
+                            }}>
+                              {assertion.isNegated && <span style={{ color: '#ef4444', fontWeight: 'bold' }}>NOT </span>}
+                              {assertion.constraintExpression}
                             </div>
-                          ) : assertion.isValid ? (
-                            <span style={{ fontStyle: 'italic', opacity: 0.7, fontSize: '0.9em' }}>
-                              Constraint node found (expression parsing in progress)
-                            </span>
                           ) : (
-                            <span className="empty-cell" style={{ fontStyle: 'italic' }}>
-                              <div>No constraint expression found</div>
-                              <div style={{ fontSize: '0.8em', marginTop: '0.25rem', opacity: 0.7 }}>
-                                Tip: Use syntax: <code>assert name {'{'} expression {'}'}</code>
-                              </div>
-                            </span>
+                            <span style={{ color: '#9ca3af', fontStyle: 'italic' }}>No expression found</span>
                           )}
                         </td>
-                        <td className="test-validation">
-                          {assertion.evaluationResult ? (
-                            <div>
-                              <span className={`status-badge status-${assertion.evaluationResult.verdict === 'pass' ? 'valid' : assertion.evaluationResult.verdict === 'fail' ? 'invalid' : 'pending'}`}>
-                                {assertion.evaluationResult.verdict === 'pass' ? '✓ Pass' : assertion.evaluationResult.verdict === 'fail' ? '✗ Fail' : '? ' + assertion.evaluationResult.verdict}
-                              </span>
-                              <div className="validation-message" style={{ fontSize: '0.8em', marginTop: '0.25rem' }}>
-                                <div style={{ color: assertion.evaluationResult.verdict === 'pass' ? '#10b981' : assertion.evaluationResult.verdict === 'fail' ? '#ef4444' : '#6b7280' }}>
-                                  <strong>Evaluated:</strong> {assertion.evaluationResult.message || `Assertion ${assertion.evaluationResult.verdict}`}
-                                </div>
-                                {assertion.evaluationResult.actual_value && (
-                                  <div style={{ marginTop: '0.25rem', fontSize: '0.75em', opacity: 0.8 }}>
-                                    Actual: {JSON.stringify(assertion.evaluationResult.actual_value)}
-                                  </div>
-                                )}
+                        <td style={{ padding: '15px', textAlign: 'center' }}>
+                          {assertion.isNegated ? '✓ Yes' : '✗ No'}
+                        </td>
+                        <td style={{ padding: '15px' }}>
+                          <span style={{
+                            display: 'inline-block',
+                            padding: '4px 12px',
+                            borderRadius: '12px',
+                            fontSize: '0.85em',
+                            fontWeight: '600',
+                            background: assertion.isValid && assertion.constraintExpression ? '#d1fae5' : '#fee2e2',
+                            color: assertion.isValid && assertion.constraintExpression ? '#065f46' : '#991b1b'
+                          }}>
+                            {assertion.isValid && assertion.constraintExpression ? '✓ Valid' : '✗ Invalid'}
+                          </span>
+                          {assertion.evaluationResult && (
+                            <div style={{ fontSize: '0.75em', marginTop: '0.5rem', opacity: 0.8 }}>
+                              <div style={{ color: assertion.evaluationResult.verdict === 'pass' ? '#10b981' : '#ef4444' }}>
+                                {assertion.evaluationResult.verdict === 'pass' ? '✓ Evaluated: Pass' : '✗ Evaluated: Fail'}
                               </div>
                             </div>
-                          ) : (
-                            <>
-                              <span className={`status-badge status-${assertion.isValid ? 'valid' : 'invalid'}`}>
-                                {assertion.isValid ? '✓ Valid' : '✗ Invalid'}
-                              </span>
-                              <div className="validation-message" style={{ fontSize: '0.8em', marginTop: '0.25rem' }}>
-                                {assertion.validationMessage}
-                                {!assertion.isValid && (
-                                  <div style={{ marginTop: '0.25rem', fontSize: '0.85em', opacity: 0.8 }}>
-                                    <strong>Note:</strong> Constraint expressions will be extracted automatically.
-                                  </div>
-                                )}
-                              </div>
-                            </>
                           )}
                         </td>
                       </tr>
