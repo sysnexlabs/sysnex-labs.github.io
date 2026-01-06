@@ -856,29 +856,6 @@ export default function TestingView({ code }) {
       <div className="testing-header">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
           <h3>Test Analysis</h3>
-          {extractedScenarios.length > 0 || testCoverageData ? (
-            <span style={{ 
-              fontSize: '0.75rem', 
-              padding: '0.25rem 0.5rem', 
-              background: 'rgba(16, 185, 129, 0.1)', 
-              color: '#10b981',
-              borderRadius: '4px',
-              fontWeight: 600,
-              border: '1px solid #10b981'
-            }}>
-              ✓ Active • {extractedScenarios.length} scenarios • {testCoverageData?.totalRequirements || 0} requirements analyzed
-            </span>
-          ) : (
-            <span style={{ 
-              fontSize: '0.75rem', 
-              padding: '0.25rem 0.5rem', 
-              background: 'rgba(107, 114, 128, 0.1)', 
-              color: '#6b7280',
-              borderRadius: '4px'
-            }}>
-              Using HIR Extraction
-            </span>
-          )}
         </div>
         <div className="testing-stats">
           <span className="test-stat">

@@ -279,47 +279,77 @@ const Home = () => {
             </p>
           </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', maxWidth: '1400px', margin: '0 auto' }}>
             {[
               {
-                badge: 'DEVELOPER',
+                badge: 'CODE-FIRST',
                 badgeColor: '#00bcd4',
                 icon: '/assets/role_developer.svg',
-                role: 'Code-First Engineer',
-                description: 'For those who live in the editor.',
-                features: ['Type Hierarchy & Navigation', 'Keyboard-First Control', 'Git-native modeling'],
+                role: 'Code-First Users',
+                description: 'Developers and engineers who prefer text-based editing and native code workflows.',
+                features: ['Autocompletion & Go-to-Definition', 'Rename Symbol & Code Actions', 'Git Integration & Formatting'],
                 link: '/overview',
                 linkText: 'Explore Developer Tools'
               },
               {
-                badge: 'ENGINEER',
+                badge: 'OFFICE-STYLE',
                 badgeColor: '#ff9800',
-                icon: '/assets/role_systems_analyst.svg',
-                role: 'Systems Analyst',
-                description: 'Focus on requirements & traceability.',
-                features: ['Reqs & Traceability Matrix', 'Auto-Generated Docs', 'Validation Rules'],
-                link: '/editions',
-                linkText: 'See Analyst Features'
-              },
-              {
-                badge: 'EXECUTIVE',
-                badgeColor: '#9c27b0',
                 icon: '/assets/role_executive.svg',
-                role: 'Director / VP',
-                description: 'Digital transformation & strategy.',
-                features: ['Vendor Vendor Independence', 'Open Standards (SysML v2)', 'Modern Architecture'],
-                link: '/pricing',
-                linkText: 'View Business Case'
+                role: 'Office-Style Users',
+                description: 'Business analysts and stakeholders who prefer documentation and visual presentations.',
+                features: ['Documentation Viewer & Editing', 'Requirements Manager', 'Traceability Matrix & Reports'],
+                link: '/products/nexdocs',
+                linkText: 'See Documentation Features'
               },
               {
-                badge: 'PROCUREMENT',
+                badge: 'VISUAL MODELER',
+                badgeColor: '#9c27b0',
+                icon: '/assets/role_architects.svg',
+                role: 'Visual Modelers',
+                description: 'Systems architects who prefer graphical editing and diagram-first workflows.',
+                features: ['Diagram Editor & Viewer', 'Visual Relationship Creation', 'ELK.js Auto-Layout'],
+                link: '/contact',
+                linkText: 'Request Early Access'
+              },
+              {
+                badge: 'COMPLIANCE',
+                badgeColor: '#f44336',
+                icon: '/assets/feature_compliance.svg',
+                role: 'Compliance & Audit',
+                description: 'Quality engineers and compliance officers who need standards compliance and audit trails.',
+                features: ['ASPICE Work Products', 'ISO 26262 Validation', 'Traceability & Audit Trails'],
+                link: '/compliance',
+                linkText: 'Explore Compliance'
+              },
+              {
+                badge: 'ANALYSIS',
                 badgeColor: '#4caf50',
-                icon: '/assets/role_procurement.svg',
-                role: 'Procurement',
-                description: 'Licensing & support.',
-                features: ['Transparent Pricing', 'Flexible Licensing', 'Integration Guides'],
-                link: '/pricing',
-                linkText: 'Pricing & Licensing'
+                icon: '/assets/feature_analytics.svg',
+                role: 'Analysis & Simulation',
+                description: 'Systems analysts and simulation engineers who need model analysis and execution.',
+                features: ['Model Analytics & Metrics', 'Constraint System (OCL 2.5)', 'Trade Study Analysis'],
+                link: '/products/nexanalytics',
+                linkText: 'See Analytics Features'
+              },
+              {
+                badge: 'DOCUMENTATION',
+                badgeColor: '#2196f3',
+                icon: '/assets/icon_nexdocs.svg',
+                role: 'Documentation-Focused',
+                description: 'Technical writers and documentation specialists focused on generation and formatting.',
+                features: ['Documentation Generation', 'PDF/HTML/Markdown Export', 'MkDocs & Sphinx Integration'],
+                link: '/products/nexdocs',
+                linkText: 'Explore Documentation'
+              },
+              {
+                badge: 'COLLABORATIVE',
+                badgeColor: '#607d8b',
+                icon: '/assets/role_toolchain.svg',
+                role: 'Collaborative Teams',
+                description: 'Team leads and project managers who need multi-user workflows and version control.',
+                features: ['Git Integration & Code Review', 'Multi-User Support', 'Traceability & Requirements'],
+                link: '/overview',
+                linkText: 'Explore Collaboration'
               }
             ].map((roleCard, index) => (
               <motion.div

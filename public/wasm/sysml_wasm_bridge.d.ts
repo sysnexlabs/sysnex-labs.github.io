@@ -21,10 +21,8 @@ export class SysMLWasm {
    */
   generate_hir(source: string, file_uri: string): any;
   /**
-   * Run state machine simulation and return execution trace (Phase 1: Static Analysis)
-   * Extracts state machines from HIR and simulates execution by following transitions
-   * Simulation execution - currently uses placeholder implementation
-   * Phase 2 will integrate with sysml-exec engine once WASM-compatible
+   * Run state machine simulation and return execution trace
+   * Delegates to sysml-ide-simulation crate for all business logic
    */
   run_simulation(source: string, file_uri: string, max_steps: number): any;
   /**
@@ -50,7 +48,7 @@ export class SysMLWasm {
   extract_traceability(source: string, file_uri: string): any;
   /**
    * Generate trade study analysis with variant extraction and scoring
-   * Extracts variants, normalizes attributes, scores alternatives, and generates comparisons
+   * Delegates to sysml-ide-trade-study crate for all business logic
    */
   generate_trade_study(source: string, file_uri: string): any;
   /**
