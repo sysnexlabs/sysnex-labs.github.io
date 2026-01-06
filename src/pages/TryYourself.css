@@ -11,6 +11,9 @@
   display: flex;
   flex-direction: column;
   min-height: 600px;
+  height: 100%;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 .try-yourself-uvl-section {
@@ -41,7 +44,9 @@
   grid-template-columns: 1fr 2fr;
   gap: 2rem;
   min-height: 600px;
+  max-height: calc(100vh - 200px);
   margin: 2rem 0;
+  overflow: hidden;
 }
 
 @media (max-width: 1024px) {
