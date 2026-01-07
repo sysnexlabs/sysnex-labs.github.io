@@ -114,22 +114,42 @@ export default function TryNexTrade() {
     <div className="page">
       <section className="page-hero-section">
         <div className="container">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
             <img
               src="/assets/icon_nextrade.svg"
               alt="NexTrade"
-              style={{height: '60px', width: 'auto', maxWidth: '60px', objectFit: 'contain'}}
+              style={{height: '64px', width: 'auto', maxWidth: '64px', objectFit: 'contain'}}
             />
-            <h1>Try NexTrade</h1>
+            <div>
+              <h1 style={{ margin: 0, marginBottom: '0.25rem' }}>Try NexTrade</h1>
+              <p style={{ margin: 0, fontSize: '0.95rem', color: 'var(--text-secondary)', opacity: 0.9 }}>
+                Interactive Trade Study Analysis
+              </p>
+            </div>
           </div>
-          <p className="page-hero-description">
-            Experience trade study management with variant extraction, objective tracking, and decision analysis.
-            Define trade studies and variants to see WASM-powered analysis capabilities.
+          <p className="page-hero-description" style={{ fontSize: '1.125rem', lineHeight: '1.7', maxWidth: '800px' }}>
+            Experience powerful trade study management with real-time variant extraction, objective tracking, 
+            and automated decision analysis. Edit the SysML v2 code below to see instant WASM-powered insights.
           </p>
-          <div style={{ marginTop: '1rem' }}>
+          <div style={{ 
+            marginTop: '1.5rem', 
+            display: 'flex', 
+            gap: '1rem', 
+            flexWrap: 'wrap',
+            alignItems: 'center'
+          }}>
             <Link to="/products/nextrade" className="btn ghost">
               ← Back to NexTrade Details
             </Link>
+            <div style={{ 
+              padding: '0.75rem 1rem', 
+              background: 'rgba(139, 92, 246, 0.1)', 
+              borderRadius: '6px',
+              fontSize: '0.875rem',
+              color: 'var(--text-secondary)'
+            }}>
+              💡 <strong>Tip:</strong> Modify the code to see real-time analysis updates
+            </div>
           </div>
         </div>
       </section>
@@ -150,11 +170,59 @@ export default function TryNexTrade() {
           </div>
 
           <div className="try-yourself-footer">
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+              gap: '1.5rem',
+              marginBottom: '2rem'
+            }}>
+              <div style={{
+                padding: '1.25rem',
+                background: 'rgba(139, 92, 246, 0.05)',
+                borderRadius: '8px',
+                border: '1px solid rgba(139, 92, 246, 0.1)'
+              }}>
+                <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>🔍</div>
+                <strong style={{ color: 'var(--brand-purple)', display: 'block', marginBottom: '0.25rem' }}>
+                  Variant Extraction
+                </strong>
+                <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                  Automatically identifies and compares design variants
+                </p>
+              </div>
+              <div style={{
+                padding: '1.25rem',
+                background: 'rgba(139, 92, 246, 0.05)',
+                borderRadius: '8px',
+                border: '1px solid rgba(139, 92, 246, 0.1)'
+              }}>
+                <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>📊</div>
+                <strong style={{ color: 'var(--brand-purple)', display: 'block', marginBottom: '0.25rem' }}>
+                  Decision Matrix
+                </strong>
+                <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                  Visual comparison tables and scoring analysis
+                </p>
+              </div>
+              <div style={{
+                padding: '1.25rem',
+                background: 'rgba(139, 92, 246, 0.05)',
+                borderRadius: '8px',
+                border: '1px solid rgba(139, 92, 246, 0.1)'
+              }}>
+                <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>🎯</div>
+                <strong style={{ color: 'var(--brand-purple)', display: 'block', marginBottom: '0.25rem' }}>
+                  Objective Tracking
+                </strong>
+                <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                  Tracks and analyzes optimization objectives
+                </p>
+              </div>
+            </div>
             <p className="try-yourself-note">
-              <strong>NexTrade Features:</strong> WASM-powered trade study extraction, variant analysis,
-              objective tracking, decision matrix generation, and automated trade-off analysis.
-              Check out the{' '}
-              <Link to="/platforms">VS Code Extension</Link> for advanced features.
+              <strong>Powered by WASM:</strong> All analysis runs in your browser using WebAssembly for 
+              instant results. Check out the{' '}
+              <Link to="/platforms">VS Code Extension</Link> for advanced features and full IDE integration.
             </p>
           </div>
         </div>

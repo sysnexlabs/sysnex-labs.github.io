@@ -85,9 +85,9 @@ const DEFAULT_TESTING_EXAMPLE = `package 'Battery Management Testing' {
         then done;
 
         // Assertions with constraint expressions
-        assert voltageWithinLimit { testBMS.voltage <= 4.2 }
-        assert disconnectActive { testBMS.voltage > 4.2 implies testBMS.disconnectSignal == true }
-        assert currentZero { testBMS.current == 0.0 }
+        assert constraint voltageWithinLimit { testBMS.voltage <= 4.2 }
+        assert constraint disconnectActive { testBMS.voltage > 4.2 implies testBMS.disconnectSignal == true }
+        assert constraint currentZero { testBMS.current == 0.0 }
     }
 
     verification def ThermalShutdownTest {
@@ -123,8 +123,8 @@ const DEFAULT_TESTING_EXAMPLE = `package 'Battery Management Testing' {
         then done;
 
         // Assertions
-        assert tempWithinLimit { testBMS.temperature <= 60.0 }
-        assert shutdownTriggered { testBMS.temperature > 60.0 implies testBMS.shutdownSignal == true }
+        assert constraint tempWithinLimit { testBMS.temperature <= 60.0 }
+        assert constraint shutdownTriggered { testBMS.temperature > 60.0 implies testBMS.shutdownSignal == true }
     }
 
     verification def ChargeCycleTest {
@@ -165,10 +165,10 @@ const DEFAULT_TESTING_EXAMPLE = `package 'Battery Management Testing' {
         then done;
 
         // Assertions for charge cycle
-        assert socReached { testBMS.stateOfCharge >= 100.0 }
-        assert noVoltageViolation { testBMS.voltage <= 4.2 }
-        assert noTempViolation { testBMS.temperature <= 60.0 }
-        assert chargingComplete { testBMS.chargingState == 'complete' }
+        assert constraint socReached { testBMS.stateOfCharge >= 100.0 }
+        assert constraint noVoltageViolation { testBMS.voltage <= 4.2 }
+        assert constraint noTempViolation { testBMS.temperature <= 60.0 }
+        assert constraint chargingComplete { testBMS.chargingState == 'complete' }
     }
 
     verification def IntegrationTest {
@@ -315,20 +315,26 @@ export default function TryNexTest() {
 
           <div className="try-yourself-footer">
             <p className="try-yourself-note">
-              <strong>NexTest Features:</strong> Backend-powered test management with real assertion extraction,
-              succession flow analysis, scenario extraction, and coverage calculation. All processing happens in
-              Rust/WASM for maximum performance. Features include:
+              <strong>🧪 NexTest: Comprehensive Model-Based Testing</strong> - All powered by Rust/WASM backend for blazing-fast performance.
+              Test management features that go beyond traditional tools:
             </p>
-            <ul style={{ marginTop: '0.5rem', paddingLeft: '1.5rem', fontSize: '0.9em' }}>
-              <li><strong>Assertion Extraction:</strong> Automatically extracts assertions with constraint expressions</li>
-              <li><strong>Succession Flows:</strong> Extracts action sequences with "first/then" relationships</li>
-              <li><strong>Scenario Analysis:</strong> Extracts use case scenarios with included verifications</li>
-              <li><strong>Coverage Analysis:</strong> Calculates requirement coverage with gap identification</li>
-              <li><strong>Backend Processing:</strong> All logic runs in Rust/WASM, web is frontend-only</li>
+            <ul style={{ marginTop: '0.5rem', paddingLeft: '1.5rem', fontSize: '0.9em', lineHeight: '1.6' }}>
+              <li><strong>✓ Assertion Extraction:</strong> Automatically extracts assertions with full constraint expression parsing from verification cases</li>
+              <li><strong>✓ Succession Flow Analysis:</strong> Extracts action sequences with "first/then" relationships for test step validation</li>
+              <li><strong>✓ Scenario Management:</strong> Use case extraction with included verifications and action ordering</li>
+              <li><strong>✓ Coverage Calculation:</strong> Real-time requirement coverage analysis with unverified requirement identification</li>
+              <li><strong>✓ Traceability Matrix:</strong> Bidirectional mapping between requirements and verifications</li>
+              <li><strong>✓ Backend Architecture:</strong> All logic runs in Rust/WASM - web UI is purely frontend for instant feedback</li>
             </ul>
+            <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(102, 126, 234, 0.1)', borderRadius: '8px', borderLeft: '3px solid #667eea' }}>
+              <p style={{ margin: 0, fontSize: '0.9em' }}>
+                <strong>💡 Try it:</strong> Click the "Assertions" tab to see real-time extraction from the first verification case.
+                Then explore "Scenarios" for succession flow analysis and "Coverage" for requirement traceability.
+              </p>
+            </div>
             <p style={{ marginTop: '0.75rem', fontSize: '0.85em', opacity: 0.8 }}>
-              For full test automation with CI/CD integration, check out the{' '}
-              <Link to="/platforms">VS Code Extension</Link>.
+              For full test automation with CI/CD integration and advanced features, check out the{' '}
+              <Link to="/platforms">VS Code Extension</Link> and <Link to="/platforms">Desktop IDE</Link>.
             </p>
           </div>
         </div>

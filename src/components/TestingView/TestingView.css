@@ -22,18 +22,26 @@
 }
 
 .testing-table thead {
-  background: var(--bg-primary);
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
-.testing-table th {
-  text-align: left;
-  padding: 0.75rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  border-bottom: 2px solid var(--border-color);
+.testing-table thead th,
+.testing-table thead th[style],
+.testing-table th,
+.testing-table th[style],
+table.testing-table thead th,
+table.testing-table th {
+  background: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+  text-align: left !important;
+  padding: 0.75rem 1rem !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  border-bottom: 2px solid var(--border-color) !important;
 }
 
 .testing-table tbody tr {
@@ -513,7 +521,7 @@
   padding: 0.75rem;
   background: var(--bg-tertiary);
   border-radius: 6px;
-  border-left: 3px solid #8b5cf6;
+  border-left: 3px solid #667eea;
 }
 
 .verification-objectives ul,
@@ -630,4 +638,94 @@
 
 .unverified-list li:last-child {
   border-bottom: none;
+}
+
+/* Table header gradient is now defined in .testing-table th above - removed duplicate */
+
+/* Status banner */
+.status-banner {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.status-banner.success {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(52, 211, 153, 0.1) 100%);
+  border-left: 4px solid #10b981;
+}
+
+.status-banner.info {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(96, 165, 250, 0.05) 100%);
+  border-left: 4px solid #3b82f6;
+}
+
+.status-banner-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.status-banner-title {
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.status-banner.success .status-banner-title {
+  color: #10b981;
+}
+
+.status-banner.info .status-banner-title {
+  color: #3b82f6;
+}
+
+.status-banner-content {
+  font-size: 0.9em;
+  margin-top: 0.5rem;
+  opacity: 0.9;
+}
+
+.status-banner-features {
+  font-size: 0.85em;
+  margin-top: 0.75rem;
+  padding: 0.5rem;
+  background: rgba(255,255,255,0.5);
+  border-radius: 6px;
+}
+
+/* Constraint expression display */
+.constraint-expression-display {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  background: #f3f4f6;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 3px solid #667eea;
+  display: block;
+  margin: 5px 0;
+}
+
+.constraint-expression-negated {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+.constraint-expression-empty {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* Evaluation result */
+.evaluation-result {
+  font-size: 0.75em;
+  margin-top: 0.5rem;
+  opacity: 0.8;
+}
+
+.evaluation-result.pass {
+  color: #10b981;
+}
+
+.evaluation-result.fail {
+  color: #ef4444;
 }

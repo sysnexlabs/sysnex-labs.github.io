@@ -642,3 +642,4 @@ The nexTest Demo has a **solid foundation** with HIR extraction and basic visual
 
 **Priority**: 🔴 **HIGH** - This is a core feature that should be functional, not just a demo.
 
+

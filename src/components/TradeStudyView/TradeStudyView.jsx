@@ -6,6 +6,38 @@ import SpotlightCard from '../SpotlightCard'
 import ComparisonChart from './ComparisonChart'
 import './TradeStudyView.css'
 
+// Utility function to format numbers with appropriate precision and units
+const formatValue = (value, attributeName = '') => {
+  if (typeof value !== 'number' || isNaN(value)) return String(value || '-')
+  
+  // Format based on attribute name patterns
+  const name = attributeName.toLowerCase()
+  if (name.includes('cost') || name.includes('price')) {
+    return new Intl.NumberFormat('en-US', { 
+      style: 'currency', 
+      currency: 'USD',
+      maximumFractionDigits: 0 
+    }).format(value)
+  }
+  if (name.includes('emission') || name.includes('co2')) {
+    return `${value.toFixed(1)} g/km`
+  }
+  if (name.includes('range') || name.includes('distance')) {
+    return `${value.toFixed(0)} km`
+  }
+  if (name.includes('power') || name.includes('capacity')) {
+    return `${value.toFixed(1)} kW`
+  }
+  if (name.includes('efficiency') || name.includes('ratio')) {
+    return value.toFixed(2)
+  }
+  
+  // Default: show 1 decimal place for small numbers, 0 for large
+  return value >= 1000 
+    ? new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value)
+    : value.toFixed(1)
+}
+
 /**
  * Trade Study View Component
  *
@@ -75,7 +107,11 @@ export default function TradeStudyView({ code }) {
   if (docLoading || analyticsLoading || tradeStudyLoading) {
     return (
       <div className="trade-study-view">
-        <div className="trade-study-loading">Extracting trade study data...</div>
+        <div className="trade-study-loading">
+          <div className="loading-spinner"></div>
+          <p>Extracting trade study data...</p>
+          <p className="loading-subtitle">Analyzing variants, objectives, and attributes</p>
+        </div>
       </div>
     )
   }
@@ -84,7 +120,18 @@ export default function TradeStudyView({ code }) {
     return (
       <div className="trade-study-view">
         <div className="trade-study-empty">
-          Write SysML v2 trade study code to see variant analysis and decision support.
+          <div className="empty-icon">📊</div>
+          <h4>Ready to Analyze</h4>
+          <p>Write SysML v2 trade study code in the editor to see:</p>
+          <ul className="empty-features">
+            <li>✨ Variant extraction and comparison</li>
+            <li>🎯 Objective tracking and analysis</li>
+            <li>📈 Decision matrix generation</li>
+            <li>🔍 Automated trade-off analysis</li>
+          </ul>
+          <p className="empty-hint">
+            <strong>Tip:</strong> Define variants using <code>part def ... :&gt; BaseType</code> with <code>:&gt;&gt;</code> attribute assignments
+          </p>
         </div>
       </div>
     )
@@ -164,8 +211,12 @@ export default function TradeStudyView({ code }) {
                           <tbody>
                             {variant.attributes.map((attr, i) => (
                               <tr key={i}>
-                                <td>{attr.name}</td>
-                                <td className="attribute-value">{attr.value}</td>
+                                <td className="attribute-name">
+                                  <span className="attribute-name-text">{attr.name}</span>
+                                </td>
+                                <td className="attribute-value">
+                                  {formatValue(attr.value, attr.name)}
+                                </td>
                               </tr>
                             ))}
                           </tbody>
@@ -177,7 +228,13 @@ export default function TradeStudyView({ code }) {
               ))
             ) : (
               <div className="trade-study-empty">
-                No variants found. Define variant parts using <code>part def ... :&gt; BaseType</code>.
+                <div className="empty-icon">🔍</div>
+                <h4>No Variants Found</h4>
+                <p>Define variant parts using inheritance and attribute assignments:</p>
+                <pre className="empty-code-example"><code>{`part def ElectricVariant :> BaseType {
+    :>> cost = 35000.0;
+    :>> range = 400.0;
+}`}</code></pre>
               </div>
             )}
           </div>
@@ -204,7 +261,17 @@ export default function TradeStudyView({ code }) {
               ))
             ) : (
               <div className="trade-study-empty">
-                No objectives found. Define objectives in <code>analysis def</code> blocks.
+                <div className="empty-icon">🎯</div>
+                <h4>No Objectives Found</h4>
+                <p>Define objectives within <code>analysis def</code> blocks:</p>
+                <pre className="empty-code-example"><code>{`analysis def TradeStudy {
+    objective costObjective {
+        doc /* Minimize cost */
+    }
+    objective performanceObjective {
+        doc /* Maximize performance */
+    }
+}`}</code></pre>
               </div>
             )}
           </div>
@@ -280,8 +347,8 @@ export default function TradeStudyView({ code }) {
                             {decisionMatrix.attributes.map((attr, j) => (
                               <td key={j} className="matrix-value">
                                 {decisionMatrix.data[i][attr] !== undefined
-                                  ? decisionMatrix.data[i][attr].toFixed(1)
-                                  : '-'}
+                                  ? formatValue(decisionMatrix.data[i][attr], attr)
+                                  : <span className="matrix-empty">-</span>}
                               </td>
                             ))}
                           </tr>
@@ -293,8 +360,14 @@ export default function TradeStudyView({ code }) {
               </>
             ) : (
               <div className="trade-study-empty">
-                <p>Decision matrix requires variants with comparable attributes.</p>
-                <p>Define multiple part variants with attribute values to generate the matrix.</p>
+                <div className="empty-icon">📊</div>
+                <h4>Decision Matrix Unavailable</h4>
+                <p>To generate a decision matrix, you need:</p>
+                <ul className="empty-features">
+                  <li>Multiple variants with comparable attributes</li>
+                  <li>Attribute values assigned using <code>:&gt;&gt;</code></li>
+                  <li>At least one objective defined</li>
+                </ul>
               </div>
             )}
           </div>
@@ -330,7 +403,15 @@ export default function TradeStudyView({ code }) {
               ))
             ) : (
               <div className="trade-study-empty">
-                No analysis definitions found. Define trade studies using <code>analysis def</code>.
+                <div className="empty-icon">📋</div>
+                <h4>No Analysis Definitions Found</h4>
+                <p>Define trade studies using <code>analysis def</code> blocks with objectives:</p>
+                <pre className="empty-code-example"><code>{`analysis def MyTradeStudy {
+    subject system : System;
+    objective costObjective {
+        doc /* Minimize cost */
+    }
+}`}</code></pre>
               </div>
             )}
           </div>

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect, useRef } from 'react'
 import { useSysMLDocumentation } from '../../hooks/useSysMLWasm'
 import { useSysMLAnalytics } from '../../hooks/useSysMLAnalytics'
 import { useSysMLSimulation } from '../../hooks/useSysMLSimulation'
@@ -7,6 +7,9 @@ import ExecutionTimeline from './ExecutionTimeline'
 import StateTransitionGraph from './StateTransitionGraph'
 import BatterySimulationControls from './BatterySimulationControls'
 import PhysicsGauges from './PhysicsGauges'
+import ChargingCharts from './ChargingCharts'
+import MessageSequenceChart from './MessageSequenceChart'
+import ChargingSimulation from './ChargingSimulation'
 import './SimulationView.css'
 
 /**
@@ -31,24 +34,143 @@ export default function SimulationView({ code }) {
     temperature: 25,
     phase: 'Idle'
   })
+  const [simulationHistory, setSimulationHistory] = useState([])
+
+  // Simulation engine reference
+  const simulationRef = useRef(null)
+  const animationFrameRef = useRef(null)
+  const lastUpdateTimeRef = useRef(0)
+
+  // Initialize simulation
+  useEffect(() => {
+    try {
+      simulationRef.current = new ChargingSimulation()
+    } catch (error) {
+      console.error('Failed to initialize simulation:', error)
+      // Fallback to default simulation
+      simulationRef.current = new ChargingSimulation()
+    }
+    return () => {
+      if (animationFrameRef.current) {
+        clearTimeout(animationFrameRef.current)
+        animationFrameRef.current = null
+      }
+    }
+  }, [])
+
+  // Simulation loop
+  useEffect(() => {
+    if (!isSimulationRunning || !simulationRef.current) {
+      if (animationFrameRef.current) {
+        clearTimeout(animationFrameRef.current)
+        animationFrameRef.current = null
+      }
+      return
+    }
+
+    let simTime = 0
+    let lastRecordedTime = -1
+
+    const simulate = () => {
+      if (!simulationRef.current || !isSimulationRunning) {
+        return
+      }
+
+      try {
+        // Step simulation (1 second per step)
+        const shouldContinue = simulationRef.current.step(1)
+        simTime++
+
+        // Update physics data
+        const data = simulationRef.current.getData()
+        
+        // Validate data before setting state
+        if (data && typeof data.soc === 'number' && isFinite(data.soc)) {
+          setPhysicsData({
+            soc: Math.max(0, Math.min(100, data.soc)),
+            voltage: Math.max(0, data.voltage || 0),
+            current: Math.max(0, data.current || 0),
+            temperature: Math.max(0, data.temperature || 25),
+            phase: data.phase || 'Idle'
+          })
+        }
+
+      // Record history every 10 seconds of simulation time (or every second if less than 10 seconds)
+      const currentSimTime = Math.floor(simulationRef.current.time)
+      const shouldRecord = currentSimTime > 0 && 
+        (currentSimTime < 10 ? currentSimTime % 1 === 0 : currentSimTime % 10 === 0) &&
+        currentSimTime !== lastRecordedTime
+      
+      if (shouldRecord) {
+        lastRecordedTime = currentSimTime
+        setSimulationHistory(prev => {
+          // Avoid duplicates
+          const existingIndex = prev.findIndex(h => Math.floor(h.time) === currentSimTime)
+          if (existingIndex >= 0) {
+            // Update existing entry
+            const updated = [...prev]
+            updated[existingIndex] = {
+              soc: data.soc,
+              voltage: data.voltage,
+              current: data.current,
+              temperature: data.temperature,
+              power: data.power,
+              time: data.time
+            }
+            return updated
+          }
+          
+          const newHistory = [...prev, {
+            soc: data.soc,
+            voltage: data.voltage,
+            current: data.current,
+            temperature: data.temperature,
+            power: data.power,
+            time: data.time
+          }]
+          // Keep last 200 data points for smoother charts
+          return newHistory.slice(-200)
+        })
+      }
+
+        if (!shouldContinue) {
+          setIsSimulationRunning(false)
+          return
+        }
+
+        // Schedule next update (100ms = 10 updates per second, scaled by speed)
+        const updateInterval = Math.max(50, 100 / simulationSpeed)
+        animationFrameRef.current = setTimeout(simulate, updateInterval)
+      } catch (error) {
+        console.error('Simulation error:', error)
+        setIsSimulationRunning(false)
+      }
+    }
+
+    // Start simulation
+    animationFrameRef.current = setTimeout(simulate, 100 / simulationSpeed)
+
+    return () => {
+      if (animationFrameRef.current) {
+        clearTimeout(animationFrameRef.current)
+        animationFrameRef.current = null
+      }
+    }
+  }, [isSimulationRunning, simulationSpeed])
 
   // Handle simulation controls
   const handleToggleSimulation = () => {
     setIsSimulationRunning(!isSimulationRunning)
-    if (!isSimulationRunning) {
-      // Start simulation - in a real implementation, this would trigger physics calculations
-      console.log('Starting simulation at speed:', simulationSpeed)
-    } else {
-      console.log('Pausing simulation')
-    }
   }
 
   const handleSpeedChange = (newSpeed) => {
     setSimulationSpeed(newSpeed)
-    console.log('Simulation speed changed to:', newSpeed)
   }
 
   const handleRestart = () => {
+    if (simulationRef.current) {
+      simulationRef.current.reset()
+    }
     setPhysicsData({
       soc: 20,
       voltage: 350,
@@ -56,8 +178,8 @@ export default function SimulationView({ code }) {
       temperature: 25,
       phase: 'Idle'
     })
+    setSimulationHistory([])
     setIsSimulationRunning(false)
-    console.log('Simulation restarted')
   }
 
   // Get state machines from WASM backend
@@ -182,6 +304,12 @@ export default function SimulationView({ code }) {
             {/* Real-Time Physics Gauges */}
             <PhysicsGauges physicsData={physicsData} />
 
+            {/* Charging Charts */}
+            <ChargingCharts history={simulationHistory} />
+
+            {/* Message Sequence Chart */}
+            <MessageSequenceChart isRunning={isSimulationRunning} />
+
             {simulation && simulation.timeline && simulation.timeline.length > 0 ? (
               <>
                 {/* Execution Statistics */}
@@ -239,19 +367,29 @@ export default function SimulationView({ code }) {
               </>
             ) : (
               <>
-                <div style={{
-                  marginTop: '1rem',
-                  padding: '1rem',
-                  background: 'rgba(59, 130, 246, 0.1)',
-                  borderRadius: '8px',
-                  borderLeft: '4px solid #3b82f6'
-                }}>
-                  <strong>Interactive Demo:</strong> The simulation controls and physics gauges above demonstrate
-                  the kind of real-time visualization capabilities available with NexSim. Define state machines
-                  and actions in the editor to see actual execution flow and timeline analysis.
+                <div className="simulation-welcome-banner">
+                  <div className="welcome-banner-icon">🎯</div>
+                  <div className="welcome-banner-content">
+                    <h4>Welcome to NexSim Interactive Demo!</h4>
+                    <p>
+                      <strong>Ready to explore?</strong> The simulation controls and physics gauges above 
+                      demonstrate real-time visualization capabilities. Click "Start Simulation" to see the 
+                      battery charging process in action, or modify the code in the editor to customize the simulation.
+                    </p>
+                    <div className="welcome-banner-tips">
+                      <span className="tip-item">💡 Tip: Adjust simulation speed to see details</span>
+                      <span className="tip-item">📊 View charts as data accumulates</span>
+                      <span className="tip-item">🔄 Try restarting to see the full cycle</span>
+                    </div>
+                  </div>
                 </div>
                 <div className="simulation-empty" style={{ marginTop: '1rem' }}>
-                  No execution flow found. Define state machines and actions to see simulation execution.
+                  <div className="empty-state-content">
+                    <div className="empty-state-icon">⚡</div>
+                    <h4>No execution flow found</h4>
+                    <p>Define state machines and actions in the editor to see simulation execution. 
+                    The default example includes a complete battery charging simulation with state transitions.</p>
+                  </div>
                 </div>
               </>
             )}

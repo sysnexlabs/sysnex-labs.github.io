@@ -10,6 +10,34 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 export default defineConfig({
   plugins: [
     react(),
+    // Plugin to handle WASM files without Vite processing
+    {
+      name: 'wasm-loader',
+      resolveId(id) {
+        // Tell Vite to treat WASM files as external (don't process them)
+        if (id.includes('/wasm/sysml_wasm_bridge.js') || id.includes('sysml_wasm_bridge.js')) {
+          // Return the ID as-is to prevent Vite from processing it
+          return { id, external: false }
+        }
+        return null
+      },
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          // Intercept WASM JS file requests and serve them without processing
+          if (req.url?.includes('/wasm/sysml_wasm_bridge.js')) {
+            // Remove any Vite-added query params like ?import
+            const url = new URL(req.url, `http://${req.headers.host}`)
+            if (url.searchParams.has('import')) {
+              url.searchParams.delete('import')
+              req.url = url.pathname + (url.search || '')
+            }
+            // Ensure proper content type
+            res.setHeader('Content-Type', 'application/javascript; charset=utf-8')
+          }
+          next()
+        })
+      }
+    },
     // Bundle analyzer - generates stats.html in dist/
     visualizer({
       filename: 'dist/stats.html',
@@ -226,7 +254,7 @@ export default defineConfig({
   },
   optimizeDeps: {
     // Exclude WASM from pre-bundling
-    exclude: ['../wasm/sysml_wasm_bridge.js']
+    exclude: ['/wasm/sysml_wasm_bridge.js', '../wasm/sysml_wasm_bridge.js']
   },
   resolve: {
     // Handle WASM imports gracefully

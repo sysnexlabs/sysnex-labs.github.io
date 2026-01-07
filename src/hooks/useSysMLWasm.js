@@ -28,16 +28,20 @@ export function useSysMLWasm() {
         const timestamp = Date.now()
         const random = Math.random().toString(36).substring(2, 15)
         const cacheBuster = import.meta.env.DEV ? `${WASM_VERSION}-${timestamp}-${random}` : WASM_VERSION
+        // In dev mode, don't use query params to avoid Vite's module processing
+        // Vite adds ?import automatically which breaks WASM loading
         const wasmJsPath = import.meta.env.PROD
           ? `${baseUrl}wasm/sysml_wasm_bridge.js?v=${WASM_VERSION}`
-          : `../wasm/sysml_wasm_bridge.js?v=${cacheBuster}&t=${timestamp}`
+          : `/wasm/sysml_wasm_bridge.js`  // No query params in dev mode
         const wasmBinaryPath = import.meta.env.PROD
           ? `${baseUrl}wasm/sysml_wasm_bridge_bg.wasm?v=${WASM_VERSION}`
-          : undefined // Use default path in development
+          : `/wasm/sysml_wasm_bridge_bg.wasm` // No query params in dev mode
         
         // Try to load WASM module - catch import errors gracefully
         let wasmModule
         try {
+          // Use @vite-ignore to prevent Vite from processing the WASM file
+          // The path already has no query params in dev mode to avoid Vite's ?import addition
           wasmModule = await import(/* @vite-ignore */ wasmJsPath)
         } catch (importErr) {
           // WASM file doesn't exist - this is expected in development
@@ -48,10 +52,9 @@ export function useSysMLWasm() {
         }
         
         // Initialize WASM module
-        // For GitHub Pages, we need to ensure the WASM file path is correct
+        // Pass the WASM file path explicitly for both dev and production
         if (wasmModule.default) {
-          // Pass the WASM file path explicitly for production
-          if (wasmBinaryPath && import.meta.env.PROD) {
+          if (wasmBinaryPath) {
             await wasmModule.default({ module_or_path: wasmBinaryPath })
           } else {
             await wasmModule.default()

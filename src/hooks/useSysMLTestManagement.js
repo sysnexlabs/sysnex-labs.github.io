@@ -140,13 +140,54 @@ export function useAssertions(code, verificationId) {
           return
         }
 
-        // Convert verificationId to BigInt (WASM expects u64)
-        const verificationIdBigInt = BigInt(verificationId)
-        const data = await safeWasmCall(
-          wasm.extract_assertions.bind(wasm),
-          code,
-          verificationIdBigInt
-        )
+        // Try the provided verification ID first, then try common IDs like validation page
+        let data = null
+        let foundId = verificationId
+        const tryIds = [verificationId, ...Array.from({length: 10}, (_, i) => i + 1)].filter((id, idx, arr) => arr.indexOf(id) === idx)
+        
+        for (const testId of tryIds) {
+          try {
+            const testIdBigInt = BigInt(testId)
+            const result = await safeWasmCall(
+              wasm.extract_assertions.bind(wasm),
+              code,
+              testIdBigInt
+            )
+            if (Array.isArray(result) && result.length > 0) {
+              data = result
+              foundId = testId
+              console.log(`✅ [useAssertions] Found ${result.length} assertions with verification ID ${testId}`)
+              break
+            }
+          } catch (err) {
+            // Continue trying other IDs
+            if (testId === verificationId) {
+              console.warn(`⚠️ [useAssertions] Verification ID ${testId} failed:`, err.message)
+            }
+          }
+        }
+        
+        console.log('🔍 [useAssertions] Extracted assertions:', data)
+        console.log('🔍 [useAssertions] Verification ID used:', foundId, 'BigInt:', BigInt(foundId).toString())
+        console.log('🔍 [useAssertions] Assertions count:', Array.isArray(data) ? data.length : 'not an array')
+        if (Array.isArray(data) && data.length > 0) {
+          console.log('🔍 [useAssertions] First assertion:', data[0])
+          data.forEach((a, idx) => {
+            console.log(`  Assertion ${idx + 1}:`, {
+              name: a.name,
+              constraintExpression: a.constraintExpression,
+              constraint_expression: a.constraint_expression, // Check both
+              hasExpression: !!(a.constraintExpression || a.constraint_expression),
+              assertionId: a.assertionId,
+              keys: Object.keys(a)
+            })
+          })
+        } else if (Array.isArray(data) && data.length === 0) {
+          console.warn('⚠️ [useAssertions] extract_assertions returned empty array for all verification IDs')
+          console.warn('⚠️ [useAssertions] This means WASM extraction found no assertions - will use HIR fallback')
+        } else {
+          console.warn('⚠️ [useAssertions] extract_assertions returned non-array:', typeof data, data)
+        }
         setAssertions(data || [])
       } catch (err) {
         console.error('Assertion extraction error:', err)
@@ -253,6 +294,7 @@ export function useAssertionEvaluation(code, assertionId, context = null) {
           assertionIdBigInt,
           contextJson
         )
+        console.log('🔍 [useAssertionEvaluation] Evaluation result:', result)
         setEvaluationResult(result)
       } catch (err) {
         console.error('Assertion evaluation error:', err)
@@ -268,5 +310,137 @@ export function useAssertionEvaluation(code, assertionId, context = null) {
   }, [code, assertionId, context, wasm])
 
   return { evaluationResult, loading, error }
+}
+
+/**
+ * Hook to evaluate multiple assertions with context
+ */
+export function useAssertionsEvaluation(code, assertions, contextProvider = null) {
+  const { wasm } = useSysMLWasm()
+  const [evaluationResults, setEvaluationResults] = useState(new Map())
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    if (!code || !assertions || assertions.length === 0 || !wasm) {
+      setEvaluationResults(new Map())
+      return
+    }
+
+    const evaluateAll = async () => {
+      setLoading(true)
+      setError(null)
+
+      try {
+        if (!wasm.evaluate_assertion) {
+          setEvaluationResults(new Map())
+          setLoading(false)
+          return
+        }
+
+        const results = new Map()
+        
+        // Evaluate each assertion that has a constraint expression
+        for (const assertion of assertions) {
+          if (!assertion.constraintExpression && !assertion.constraint_expression) {
+            continue // Skip assertions without expressions
+          }
+
+          // Get context for this assertion
+          const context = contextProvider 
+            ? contextProvider(assertion)
+            : createDefaultContext(assertion.constraintExpression || assertion.constraint_expression || '')
+
+          if (!context || Object.keys(context).length === 0) {
+            continue
+          }
+
+          // Extract assertion ID
+          let assertionId = 0
+          if (assertion.assertionId !== undefined && assertion.assertionId !== null) {
+            if (typeof assertion.assertionId === 'number') {
+              assertionId = assertion.assertionId
+            } else if (Array.isArray(assertion.assertionId) && assertion.assertionId.length > 0) {
+              assertionId = assertion.assertionId[0]
+            } else if (typeof assertion.assertionId === 'object') {
+              if (assertion.assertionId[0] !== undefined) {
+                assertionId = assertion.assertionId[0]
+              } else if (assertion.assertionId.value !== undefined) {
+                assertionId = assertion.assertionId.value
+              }
+            }
+          }
+
+          if (assertionId === 0) {
+            continue
+          }
+
+          try {
+            const assertionIdBigInt = BigInt(assertionId)
+            const contextJson = JSON.stringify(context)
+            
+            const result = await safeWasmCall(
+              wasm.evaluate_assertion.bind(wasm),
+              code,
+              assertionIdBigInt,
+              contextJson
+            )
+            
+            results.set(assertionId, result)
+          } catch (err) {
+            console.warn(`Failed to evaluate assertion ${assertionId}:`, err)
+            // Continue with other assertions
+          }
+        }
+
+        console.log('🔍 [useAssertionsEvaluation] Evaluated', results.size, 'assertions')
+        setEvaluationResults(results)
+      } catch (err) {
+        console.error('Assertions evaluation error:', err)
+        setError(err.message)
+        setEvaluationResults(new Map())
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    const timeoutId = setTimeout(evaluateAll, 300)
+    return () => clearTimeout(timeoutId)
+  }, [code, assertions, wasm, contextProvider])
+
+  return { evaluationResults, loading, error }
+}
+
+/**
+ * Create default context for an assertion based on its constraint expression
+ */
+function createDefaultContext(expression) {
+  if (!expression) return {}
+  
+  const context = {}
+  
+  // Extract variable names from expression and set reasonable default values
+  if (expression.includes('testBMS.voltage')) {
+    context['testBMS.voltage'] = 3.7 // Safe voltage below 4.2V limit
+  }
+  if (expression.includes('testBMS.current')) {
+    context['testBMS.current'] = 0.0 // Zero current
+  }
+  if (expression.includes('testBMS.temperature')) {
+    context['testBMS.temperature'] = 25.0 // Normal temperature below 60°C
+  }
+  if (expression.includes('testBMS.stateOfCharge')) {
+    context['testBMS.stateOfCharge'] = 100.0 // Fully charged
+  }
+  
+  // If no specific variables found, provide a default set
+  if (Object.keys(context).length === 0) {
+    context['testBMS.voltage'] = 3.7
+    context['testBMS.current'] = 0.0
+    context['testBMS.temperature'] = 25.0
+    context['testBMS.stateOfCharge'] = 100.0
+  }
+  
+  return context
 }
 

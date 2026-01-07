@@ -47,7 +47,8 @@
 
                 // Import WASM module
                 const wasm = await import('/wasm/sysml_wasm_bridge.js');
-                await wasm.default();
+                // Explicitly pass the WASM binary path to ensure it loads correctly
+                await wasm.default({ module_or_path: '/wasm/sysml_wasm_bridge_bg.wasm' });
 
                 output.innerHTML += '<p class="success">✅ WASM module loaded</p>';
 
