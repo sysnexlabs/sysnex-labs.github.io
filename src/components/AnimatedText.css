@@ -19,8 +19,21 @@
   }
 }
 
+@keyframes gradientShift {
+  0% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
+  100% {
+    background-position: 0% center;
+  }
+}
+
 .animated-text {
   display: inline-block;
+  position: relative;
 }
 
 .animated-text--shiny {
@@ -28,7 +41,8 @@
 }
 
 .animated-text--gradient {
-  animation: gradient-shift 4s ease infinite;
+  animation: gradientShift 4s ease-in-out infinite;
+  will-change: background-position;
 }
 
 

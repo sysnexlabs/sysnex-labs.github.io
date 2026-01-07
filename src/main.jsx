@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import './styles/index.css'
+import './styles/tailwind.css'
 import reportWebVitals, { consoleReporter } from './utils/reportWebVitals'
 
 // Ensure DOM is ready and handle errors gracefully

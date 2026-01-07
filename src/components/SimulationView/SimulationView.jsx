@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from 'react'
 import { useSysMLDocumentation } from '../../hooks/useSysMLWasm'
 import { useSysMLAnalytics } from '../../hooks/useSysMLAnalytics'
 import { useSysMLSimulation } from '../../hooks/useSysMLSimulation'
+import { useSysMLHir } from '../../hooks/useSysMLHir'
 import SpotlightCard from '../SpotlightCard'
 import ExecutionTimeline from './ExecutionTimeline'
 import StateTransitionGraph from './StateTransitionGraph'
@@ -22,6 +23,7 @@ export default function SimulationView({ code }) {
   const { documentation, loading: docLoading } = useSysMLDocumentation(code, 'editor://current')
   const { analytics, loading: analyticsLoading } = useSysMLAnalytics(code, 'editor://current')
   const { simulation, loading: simLoading } = useSysMLSimulation(code, 'editor://current')
+  const { hirData } = useSysMLHir(code, 'editor://current')
   const [activeTab, setActiveTab] = useState('execution')
 
   // Simulation control state
@@ -182,23 +184,106 @@ export default function SimulationView({ code }) {
     setIsSimulationRunning(false)
   }
 
-  // Get state machines from WASM backend
+  // Get state machines from WASM backend, with HIR fallback
   const stateMachines = useMemo(() => {
-    if (!simulation || !simulation.stateMachines) return []
-    return simulation.stateMachines
-  }, [simulation])
+    if (simulation && simulation.stateMachines && simulation.stateMachines.length > 0) {
+      console.log('✅ [SimulationView] Using WASM-extracted state machines:', simulation.stateMachines.length)
+      return simulation.stateMachines
+    }
+    
+    // HIR fallback: extract state machines from HIR nodes
+    if (hirData && hirData.nodes) {
+      console.log('🔍 [SimulationView] WASM extraction returned empty, using HIR fallback for state machines')
+      const stateList = []
+      Object.entries(hirData.nodes).forEach(([nodeId, node]) => {
+        if (node.kind && String(node.kind).includes('StateDefinition')) {
+          stateList.push({
+            title: node.name || 'Unnamed State Machine',
+            kind: 'StateDefinition',
+            doc_comment: node.doc_comment,
+            stable_id: node.stable_id,
+            nested_elements: node.children ? node.children.map(childId => {
+              const child = hirData.nodes[childId]
+              return child ? {
+                title: child.name || 'Unnamed State',
+                kind: String(child.kind),
+                doc_comment: child.doc_comment
+              } : null
+            }).filter(Boolean) : []
+          })
+        }
+      })
+      console.log(`🔍 [SimulationView] HIR fallback extracted ${stateList.length} state machines`)
+      return stateList
+    }
+    
+    return []
+  }, [simulation, hirData])
 
-  // Get actions from WASM backend
+  // Get actions from WASM backend, with HIR fallback
   const actions = useMemo(() => {
-    if (!simulation || !simulation.actions) return []
-    return simulation.actions
-  }, [simulation])
+    if (simulation && simulation.actions && simulation.actions.length > 0) {
+      console.log('✅ [SimulationView] Using WASM-extracted actions:', simulation.actions.length)
+      return simulation.actions
+    }
+    
+    // HIR fallback: extract actions from HIR nodes
+    if (hirData && hirData.nodes) {
+      console.log('🔍 [SimulationView] WASM extraction returned empty, using HIR fallback for actions')
+      const actionList = []
+      Object.entries(hirData.nodes).forEach(([nodeId, node]) => {
+        if (node.kind && String(node.kind).includes('ActionDefinition')) {
+          actionList.push({
+            title: node.name || 'Unnamed Action',
+            kind: 'ActionDefinition',
+            doc_comment: node.doc_comment,
+            stable_id: node.stable_id,
+            nested_elements: node.children ? node.children.map(childId => {
+              const child = hirData.nodes[childId]
+              return child ? {
+                title: child.name || 'Unnamed Step',
+                kind: String(child.kind),
+                doc_comment: child.doc_comment
+              } : null
+            }).filter(Boolean) : []
+          })
+        }
+      })
+      console.log(`🔍 [SimulationView] HIR fallback extracted ${actionList.length} actions`)
+      return actionList
+    }
+    
+    return []
+  }, [simulation, hirData])
 
-  // Get calculations from WASM backend
+  // Get calculations from WASM backend, with HIR fallback
   const calculations = useMemo(() => {
-    if (!simulation || !simulation.calculations) return []
-    return simulation.calculations
-  }, [simulation])
+    if (simulation && simulation.calculations && simulation.calculations.length > 0) {
+      console.log('✅ [SimulationView] Using WASM-extracted calculations:', simulation.calculations.length)
+      return simulation.calculations
+    }
+    
+    // HIR fallback: extract calculations from HIR nodes
+    if (hirData && hirData.nodes) {
+      console.log('🔍 [SimulationView] WASM extraction returned empty, using HIR fallback for calculations')
+      const calcList = []
+      Object.entries(hirData.nodes).forEach(([nodeId, node]) => {
+        // HIR uses "CalcDefinition" not "CalculationDefinition"
+        if (node.kind && (String(node.kind).includes('CalcDefinition') || String(node.kind).includes('CalculationDefinition'))) {
+          calcList.push({
+            title: node.name || 'Unnamed Calculation',
+            kind: 'CalcDefinition',
+            doc_comment: node.doc_comment,
+            stable_id: node.stable_id
+          })
+        }
+      })
+      console.log(`🔍 [SimulationView] HIR fallback extracted ${calcList.length} calculations`)
+      return calcList
+    }
+    
+    return []
+  }, [simulation, hirData])
 
   // Extract scenario elements (action/state usages)
   const scenarios = useMemo(() => {
@@ -481,15 +566,45 @@ export default function SimulationView({ code }) {
                 <SpotlightCard key={index}>
                   <div className="calculation-item">
                     <div className="calculation-header">
-                      <span className="calculation-badge">CALC</span>
-                      <h4 className="calculation-title">{calc.title}</h4>
+                      <span className="calculation-badge">{calc.kind || 'CALC'}</span>
+                      <h4 className="calculation-title">{calc.title || calc.name}</h4>
                     </div>
                     {calc.doc_comment && (
                       <div className="calculation-doc">{calc.doc_comment}</div>
                     )}
                     {calc.signature && (
                       <div className="calculation-signature">
-                        <code>{calc.signature}</code>
+                        <strong>Signature:</strong> <code>{calc.signature}</code>
+                      </div>
+                    )}
+                    {calc.parameters && Array.isArray(calc.parameters) && calc.parameters.length > 0 && (
+                      <div className="calculation-parameters">
+                        <strong>Parameters:</strong>
+                        <ul className="parameter-list">
+                          {calc.parameters.map((param, i) => (
+                            <li key={i} className="parameter-item">
+                              <code>{param.name}</code>
+                              {param.type && <span className="parameter-type">: {param.type}</span>}
+                              {param.direction && <span className="parameter-direction"> ({param.direction})</span>}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {calc.returnType && (
+                      <div className="calculation-return">
+                        <strong>Returns:</strong> <code>{calc.returnType}</code>
+                        {calc.returnName && <span> as <code>{calc.returnName}</code></span>}
+                      </div>
+                    )}
+                    {calc.complexity !== undefined && (
+                      <div className="calculation-complexity">
+                        <strong>Complexity:</strong> {calc.complexity}
+                      </div>
+                    )}
+                    {calc.packageName && (
+                      <div className="calculation-package">
+                        <strong>Package:</strong> <code>{calc.packageName}</code>
                       </div>
                     )}
                   </div>

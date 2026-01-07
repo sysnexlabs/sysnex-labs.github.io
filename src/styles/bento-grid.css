@@ -1,0 +1,30 @@
+/* Bento Grid Hover Effects */
+.bento-card {
+  position: relative;
+}
+
+.bento-content {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bento-cta {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bento-overlay {
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.group:hover .bento-content {
+  transform: translateY(-40px) !important;
+}
+
+.group:hover .bento-cta {
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+}
+
+.group:hover .bento-overlay {
+  opacity: 1 !important;
+}
+

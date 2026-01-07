@@ -2,67 +2,69 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import SpotlightCard from '../components/SpotlightCard'
+import { useTranslation } from '../utils/i18n'
 import './Page.css'
 
 const Process = () => {
+  const { t } = useTranslation()
   const highlights = [
     {
-      title: 'ISO 15288 Foundation',
-      description: 'Strong understanding of system life cycle processes across Agreement, Organizational Project-Enabling, Technical Management, and Technical processes. Our tooling supports these processes in MBSE workflows.'
+      title: t('process.highlights.item1.title'),
+      description: t('process.highlights.item1.description')
     },
     {
-      title: 'ISO 26262 Understanding',
-      description: 'Good knowledge of automotive functional safety standard covering concept phase through production, including ASIL classification, safety goals, and verification methods. Not certified or audit-validated.'
+      title: t('process.highlights.item2.title'),
+      description: t('process.highlights.item2.description')
     },
     {
-      title: 'Integrated Tooling Approach',
-      description: 'Building tooling that combines ISO 15288 system life cycle processes with ISO 26262 functional safety requirements in a model-based framework. Early-stage implementation, not production-validated.'
+      title: t('process.highlights.item3.title'),
+      description: t('process.highlights.item3.description')
     },
     {
-      title: 'Tool-Supported Compliance (Beta)',
-      description: 'Our SysML v2 tooling is designed to support standards compliance through traceability, documentation generation, and automated verification workflows. Features in development, not audit-ready.'
+      title: t('process.highlights.item4.title'),
+      description: t('process.highlights.item4.description')
     }
   ]
 
   const implementations = [
     {
-      title: 'Standards Alignment (In Development)',
-      description: 'Scope: Building tooling to map ISO 15288 technical processes to ISO 26262 safety life cycle phases. Goal is traceability from stakeholder needs through safety goals to implementation. Not validated in production programs.'
+      title: t('process.implementations.item1.title'),
+      description: t('process.implementations.item1.description')
     },
     {
-      title: 'Model-Based Compliance (Beta)',
-      description: 'Scope: SysML models can capture functional and safety requirements with ASIL classification. Experimenting with safety mechanism modeling, HARA result capture, and traceability. Not audit-tested or certified for compliance use.'
+      title: t('process.implementations.item2.title'),
+      description: t('process.implementations.item2.description')
     },
     {
-      title: 'Tool Support (Planned Features)',
-      description: 'Scope: Working on automated traceability management, ASIL propagation support, documentation generation for safety plans, and change impact analysis. Early prototypes exist, not production-ready for audits.'
+      title: t('process.implementations.item3.title'),
+      description: t('process.implementations.item3.description')
     }
   ]
 
   const value = [
     {
-      title: 'Tooling for Compliant Workflows',
-      description: 'Building MBSE tools designed to align with standards (not consulting services)'
+      title: t('process.value.item1.title'),
+      description: t('process.value.item1.description')
     },
     {
-      title: 'Safety Modeling Features',
-      description: 'Tools to capture safety goals and ASIL handling in models (experimental)'
+      title: t('process.value.item2.title'),
+      description: t('process.value.item2.description')
     },
     {
-      title: 'Documentation Generation',
-      description: 'Automated evidence and documentation for compliance workflows (beta)'
+      title: t('process.value.item3.title'),
+      description: t('process.value.item3.description')
     },
     {
-      title: 'Self-Service Standards Support',
-      description: 'Tool features and documentation, not training or consulting'
+      title: t('process.value.item4.title'),
+      description: t('process.value.item4.description')
     },
     {
-      title: 'Workflow Automation',
-      description: 'Features to streamline compliance processes through tooling (in development)'
+      title: t('process.value.item5.title'),
+      description: t('process.value.item5.description')
     },
     {
-      title: 'Standards-Aware IDE',
-      description: 'LSP and editor features that understand standards structures (production-ready)'
+      title: t('process.value.item6.title'),
+      description: t('process.value.item6.description')
     }
   ]
 
@@ -78,13 +80,9 @@ const Process = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1>Standards-Aware Tooling</h1>
+            <h1>{t('process.hero.title')}</h1>
             <p className="page-hero-description">
-              <span>SysNex builds SysML v2 tooling designed with </span>
-              <strong>ISO 15288</strong>
-              <span> (Systems and Software Engineering) and </span>
-              <strong>ISO 26262</strong>
-              <span> (Automotive Functional Safety) awareness. Our tools help teams model compliant systems—we're not consultants or auditors, just building better MBSE tooling with standards support.</span>
+              {t('process.hero.description')}
             </p>
           </motion.div>
         </div>
@@ -92,7 +90,7 @@ const Process = () => {
 
       <section className="page-content-section">
         <div className="container">
-          <h2 className="section-title">Standards Expertise</h2>
+          <h2 className="section-title">{t('process.highlights.title')}</h2>
           <div className="features-grid">
             {highlights.map((highlight, index) => (
               <motion.div
@@ -114,9 +112,9 @@ const Process = () => {
 
       <section className="page-section-alt">
         <div className="container">
-          <h2 className="section-title">Our Standards Support Approach</h2>
+          <h2 className="section-title">{t('process.implementations.title')}</h2>
           <p className="section-subtitle">
-            We're building tooling features to support these standards, not offering consulting. Here's what we're working on:
+            {t('process.implementations.subtitle')}
           </p>
           <div className="methods-grid">
             {implementations.map((item, index) => (
@@ -139,9 +137,9 @@ const Process = () => {
 
       <section className="page-content-section">
         <div className="container">
-          <h2 className="section-title">Tool Capabilities (Not Services)</h2>
+          <h2 className="section-title">{t('process.value.title')}</h2>
           <p className="section-subtitle">
-            Our understanding of ISO 15288 and ISO 26262 enables us to build tools that:
+            {t('process.value.subtitle')}
           </p>
           <div className="benefits-grid">
             {value.map((item, index) => (
@@ -160,11 +158,11 @@ const Process = () => {
             ))}
           </div>
           <p className="page-cta">
-            <span>Interested in trying our standards-aware tooling? </span>
-            <Link to="/try-yourself">Try it yourself</Link>
-            <span> or </span>
-            <Link to="/contact">apply for beta access</Link>
-            <span> to our compliance features.</span>
+            <span>{t('process.cta.before')}</span>
+            <Link to="/try-yourself">{t('process.cta.link1')}</Link>
+            <span>{t('process.cta.middle')}</span>
+            <Link to="/contact">{t('process.cta.link2')}</Link>
+            <span>{t('process.cta.after')}</span>
           </p>
         </div>
       </section>
@@ -173,9 +171,9 @@ const Process = () => {
       <section className="page-section-alt" style={{ background: 'var(--bg-secondary)' }}>
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">What We ARE vs What We're NOT</h2>
+            <h2 className="section-title">{t('process.disclaimer.title')}</h2>
             <p className="section-subtitle">
-              We're a tooling company, not a consulting firm. Here's what that means:
+              {t('process.disclaimer.subtitle')}
             </p>
           </div>
           <div className="methods-grid" style={{ marginTop: '2rem' }}>
@@ -186,13 +184,13 @@ const Process = () => {
               transition={{ duration: 0.5 }}
             >
               <SpotlightCard>
-                <h3 style={{ color: 'var(--color-success)', marginBottom: '1rem' }}>✅ What We ARE</h3>
+                <h3 style={{ color: 'var(--color-success)', marginBottom: '1rem' }}>{t('process.disclaimer.are.title')}</h3>
                 <ul className="method-list">
-                  <li>✅ Building SysML v2 IDE with standards awareness</li>
-                  <li>✅ Researching ISO 15288 and ISO 26262 to build better tools</li>
-                  <li>✅ Creating features for traceability and documentation</li>
-                  <li>✅ Early-stage beta testing with design partners</li>
-                  <li>✅ Open about limitations and development status</li>
+                  <li>{t('process.disclaimer.are.item1')}</li>
+                  <li>{t('process.disclaimer.are.item2')}</li>
+                  <li>{t('process.disclaimer.are.item3')}</li>
+                  <li>{t('process.disclaimer.are.item4')}</li>
+                  <li>{t('process.disclaimer.are.item5')}</li>
                 </ul>
               </SpotlightCard>
             </motion.div>
@@ -203,13 +201,13 @@ const Process = () => {
               transition={{ duration: 0.5, delay: 0.1 }}
             >
               <SpotlightCard>
-                <h3 style={{ color: 'var(--color-error)', marginBottom: '1rem' }}>❌ What We're NOT</h3>
+                <h3 style={{ color: 'var(--color-error)', marginBottom: '1rem' }}>{t('process.disclaimer.not.title')}</h3>
                 <ul className="method-list no-bullets">
-                  <li>❌ Not certified ASPICE assessors or ISO 26262 auditors</li>
-                  <li>❌ Not offering consulting or training services</li>
-                  <li>❌ Not validated by TÜV or compliance authorities</li>
-                  <li>❌ Not claiming production-tested compliance tooling</li>
-                  <li>❌ Not experts—just good understanding from research</li>
+                  <li>{t('process.disclaimer.not.item1')}</li>
+                  <li>{t('process.disclaimer.not.item2')}</li>
+                  <li>{t('process.disclaimer.not.item3')}</li>
+                  <li>{t('process.disclaimer.not.item4')}</li>
+                  <li>{t('process.disclaimer.not.item5')}</li>
                 </ul>
               </SpotlightCard>
             </motion.div>

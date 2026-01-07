@@ -9,6 +9,29 @@ import './Hero.css'
 const Hero = React.memo(() => {
   const { t } = useTranslation()
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.16, 1, 0.3, 1],
+      },
+    },
+  }
+
   return (
     <AuroraBackground>
       <section className="hero" aria-labelledby="hero-heading">
@@ -16,55 +39,63 @@ const Hero = React.memo(() => {
         <div className="hero-container">
           <motion.div
             className="hero-content"
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
           >
             <motion.span
               className="hero-kicker"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
+              variants={itemVariants}
             >
               Model-Based Systems Engineering, Re-invented
             </motion.span>
-            <h1 id="hero-heading" className="hero-title">
+            <motion.h1 
+              id="hero-heading" 
+              className="hero-title"
+              variants={itemVariants}
+            >
               <AnimatedText variant="gradient">
                 Systems Engineering
                 <br />
                 for Innovators.
               </AnimatedText>
-            </h1>
+            </motion.h1>
             <motion.p
               className="hero-description"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
+              variants={itemVariants}
             >
               Production-ready SysML v2 Language Server, completely free for individuals.
               Everything you need to build the future, faster.
             </motion.p>
             <motion.div
               className="hero-metric"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7 }}
-              style={{ fontSize: '0.9rem', color: 'var(--brand-amber)', fontWeight: '600' }}
+              variants={itemVariants}
             >
-              ✨ &nbsp; Free for Individuals & Open Source Projects
+              <span className="hero-metric-icon">✨</span>
+              <span>Free for Individuals & Open Source Projects</span>
             </motion.div>
             <motion.div
               className="hero-actions"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
+              variants={itemVariants}
             >
-              <Link to="/contact" className="btn-primary-large">
-                Get Early Access
-              </Link>
-              <Link to="/overview" className="btn-secondary-large">
-                Explore Features
-              </Link>
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
+                <Link to="/contact" className="btn-primary-large">
+                  Get Early Access
+                </Link>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
+                <Link to="/overview" className="btn-secondary-large">
+                  Explore Features
+                </Link>
+              </motion.div>
             </motion.div>
           </motion.div>
         </div>

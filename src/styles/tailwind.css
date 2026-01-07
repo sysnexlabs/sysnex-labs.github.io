@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Bento Grid Hover Effects - Ensure group-hover works */
+@layer components {
+  .bento-card {
+    @apply relative;
+  }
+  
+  .bento-card:hover .bento-content {
+    transform: translateY(-40px);
+  }
+  
+  .bento-card:hover .bento-cta {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  
+  .bento-card:hover .bento-overlay {
+    opacity: 1;
+  }
+}
+

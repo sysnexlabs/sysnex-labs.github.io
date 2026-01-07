@@ -2,124 +2,126 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import SpotlightCard from '../components/SpotlightCard'
+import { useTranslation } from '../utils/i18n'
 import './Page.css'
 
 const Tools = () => {
+  const { t } = useTranslation()
   const highlights = [
     {
       icon: '/assets/misc_deployment.svg',
-      title: 'SysML v2 Modeling (Production)',
-      description: 'Native SysML v2 support with syntax highlighting, IntelliSense, and real-time validation. Define systems in textual format with LSP features. 18/18 LSP features implemented.'
+      title: t('tools.highlights.item1.title'),
+      description: t('tools.highlights.item1.description')
     },
     {
       icon: '/assets/feature_ai_first.svg',
-      title: 'AI Integration (Works with Copilot)',
-      description: 'Compatible with GitHub Copilot, Claude Code, and VS Code AI. Works with standard AI assistants—no proprietary AI. Leverage existing tooling, not custom solutions.'
+      title: t('tools.highlights.item2.title'),
+      description: t('tools.highlights.item2.description')
     },
     {
       icon: '📦',
-      title: 'Language Server (Production)',
-      description: 'Complete SysML v2 Language Server Protocol implementation. Sub-50ms response time in internal benchmarks. Autocomplete, diagnostics, navigation all working.'
+      title: t('tools.highlights.item3.title'),
+      description: t('tools.highlights.item3.description')
     },
     {
       icon: '🔗',
-      title: 'Git Integration (Native)',
-      description: 'SysML v2 files are plain text—use Git naturally. Branch, merge, PR review workflows just work. No proprietary SCM required.'
+      title: t('tools.highlights.item4.title'),
+      description: t('tools.highlights.item4.description')
     },
     {
       icon: '/assets/feature_performance.svg',
-      title: 'Real-Time Feedback (Production)',
-      description: 'Instant validation, syntax checking, and error detection. 25+ diagnostic collectors. Markers show exactly where issues are.'
+      title: t('tools.highlights.item5.title'),
+      description: t('tools.highlights.item5.description')
     },
     {
       icon: '🎯',
-      title: 'Multi-Format Support (Experimental)',
-      description: 'Experimenting with UVL variability, YAML architecture, VSS signals. SysML v2 is production-ready, domain extensions are beta.'
+      title: t('tools.highlights.item6.title'),
+      description: t('tools.highlights.item6.description')
     }
   ]
 
   const features = [
     {
-      title: 'VS Code Integration (Production)',
-      description: 'Built as a VS Code extension. No custom IDE—just extends the editor you already use. Works wherever VS Code works.',
+      title: t('tools.features.item1.title'),
+      description: t('tools.features.item1.description'),
       items: [
-        'Native VS Code extension with full LSP support (18/18 features)',
-        'Syntax highlighting and code formatting for SysML v2',
-        'Standard VS Code file explorer, search, Git integration',
-        'Multi-panel layout using VS Code webviews',
-        'Status bar shows diagnostics, language mode, encoding'
+        t('tools.features.item1.item1'),
+        t('tools.features.item1.item2'),
+        t('tools.features.item1.item3'),
+        t('tools.features.item1.item4'),
+        t('tools.features.item1.item5')
       ]
     },
     {
-      title: 'AI Assistant Compatibility (Works with Standard Tools)',
-      description: 'No proprietary AI. Works with GitHub Copilot, Claude Code, VS Code AI extensions. Just a language server—AI works naturally.',
+      title: t('tools.features.item2.title'),
+      description: t('tools.features.item2.description'),
       items: [
-        'GitHub Copilot autocomplete for SysML v2 (if you have Copilot)',
-        'Claude Code integration (if you use Claude)',
-        'Standard LSP means any AI tool can use it',
-        'No vendor lock-in to our AI—bring your own',
-        'Completions work with or without AI assistance'
+        t('tools.features.item2.item1'),
+        t('tools.features.item2.item2'),
+        t('tools.features.item2.item3'),
+        t('tools.features.item2.item4'),
+        t('tools.features.item2.item5')
       ]
     },
     {
-      title: 'SysML v2 Language Server (Production)',
-      description: 'Complete LSP implementation. Sub-50ms response in internal benchmarks. All 18 LSP features working.',
+      title: t('tools.features.item3.title'),
+      description: t('tools.features.item3.description'),
       items: [
-        'Real-time syntax validation (25+ diagnostic collectors)',
-        'IntelliSense autocomplete with ~10K library types',
-        'Go-to-definition, find-references, type hierarchy',
-        'Semantic highlighting (43 token types, HIR-based)',
-        'Hover, rename, folding, inlay hints, signature help'
+        t('tools.features.item3.item1'),
+        t('tools.features.item3.item2'),
+        t('tools.features.item3.item3'),
+        t('tools.features.item3.item4'),
+        t('tools.features.item3.item5')
       ]
     },
     {
-      title: 'Git-Based Workflows (Native Support)',
-      description: "SysML v2 files are plain text. Git just works—no special tooling needed. Use standard Git workflows.",
+      title: t('tools.features.item4.title'),
+      description: t('tools.features.item4.description'),
       items: [
-        'Branch-based development (files are .sysml text)',
-        'Pull request reviews show line-by-line diffs',
-        'Merge conflicts are text-based (resolve in editor)',
-        'Commit history and blame work naturally',
-        'Use GitHub/GitLab/Bitbucket—no special integration'
+        t('tools.features.item4.item1'),
+        t('tools.features.item4.item2'),
+        t('tools.features.item4.item3'),
+        t('tools.features.item4.item4'),
+        t('tools.features.item4.item5')
       ]
     },
     {
-      title: 'Code Generation (Experimental)',
-      description: 'Early prototypes for model-to-code generation. Not production-ready. Experimenting with templates and validation.',
+      title: t('tools.features.item5.title'),
+      description: t('tools.features.item5.description'),
       items: [
-        'Prototype code generation from SysML models',
-        'Template-based approach (alpha)',
-        'Validation of generated code (experimental)',
-        'CI/CD integration (planned)',
-        'Round-trip engineering (research stage)'
+        t('tools.features.item5.item1'),
+        t('tools.features.item5.item2'),
+        t('tools.features.item5.item3'),
+        t('tools.features.item5.item4'),
+        t('tools.features.item5.item5')
       ]
     }
   ]
 
   const experience = [
     {
-      title: 'Textual Modeling',
-      description: 'Write SysML v2 in plain text files—no complex GUI tools required'
+      title: t('tools.experience.item1.title'),
+      description: t('tools.experience.item1.description')
     },
     {
-      title: 'IDE-Native',
-      description: 'All the features you expect from a modern IDE: autocomplete, error checking, refactoring'
+      title: t('tools.experience.item2.title'),
+      description: t('tools.experience.item2.description')
     },
     {
-      title: 'AI-Enhanced',
-      description: 'Get intelligent suggestions and automation throughout your workflow'
+      title: t('tools.experience.item3.title'),
+      description: t('tools.experience.item3.description')
     },
     {
-      title: 'Version Controlled',
-      description: 'Use Git for branching, merging, and collaboration on models'
+      title: t('tools.experience.item4.title'),
+      description: t('tools.experience.item4.description')
     },
     {
-      title: 'Fast &amp; Responsive',
-      description: 'Built for performance that keeps up with your thinking'
+      title: t('tools.experience.item5.title'),
+      description: t('tools.experience.item5.description')
     },
     {
-      title: 'Extensible',
-      description: 'Plugin architecture for custom tools and integrations'
+      title: t('tools.experience.item6.title'),
+      description: t('tools.experience.item6.description')
     }
   ]
 
@@ -135,11 +137,9 @@ const Tools = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1>Development Tools &amp; Environment</h1>
+            <h1>{t('tools.hero.title')}</h1>
             <p className="page-hero-description">
-              SysNex builds AI-augmented SysML v2 tooling for VS Code.
-              Our extension integrates with Git and modern development workflows, bringing
-              systems engineering into the developer experience. Early-stage product, not enterprise-validated.
+              {t('tools.hero.description')}
             </p>
           </motion.div>
         </div>
@@ -148,7 +148,7 @@ const Tools = () => {
       <section className="page-content-section">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Key Features</h2>
+            <h2 className="section-title">{t('tools.highlights.title')}</h2>
           </div>
           <div className="features-grid">
             {highlights.map((highlight, index) => (
@@ -183,7 +183,7 @@ const Tools = () => {
       <section className="page-section-alt">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">IDE Features</h2>
+            <h2 className="section-title">{t('tools.features.title')}</h2>
           </div>
           <div className="methods-grid">
             {features.map((feature, index) => (
@@ -212,9 +212,9 @@ const Tools = () => {
       <section className="page-content-section">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Development Experience</h2>
+            <h2 className="section-title">{t('tools.experience.title')}</h2>
             <p className="section-subtitle">
-              Our tools are designed for the modern systems engineer who wants to work like a software developer:
+              {t('tools.experience.subtitle')}
             </p>
           </div>
           <div className="benefits-grid">
@@ -234,11 +234,11 @@ const Tools = () => {
             ))}
           </div>
           <p className="page-cta">
-            <span>Ready to try it? </span>
-            <Link to="/try-yourself">Try the demo</Link>
-            <span> or </span>
-            <Link to="/contact">apply for beta access</Link>
-            <span> to advanced features.</span>
+            <span>{t('tools.cta.before')}</span>
+            <Link to="/try-yourself">{t('tools.cta.link1')}</Link>
+            <span>{t('tools.cta.middle')}</span>
+            <Link to="/contact">{t('tools.cta.link2')}</Link>
+            <span>{t('tools.cta.after')}</span>
           </p>
         </div>
       </section>
@@ -247,9 +247,9 @@ const Tools = () => {
       <section className="page-section-alt" style={{ background: 'var(--bg-secondary)' }}>
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">What We ARE vs What We're NOT</h2>
+            <h2 className="section-title">{t('tools.disclaimer.title')}</h2>
             <p className="section-subtitle">
-              We're building a VS Code extension, not an enterprise platform. Here's the reality:
+              {t('tools.disclaimer.subtitle')}
             </p>
           </div>
           <div className="methods-grid" style={{ marginTop: '2rem' }}>
@@ -260,13 +260,13 @@ const Tools = () => {
               transition={{ duration: 0.5 }}
             >
               <SpotlightCard>
-                <h3 style={{ color: 'var(--color-success)', marginBottom: '1rem' }}>✅ What We ARE</h3>
+                <h3 style={{ color: 'var(--color-success)', marginBottom: '1rem' }}>{t('tools.disclaimer.are.title')}</h3>
                 <ul className="method-list">
-                  <li>✅ VS Code extension for SysML v2 (production-ready LSP)</li>
-                  <li>✅ Compatible with standard AI tools (Copilot, Claude)</li>
-                  <li>✅ Plain text files that work with Git naturally</li>
-                  <li>✅ Early-stage product with beta features</li>
-                  <li>✅ Open source core (fork and extend anytime)</li>
+                  <li>{t('tools.disclaimer.are.item1')}</li>
+                  <li>{t('tools.disclaimer.are.item2')}</li>
+                  <li>{t('tools.disclaimer.are.item3')}</li>
+                  <li>{t('tools.disclaimer.are.item4')}</li>
+                  <li>{t('tools.disclaimer.are.item5')}</li>
                 </ul>
               </SpotlightCard>
             </motion.div>
@@ -277,13 +277,13 @@ const Tools = () => {
               transition={{ duration: 0.5, delay: 0.1 }}
             >
               <SpotlightCard>
-                <h3 style={{ color: 'var(--color-error)', marginBottom: '1rem' }}>❌ What We're NOT</h3>
+                <h3 style={{ color: 'var(--color-error)', marginBottom: '1rem' }}>{t('tools.disclaimer.not.title')}</h3>
                 <ul className="method-list no-bullets">
-                  <li>❌ Not claiming 50M+ users (that's VS Code, not us)</li>
-                  <li>❌ Not enterprise-validated or production-tested</li>
-                  <li>❌ Not offering proprietary AI or custom IDE</li>
-                  <li>❌ Not replacing CATIA/Cameo/Rhapsody (yet)</li>
-                  <li>❌ Not certified for safety-critical use</li>
+                  <li>{t('tools.disclaimer.not.item1')}</li>
+                  <li>{t('tools.disclaimer.not.item2')}</li>
+                  <li>{t('tools.disclaimer.not.item3')}</li>
+                  <li>{t('tools.disclaimer.not.item4')}</li>
+                  <li>{t('tools.disclaimer.not.item5')}</li>
                 </ul>
               </SpotlightCard>
             </motion.div>
