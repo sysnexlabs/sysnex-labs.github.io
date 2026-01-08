@@ -35,7 +35,8 @@ export const products = [
       'Architecture documentation'
     ],
     pricing: 'Included in Platform edition',
-    link: '/products/nexdocs'
+    link: '/products/nexdocs',
+    demoLink: '/try-nexdocs'
   },
   {
     id: 'nexreq',
@@ -65,7 +66,8 @@ export const products = [
       'Compliance documentation'
     ],
     pricing: 'Included in Standard edition',
-    link: '/products/nexreq'
+    link: '/products/nexreq',
+    demoLink: '/try-nexreq'
   },
   {
     id: 'nextest',
@@ -95,7 +97,8 @@ export const products = [
       'Regression testing'
     ],
     pricing: 'Included in Standard edition',
-    link: '/products/nextest'
+    link: '/products/nextest',
+    demoLink: '/try-nextest'
   },
   {
     id: 'nexviz',
@@ -125,7 +128,8 @@ export const products = [
       'Requirements visualization'
     ],
     pricing: 'Included in Essential edition',
-    link: '/products/nexviz'
+    link: '/products/nexviz',
+    demoLink: '/try-nexviz'
   },
   {
     id: 'nexanalytics',
@@ -155,7 +159,8 @@ export const products = [
       'Compliance reporting'
     ],
     pricing: 'Included in Platform edition',
-    link: '/products/nexanalytics'
+    link: '/products/nexanalytics',
+    demoLink: '/try-nexanalytics'
   },
   {
     id: 'nextrade',
@@ -185,7 +190,8 @@ export const products = [
       'Risk-benefit analysis'
     ],
     pricing: 'Included in Platform edition',
-    link: '/products/nextrade'
+    link: '/products/nextrade',
+    demoLink: '/try-nextrade'
   },
   {
     id: 'nexvar',
@@ -215,7 +221,8 @@ export const products = [
       'Constraint validation'
     ],
     pricing: 'Included in Platform edition',
-    link: '/products/nexvar'
+    link: '/products/nexvar',
+    demoLink: '/try-nexvar'
   },
   {
     id: 'nexsim',
@@ -245,7 +252,8 @@ export const products = [
       'Design validation'
     ],
     pricing: 'Included in Platform-Full edition',
-    link: '/products/nexsim'
+    link: '/products/nexsim',
+    demoLink: '/try-nexsim'
   },
   {
     id: 'nexsuite',

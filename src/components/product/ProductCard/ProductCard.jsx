@@ -103,10 +103,17 @@ const ProductCard = ({ product, index = 0 }) => {
 
       {/* CTA */}
       <div className="product-card-cta">
-        {product.status.includes('✅') ? (
-          <Link to={product.link} className="btn primary">
-            Learn More →
-          </Link>
+        {product.status.includes('✅') || product.status.includes('🟡') ? (
+          <div style={{ display: 'flex', gap: '0.75rem', flexDirection: 'column', width: '100%' }}>
+            <Link to={product.link} className="btn primary" style={{ width: '100%' }}>
+              Learn More →
+            </Link>
+            {product.demoLink && (
+              <Link to={product.demoLink} className="btn secondary" style={{ width: '100%' }}>
+                Try Demo →
+              </Link>
+            )}
+          </div>
         ) : (
           <button className="btn ghost" disabled>
             Coming Soon

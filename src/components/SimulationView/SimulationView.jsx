@@ -184,7 +184,83 @@ export default function SimulationView({ code }) {
     setIsSimulationRunning(false)
   }
 
-  // Get state machines from WASM backend, with HIR fallback
+  // Parse code directly to extract state machines (fallback when WASM/HIR don't work)
+  const parseStateMachinesFromCode = (code) => {
+    const stateMachines = []
+    const lines = code.split('\n')
+    let currentStateMachine = null
+    let braceDepth = 0
+    let startDepth = 0
+    let inStateMachine = false
+    let docComment = ''
+    let inDocComment = false
+    
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim()
+      
+      // Track doc comments
+      if (line.startsWith('doc /*')) {
+        inDocComment = true
+        docComment = line.replace('doc /*', '').replace('*/', '').trim()
+      } else if (inDocComment && line.includes('*/')) {
+        docComment += ' ' + line.replace('*/', '').trim()
+        inDocComment = false
+      } else if (inDocComment) {
+        docComment += ' ' + line.replace(/^\*+\s*/, '').trim()
+        continue
+      }
+      
+      // Track brace depth (global)
+      braceDepth += (line.match(/{/g) || []).length - (line.match(/}/g) || []).length
+      
+      // Detect state def
+      const stateDefMatch = line.match(/state\s+def\s+(\w+)/i)
+      if (stateDefMatch) {
+        if (currentStateMachine) {
+          stateMachines.push(currentStateMachine)
+        }
+        currentStateMachine = {
+          title: stateDefMatch[1],
+          kind: 'StateDefinition',
+          doc_comment: docComment || undefined,
+          nested_elements: []
+        }
+        inStateMachine = true
+        startDepth = braceDepth
+        docComment = ''
+        continue
+      }
+      
+      // Extract nested states within state machine (relative to start depth)
+      if (inStateMachine && currentStateMachine && braceDepth > startDepth) {
+        const stateMatch = line.match(/state\s+(\w+)/i)
+        if (stateMatch && !line.includes('def')) {
+          currentStateMachine.nested_elements.push({
+            title: stateMatch[1],
+            kind: 'State',
+            doc_comment: undefined
+          })
+        }
+      }
+      
+      // End of state machine (back to start depth)
+      if (inStateMachine && braceDepth === startDepth && line.includes('}')) {
+        if (currentStateMachine) {
+          stateMachines.push(currentStateMachine)
+          currentStateMachine = null
+        }
+        inStateMachine = false
+      }
+    }
+    
+    if (currentStateMachine) {
+      stateMachines.push(currentStateMachine)
+    }
+    
+    return stateMachines
+  }
+
+  // Get state machines from WASM backend, with HIR fallback, then code parsing fallback
   const stateMachines = useMemo(() => {
     if (simulation && simulation.stateMachines && simulation.stateMachines.length > 0) {
       console.log('✅ [SimulationView] Using WASM-extracted state machines:', simulation.stateMachines.length)
@@ -194,33 +270,145 @@ export default function SimulationView({ code }) {
     // HIR fallback: extract state machines from HIR nodes
     if (hirData && hirData.nodes) {
       console.log('🔍 [SimulationView] WASM extraction returned empty, using HIR fallback for state machines')
+      console.log('🔍 [SimulationView] HIR nodes:', Object.keys(hirData.nodes).length, 'total nodes')
       const stateList = []
       Object.entries(hirData.nodes).forEach(([nodeId, node]) => {
-        if (node.kind && String(node.kind).includes('StateDefinition')) {
+        const kindStr = String(node.kind || '')
+        // Check for various state machine related node kinds
+        if (kindStr.includes('StateDefinition') || 
+            kindStr.includes('StateMachineDefinition') ||
+            (kindStr.includes('State') && kindStr.includes('Definition'))) {
+          // Get nested states (children that are also states)
+          const nestedStates = node.children ? node.children.map(childId => {
+            const child = hirData.nodes[childId]
+            if (child) {
+              const childKind = String(child.kind || '')
+              // Include states, transitions, and other state machine elements
+              if (childKind.includes('State') || childKind.includes('Transition')) {
+                return {
+                  title: child.name || 'Unnamed State',
+                  kind: childKind,
+                  doc_comment: child.doc_comment
+                }
+              }
+            }
+            return null
+          }).filter(Boolean) : []
+          
           stateList.push({
             title: node.name || 'Unnamed State Machine',
-            kind: 'StateDefinition',
+            kind: kindStr,
             doc_comment: node.doc_comment,
             stable_id: node.stable_id,
-            nested_elements: node.children ? node.children.map(childId => {
-              const child = hirData.nodes[childId]
-              return child ? {
-                title: child.name || 'Unnamed State',
-                kind: String(child.kind),
-                doc_comment: child.doc_comment
-              } : null
-            }).filter(Boolean) : []
+            nested_elements: nestedStates
           })
         }
       })
-      console.log(`🔍 [SimulationView] HIR fallback extracted ${stateList.length} state machines`)
-      return stateList
+      if (stateList.length > 0) {
+        console.log(`🔍 [SimulationView] HIR fallback extracted ${stateList.length} state machines:`, stateList.map(s => s.title))
+        return stateList
+      }
+    }
+    
+    // Code parsing fallback
+    if (code) {
+      console.log('🔍 [SimulationView] HIR fallback returned empty, using code parsing fallback for state machines')
+      const parsed = parseStateMachinesFromCode(code)
+      if (parsed.length > 0) {
+        console.log(`🔍 [SimulationView] Code parsing extracted ${parsed.length} state machines:`, parsed.map(s => s.title))
+        return parsed
+      }
     }
     
     return []
-  }, [simulation, hirData])
+  }, [simulation, hirData, code])
 
-  // Get actions from WASM backend, with HIR fallback
+  // Parse code directly to extract actions (fallback when WASM/HIR don't work)
+  const parseActionsFromCode = (code) => {
+    const actions = []
+    const lines = code.split('\n')
+    let currentAction = null
+    let braceDepth = 0
+    let startDepth = 0
+    let inAction = false
+    let docComment = ''
+    let inDocComment = false
+    
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim()
+      
+      // Track doc comments
+      if (line.startsWith('doc /*')) {
+        inDocComment = true
+        docComment = line.replace('doc /*', '').replace('*/', '').trim()
+      } else if (inDocComment && line.includes('*/')) {
+        docComment += ' ' + line.replace('*/', '').trim()
+        inDocComment = false
+      } else if (inDocComment) {
+        docComment += ' ' + line.replace(/^\*+\s*/, '').trim()
+        continue
+      }
+      
+      // Track brace depth (global)
+      braceDepth += (line.match(/{/g) || []).length - (line.match(/}/g) || []).length
+      
+      // Detect action def
+      const actionDefMatch = line.match(/action\s+def\s+(\w+)/i)
+      if (actionDefMatch) {
+        if (currentAction) {
+          actions.push(currentAction)
+        }
+        currentAction = {
+          title: actionDefMatch[1],
+          kind: 'ActionDefinition',
+          doc_comment: docComment || undefined,
+          nested_elements: []
+        }
+        inAction = true
+        startDepth = braceDepth
+        docComment = ''
+        continue
+      }
+      
+      // Extract nested action steps within action (relative to start depth)
+      if (inAction && currentAction && braceDepth > startDepth) {
+        const actionStepMatch = line.match(/action\s+(\w+)/i)
+        if (actionStepMatch && !line.includes('def')) {
+          currentAction.nested_elements.push({
+            title: actionStepMatch[1],
+            kind: 'ActionStep',
+            doc_comment: undefined
+          })
+        }
+        // Also capture "then" statements as steps
+        const thenMatch = line.match(/then\s+(\w+)/i)
+        if (thenMatch) {
+          currentAction.nested_elements.push({
+            title: thenMatch[1],
+            kind: 'ActionStep',
+            doc_comment: undefined
+          })
+        }
+      }
+      
+      // End of action (back to start depth)
+      if (inAction && braceDepth === startDepth && line.includes('}')) {
+        if (currentAction) {
+          actions.push(currentAction)
+          currentAction = null
+        }
+        inAction = false
+      }
+    }
+    
+    if (currentAction) {
+      actions.push(currentAction)
+    }
+    
+    return actions
+  }
+
+  // Get actions from WASM backend, with HIR fallback, then code parsing fallback
   const actions = useMemo(() => {
     if (simulation && simulation.actions && simulation.actions.length > 0) {
       console.log('✅ [SimulationView] Using WASM-extracted actions:', simulation.actions.length)
@@ -232,31 +420,142 @@ export default function SimulationView({ code }) {
       console.log('🔍 [SimulationView] WASM extraction returned empty, using HIR fallback for actions')
       const actionList = []
       Object.entries(hirData.nodes).forEach(([nodeId, node]) => {
-        if (node.kind && String(node.kind).includes('ActionDefinition')) {
+        const kindStr = String(node.kind || '')
+        // Check for various action related node kinds
+        if (kindStr.includes('ActionDefinition') || 
+            (kindStr.includes('Action') && kindStr.includes('Definition'))) {
+          // Get nested action steps (children that are action usages or steps)
+          const nestedSteps = node.children ? node.children.map(childId => {
+            const child = hirData.nodes[childId]
+            if (child) {
+              const childKind = String(child.kind || '')
+              // Include action usages, action steps, and other action elements
+              if (childKind.includes('Action') || childKind.includes('Step') || childKind.includes('Usage')) {
+                return {
+                  title: child.name || 'Unnamed Step',
+                  kind: childKind,
+                  doc_comment: child.doc_comment
+                }
+              }
+            }
+            return null
+          }).filter(Boolean) : []
+          
           actionList.push({
             title: node.name || 'Unnamed Action',
-            kind: 'ActionDefinition',
+            kind: kindStr,
             doc_comment: node.doc_comment,
             stable_id: node.stable_id,
-            nested_elements: node.children ? node.children.map(childId => {
-              const child = hirData.nodes[childId]
-              return child ? {
-                title: child.name || 'Unnamed Step',
-                kind: String(child.kind),
-                doc_comment: child.doc_comment
-              } : null
-            }).filter(Boolean) : []
+            nested_elements: nestedSteps
           })
         }
       })
-      console.log(`🔍 [SimulationView] HIR fallback extracted ${actionList.length} actions`)
-      return actionList
+      if (actionList.length > 0) {
+        console.log(`🔍 [SimulationView] HIR fallback extracted ${actionList.length} actions:`, actionList.map(a => a.title))
+        return actionList
+      }
+    }
+    
+    // Code parsing fallback
+    if (code) {
+      console.log('🔍 [SimulationView] HIR fallback returned empty, using code parsing fallback for actions')
+      const parsed = parseActionsFromCode(code)
+      if (parsed.length > 0) {
+        console.log(`🔍 [SimulationView] Code parsing extracted ${parsed.length} actions:`, parsed.map(a => a.title))
+        return parsed
+      }
     }
     
     return []
-  }, [simulation, hirData])
+  }, [simulation, hirData, code])
 
-  // Get calculations from WASM backend, with HIR fallback
+  // Parse code directly to extract calculations (fallback when WASM/HIR don't work)
+  const parseCalculationsFromCode = (code) => {
+    const calculations = []
+    const lines = code.split('\n')
+    let currentCalc = null
+    let braceDepth = 0
+    let startDepth = 0
+    let inCalc = false
+    let docComment = ''
+    let inDocComment = false
+    
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim()
+      
+      // Track doc comments
+      if (line.startsWith('doc /*')) {
+        inDocComment = true
+        docComment = line.replace('doc /*', '').replace('*/', '').trim()
+      } else if (inDocComment && line.includes('*/')) {
+        docComment += ' ' + line.replace('*/', '').trim()
+        inDocComment = false
+      } else if (inDocComment) {
+        docComment += ' ' + line.replace(/^\*+\s*/, '').trim()
+        continue
+      }
+      
+      // Track brace depth (global)
+      braceDepth += (line.match(/{/g) || []).length - (line.match(/}/g) || []).length
+      
+      // Detect calc def
+      const calcDefMatch = line.match(/calc\s+def\s+(\w+)/i)
+      if (calcDefMatch) {
+        if (currentCalc) {
+          calculations.push(currentCalc)
+        }
+        currentCalc = {
+          title: calcDefMatch[1],
+          kind: 'CalcDefinition',
+          doc_comment: docComment || undefined,
+          parameters: [],
+          returnType: null,
+          returnName: null
+        }
+        inCalc = true
+        startDepth = braceDepth
+        docComment = ''
+        continue
+      }
+      
+      // Extract parameters and return type within calculation (relative to start depth)
+      if (inCalc && currentCalc && braceDepth > startDepth) {
+        // Match input parameters: "in parameterName : Type"
+        const inParamMatch = line.match(/in\s+(\w+)\s*:\s*(\w+)/i)
+        if (inParamMatch) {
+          currentCalc.parameters.push({
+            name: inParamMatch[1],
+            type: inParamMatch[2],
+            direction: 'in'
+          })
+        }
+        
+        // Match return statement: "return returnName : Type = ..."
+        const returnMatch = line.match(/return\s+(\w+)\s*:\s*(\w+)/i)
+        if (returnMatch) {
+          currentCalc.returnName = returnMatch[1]
+          currentCalc.returnType = returnMatch[2]
+        }
+      }
+      
+      // End of calculation (back to start depth)
+      if (inCalc && braceDepth === startDepth && line.includes('}')) {
+        if (currentCalc) {
+          calculations.push(currentCalc)
+          currentCalc = null
+        }
+        inCalc = false
+      }
+    }
+    
+    if (currentCalc) {
+      calculations.push(currentCalc)
+    }
+    
+    return calculations
+  }
+
+  // Get calculations from WASM backend, with HIR fallback, then code parsing fallback
   const calculations = useMemo(() => {
     if (simulation && simulation.calculations && simulation.calculations.length > 0) {
       console.log('✅ [SimulationView] Using WASM-extracted calculations:', simulation.calculations.length)
@@ -268,22 +567,72 @@ export default function SimulationView({ code }) {
       console.log('🔍 [SimulationView] WASM extraction returned empty, using HIR fallback for calculations')
       const calcList = []
       Object.entries(hirData.nodes).forEach(([nodeId, node]) => {
-        // HIR uses "CalcDefinition" not "CalculationDefinition"
-        if (node.kind && (String(node.kind).includes('CalcDefinition') || String(node.kind).includes('CalculationDefinition'))) {
+        const kindStr = String(node.kind || '')
+        // Check for various calculation related node kinds
+        if (kindStr.includes('CalcDefinition') || 
+            kindStr.includes('CalculationDefinition') ||
+            (kindStr.includes('Calc') && kindStr.includes('Definition'))) {
+          // Extract parameters from children (input/output parameters)
+          const parameters = []
+          if (node.children) {
+            node.children.forEach(childId => {
+              const child = hirData.nodes[childId]
+              if (child) {
+                const childKind = String(child.kind || '')
+                // Look for parameter-like nodes (AttributeUsage, etc.)
+                if (childKind.includes('Attribute') || childKind.includes('Parameter') || childKind.includes('Usage')) {
+                  parameters.push({
+                    name: child.name || 'unnamed',
+                    type: child.type || 'Unknown',
+                    direction: childKind.includes('in') ? 'in' : childKind.includes('out') ? 'out' : 'inout'
+                  })
+                }
+              }
+            })
+          }
+          
+          // Extract return type from node properties or children
+          let returnType = null
+          let returnName = null
+          if (node.children) {
+            node.children.forEach(childId => {
+              const child = hirData.nodes[childId]
+              if (child && String(child.kind || '').includes('return')) {
+                returnType = child.type || null
+                returnName = child.name || null
+              }
+            })
+          }
+          
           calcList.push({
             title: node.name || 'Unnamed Calculation',
-            kind: 'CalcDefinition',
+            kind: kindStr,
             doc_comment: node.doc_comment,
-            stable_id: node.stable_id
+            stable_id: node.stable_id,
+            parameters: parameters.length > 0 ? parameters : undefined,
+            returnType: returnType,
+            returnName: returnName
           })
         }
       })
-      console.log(`🔍 [SimulationView] HIR fallback extracted ${calcList.length} calculations`)
-      return calcList
+      if (calcList.length > 0) {
+        console.log(`🔍 [SimulationView] HIR fallback extracted ${calcList.length} calculations:`, calcList.map(c => c.title))
+        return calcList
+      }
+    }
+    
+    // Code parsing fallback
+    if (code) {
+      console.log('🔍 [SimulationView] HIR fallback returned empty, using code parsing fallback for calculations')
+      const parsed = parseCalculationsFromCode(code)
+      if (parsed.length > 0) {
+        console.log(`🔍 [SimulationView] Code parsing extracted ${parsed.length} calculations:`, parsed.map(c => c.title))
+        return parsed
+      }
     }
     
     return []
-  }, [simulation, hirData])
+  }, [simulation, hirData, code])
 
   // Extract scenario elements (action/state usages)
   const scenarios = useMemo(() => {
