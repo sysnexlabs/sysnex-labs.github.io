@@ -108,55 +108,10 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
   position: relative;
   min-height: 100vh;
-  /* Dotted Background Pattern - Inspired by MagicUI */
-  /* Use background-color and background-image together */
   background-color: var(--bg-primary);
-  background-image: 
-    radial-gradient(
-      circle at center,
-      rgba(255, 255, 255, 0.5) 1.5px,
-      transparent 1.5px
-    );
-  background-size: 14px 14px;
-  background-position: 0 0;
-  background-attachment: fixed;
-  /* Ensure background image is visible */
-  background-repeat: repeat;
 }
 
-/* Dark theme - more visible dots */
-html[data-theme="dark"] body,
-[data-theme="dark"] body {
-  background-color: var(--bg-primary);
-  background-image: 
-    radial-gradient(
-      circle at center,
-      rgba(255, 255, 255, 0.5) 1.5px,
-      transparent 1.5px
-    );
-  background-size: 14px 14px;
-  background-position: 0 0;
-  background-attachment: fixed;
-  background-repeat: repeat;
-}
-
-/* Light theme - subtle dots */
-html[data-theme="light"] body,
-[data-theme="light"] body {
-  background-color: var(--bg-primary);
-  background-image: 
-    radial-gradient(
-      circle at center,
-      rgba(0, 0, 0, 0.25) 1.5px,
-      transparent 1.5px
-    );
-  background-size: 14px 14px;
-  background-position: 0 0;
-  background-attachment: fixed;
-  background-repeat: repeat;
-}
-
-/* Ensure content is above the dotted background */
+/* Ensure content is above the background */
 .app,
 main {
   position: relative;
