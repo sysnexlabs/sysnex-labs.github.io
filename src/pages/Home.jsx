@@ -606,7 +606,7 @@ const Home = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className={styles.testimonialsSection}>
+      {/* <section className={styles.testimonialsSection}>
         <div className={styles.container}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -686,7 +686,6 @@ const Home = () => {
             ))}
           </div>
 
-          {/* Pilot Partners Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -731,7 +730,7 @@ const Home = () => {
             </p>
           </motion.div>
         </div>
-      </section>
+      </section> */}
 
       <section className={styles.ctaSectionHome}>
         <div className={styles.container}>
