@@ -248,23 +248,23 @@ const Header = () => {
           </div>
           <div className="dropdown-menu">
             <Link to="/overview" className={location.pathname === '/overview' ? 'active' : ''} data-page="overview">Overview</Link>
-            <Link to="/solutions" className={location.pathname === '/solutions' ? 'active' : ''} data-page="solutions">Solutions</Link>
-            <Link to="/platforms" className={location.pathname === '/platforms' ? 'active' : ''} data-page="platforms">Platforms</Link>
+            {/* <Link to="/solutions" className={location.pathname === '/solutions' ? 'active' : ''} data-page="solutions">Solutions</Link> */}
+            {/* <Link to="/platforms" className={location.pathname === '/platforms' ? 'active' : ''} data-page="platforms">Platforms</Link> */}
             <Link to="/products" className={location.pathname === '/products' ? 'active' : ''} data-page="products">Products</Link>
-            <Link to="/editions" className={location.pathname === '/editions' ? 'active' : ''} data-page="editions">Editions</Link>
-            <Link to="/compliance" className={location.pathname === '/compliance' ? 'active' : ''} data-page="compliance">Compliance</Link>
-            <Link to="/workspaces" className={location.pathname.includes('/workspaces') ? 'active' : ''} data-page="workspaces">Workspaces</Link>
-            <Link to="/resources" className={location.pathname === '/resources' ? 'active' : ''} data-page="resources">Resources</Link>
+            {/* <Link to="/editions" className={location.pathname === '/editions' ? 'active' : ''} data-page="editions">Editions</Link> */}
+            {/* <Link to="/compliance" className={location.pathname === '/compliance' ? 'active' : ''} data-page="compliance">Compliance</Link> */}
+            {/* <Link to="/workspaces" className={location.pathname.includes('/workspaces') ? 'active' : ''} data-page="workspaces">Workspaces</Link> */}
+            {/* <Link to="/resources" className={location.pathname === '/resources' ? 'active' : ''} data-page="resources">Resources</Link> */}
             <Link to="/try-yourself" className={location.pathname.includes('try-yourself') ? 'active' : ''} data-page="try-yourself">{t('nav.try-yourself')}</Link>
-            <Link to="/pricing" className={isSubmenuActive('pricing') ? 'active' : ''} data-page="pricing">{t('nav.pricing')}</Link>
+            {/* <Link to="/pricing" className={isSubmenuActive('pricing') ? 'active' : ''} data-page="pricing">{t('nav.pricing')}</Link> */}
           </div>
         </div>
         
         {/* Competences pages */}
-        <div className={`nav-dropdown ${consultingOpen ? 'is-open' : ''}`}>
+        {/* <div className={`nav-dropdown ${consultingOpen ? 'is-open' : ''}`}>
           <div className="nav-dropdown-trigger">
-            <Link 
-              to="/methods" 
+            <Link
+              to="/methods"
               className={`nav-link-dropdown ${isActive('consulting') ? 'active' : ''}`}
               data-page="consulting"
             >
@@ -288,7 +288,7 @@ const Header = () => {
             <Link to="/process" className={location.pathname === '/process' ? 'active' : ''} data-page="process">{t('nav.process') || 'Process'}</Link>
             <Link to="/tools" className={location.pathname === '/tools' ? 'active' : ''} data-page="tools">{t('nav.tools') || 'Tools'}</Link>
           </div>
-        </div>
+        </div> */}
         
         <Link 
           to="/about" 
