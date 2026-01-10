@@ -1,106 +1,72 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import AuroraBackground from './AuroraBackground'
-import AnimatedText from './AnimatedText'
-import { useTranslation } from '../utils/i18n'
+import { ExperienceHero } from './ui/experience-hero'
+import Lenis from 'lenis'
 import './Hero.css'
 
 const Hero = React.memo(() => {
-  const { t } = useTranslation()
+  // Initialize smooth scroll with Lenis - configured to work with Framer Motion
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      syncTouch: false,
+      touchMultiplier: 2,
+    })
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
-      },
-    },
-  }
+    // Ensure Lenis works with Framer Motion's scroll detection
+    lenis.on('scroll', () => {
+      // Trigger scroll event for Framer Motion
+      window.dispatchEvent(new Event('scroll'))
+    })
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.16, 1, 0.3, 1],
-      },
+    function raf(time) {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
+    }
+
+    requestAnimationFrame(raf)
+    return () => lenis.destroy()
+  }, [])
+
+  // SysNex-specific stats for the hero
+  const sysnexStats = [
+    { 
+      id: "001", 
+      title: "AVAILABILITY", 
+      val: "Open", 
+      type: "progress" 
     },
-  }
+    { 
+      id: "002", 
+      title: "PLATFORM STATS", 
+      val: "3 Platforms", 
+      type: "data",
+      data: [
+        { label: "VS Code Extension", value: "Available" },
+        { label: "NexSuite by SysNex", value: "Coming Soon" }
+      ]
+    },
+    { 
+      id: "003", 
+      title: "EXPERTISE", 
+      val: "Transforming systems engineering through advanced SysML v2 tooling.", 
+      type: "text" 
+    }
+  ]
 
   return (
-    <AuroraBackground>
-      <section className="hero" aria-labelledby="hero-heading">
-        <div className="hero-background-overlay"></div>
-        <div className="hero-container">
-          <motion.div
-            className="hero-content"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <motion.span
-              className="hero-kicker"
-              variants={itemVariants}
-            >
-              Model-Based Systems Engineering, Re-invented
-            </motion.span>
-            <motion.h1 
-              id="hero-heading" 
-              className="hero-title"
-              variants={itemVariants}
-            >
-              <AnimatedText variant="gradient">
-                Systems Engineering
-                <br />
-                for Innovators.
-              </AnimatedText>
-            </motion.h1>
-            <motion.p
-              className="hero-description"
-              variants={itemVariants}
-            >
-              Production-ready SysML v2 Language Server, completely free for individuals.
-              Everything you need to build the future, faster.
-            </motion.p>
-            <motion.div
-              className="hero-metric"
-              variants={itemVariants}
-            >
-              <span className="hero-metric-icon">✨</span>
-              <span>Free for Individuals & Open Source Projects</span>
-            </motion.div>
-            <motion.div
-              className="hero-actions"
-              variants={itemVariants}
-            >
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              >
-                <Link to="/contact" className="btn-primary-large">
-                  Get Early Access
-                </Link>
-              </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              >
-                <Link to="/overview" className="btn-secondary-large">
-                  Explore Features
-                </Link>
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-    </AuroraBackground>
+    <div className="hero-wrapper">
+      <ExperienceHero
+        kicker="Model-Based Systems Engineering, Re-invented"
+        title={`Systems\nEngineering\nfor\nInnovators.`}
+        description="Production-ready SysML v2 Language Server, completely free for individuals. Everything you need to build the future, faster."
+        ctaText="Get Early Access"
+        ctaLink="/contact"
+        stats={sysnexStats}
+      />
+    </div>
   )
 })
 

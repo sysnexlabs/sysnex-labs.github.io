@@ -20,5 +20,30 @@
   .bento-card:hover .bento-overlay {
     opacity: 1;
   }
+
+  /* Glass panel effect for experience hero - increased visibility */
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Loading animation for progress bars */
+@keyframes loading-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@layer utilities {
+  .animate-loading {
+    animation: loading-slide 2s ease-in-out infinite;
+  }
 }
 

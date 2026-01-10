@@ -1,3 +1,10 @@
+.hero-wrapper {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
 .hero {
   padding: 8rem 2rem;
   background: #0A1628;
@@ -351,9 +358,7 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-@keyframes pulse {
+}@keyframes pulse {
   0%, 100% {
     transform: scale(1);
     opacity: 1;
@@ -363,4 +368,3 @@
     opacity: 0.8;
   }
 }
-
