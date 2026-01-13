@@ -58,6 +58,12 @@ const Hero = React.memo(() => {
 
   return (
     <div className="hero-wrapper">
+      <div className="sysmlv2-hero-badge">
+        <div className="sysmlv2-hero-badge__logo">
+          <img src="/assets/sysmlv2.png" alt="SysML v2 Logo" />
+        </div>
+        <span className="sysmlv2-hero-badge__text">Built on SysML v2 Standards</span>
+      </div>
       <ExperienceHero
         kicker="Model-Based Systems Engineering, Re-invented"
         title={`Systems\nEngineering\nfor\nInnovators.`}

@@ -37,7 +37,17 @@ const Home = () => {
       eyebrow: 'Standards Compliant',
       title: 'ISO & ASPICE Ready',
       description: 'Built for automotive and aerospace with ISO 26262, ASPICE, and ISO 15288 support.',
-      variant: 'accent'
+      variant: 'accent',
+      logo: '/assets/sysmlv2.png',
+      logoAlt: 'SysML v2 Logo'
+    },
+    {
+      eyebrow: 'Digital Backbone',
+      title: 'KRAKEN Powered',
+      description: 'Unified engineering service mesh connecting SysML v2, simulation, and legacy tools.',
+      variant: 'primary',
+      logo: '/assets/icon_kraken.png',
+      logoAlt: 'KRAKEN Logo'
     }
   ]
 
@@ -90,11 +100,11 @@ const Home = () => {
             ].map((platform, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className={styles.platformCard}
+                viewport={{ margin: "-50px" }}
+                transition={{ duration: 0.6, delay: index * 0.15 }}
+                className={`${styles.platformCard} glass-card hover-lift`}
               >
                 <span className={`${styles.platformStatus} ${styles[platform.statusClass]}`}>
                   {platform.status}
@@ -103,10 +113,11 @@ const Home = () => {
                   <img
                     src={platform.icon}
                     alt={platform.title}
-                    style={{height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain'}}
+                    style={{ height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain' }}
+                    className="animate-float"
                   />
                 </div>
-                <h3 className={styles.platformTitle}>{platform.title}</h3>
+                <h3 className={`${styles.platformTitle} text-gradient-primary`}>{platform.title}</h3>
                 <p className={styles.platformDescription}>{platform.description}</p>
                 <div className={styles.platformMeta}>
                   {platform.features.map((feat, i) => (
@@ -253,6 +264,13 @@ const Home = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <SpotlightCard className={`insight-card insight-card--${insight.variant}`}>
+                  {insight.logo && (
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+                      <div className="sysmlv2-logo sysmlv2-logo--medium sysmlv2-logo--pulse">
+                        <img src={insight.logo} alt={insight.logoAlt} />
+                      </div>
+                    </div>
+                  )}
                   <span className="insight-eyebrow">{insight.eyebrow}</span>
                   <h3 className="insight-title">{insight.title}</h3>
                   <p className="insight-description">{insight.description}</p>
@@ -370,7 +388,7 @@ const Home = () => {
                       <img
                         src={roleCard.icon}
                         alt={roleCard.role}
-                        style={{height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain'}}
+                        style={{ height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain' }}
                       />
                     </div>
                     <h3 style={{ marginBottom: '0.5rem', textAlign: 'center', color: 'var(--accent-primary)' }}>
@@ -554,12 +572,29 @@ const Home = () => {
                   <div className={styles.checkIcon}>✓</div>
                   <div>
                     <strong>Open Standards First:</strong> We are 100% committed to SysML v2. No vendor lock-in specific to our tool.
+                    <div style={{ marginTop: '0.75rem' }}>
+                      <div className="sysmlv2-badge">
+                        <div className="sysmlv2-badge__logo">
+                          <img src="./assets/sysmlv2.png" alt="SysML v2 Logo" />
+                        </div>
+                        <div className="sysmlv2-badge__text">
+                          <div className="sysmlv2-badge__title">Built on SysML v2</div>
+                          <div className="sysmlv2-badge__subtitle">Open Standard</div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </li>
                 <li className={styles.transparencyItem}>
                   <div className={styles.checkIcon}>✓</div>
                   <div>
                     <strong>Builder-Led:</strong> Built by systems engineers who code, for systems engineers who want to code.
+                  </div>
+                </li>
+                <li className={styles.transparencyItem}>
+                  <div className={styles.checkIcon}>✓</div>
+                  <div>
+                    <strong>KRAKEN Backbone:</strong> Powered by KRAKEN, our high-performance Rust-based engineering service mesh.
                   </div>
                 </li>
               </ul>

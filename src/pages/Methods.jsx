@@ -158,12 +158,10 @@ const Methods = () => {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
                     <h3 className="card-title" style={{ margin: 0 }}>{approach.title}</h3>
                     {approach.status && (
-                      <span className={`pricing-badge ${
-                        approach.status === 'Production Ready' ? 'badge-available' :
+                      <span className={`status-badge ${approach.status === 'Production Ready' ? 'badge-available' :
                         approach.status === 'In Progress' ? 'badge-beta' :
-                        approach.status === 'Planned' ? 'badge-development' :
-                        'badge-development'
-                      }`} style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}>
+                          'badge-development'
+                        }`} style={{ margin: 0, fontSize: '0.75rem', padding: '0.25rem 0.6rem' }}>
                         {approach.status}
                       </span>
                     )}
@@ -179,7 +177,7 @@ const Methods = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section >
 
       <section className="page-content-section">
         <div className="container">
@@ -279,7 +277,7 @@ const Methods = () => {
           </motion.div>
         </div>
       </section>
-    </div>
+    </div >
   )
 }
 

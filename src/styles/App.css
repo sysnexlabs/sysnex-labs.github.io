@@ -1,4 +1,5 @@
 @import './buttons.css';
+@import './sysmlv2-logo.css';
 
 .app {
   min-height: 100vh;
@@ -20,21 +21,3 @@
   color: var(--text-secondary, #666);
   padding: 2rem;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

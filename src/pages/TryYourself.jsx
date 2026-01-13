@@ -130,6 +130,21 @@ export default function TryYourself() {
         'Action flow tracking',
         'Behavioral modeling'
       ]
+    },
+    {
+      id: 'kraken',
+      title: 'KRAKEN Hub',
+      icon: '/assets/icon_kraken.png',
+      description: 'Unified digital backbone connecting SysML v2, requirements, simulation, and legacy tools.',
+      link: '/try-kraken',
+      status: 'Live Interactive Demo',
+      statusColor: 'var(--color-success)',
+      features: [
+        'Service orchestration',
+        'Data unification',
+        'Legacy tool bridge',
+        'Real-time sync'
+      ]
     }
   ]
 

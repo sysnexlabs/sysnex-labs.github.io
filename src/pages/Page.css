@@ -242,7 +242,7 @@
   .comparison-table {
     font-size: 0.875rem;
   }
-  
+
   .comparison-table th,
   .comparison-table td {
     padding: 0.75rem 0.5rem;
@@ -305,6 +305,7 @@
 }
 
 @media (max-width: 768px) {
+
   .page-hero-section h1,
   .insights-section h1 {
     font-size: clamp(2rem, 8vw, 2.75rem);
@@ -536,6 +537,7 @@
   .benefit-title {
     font-size: 1.125rem;
   }
+
   .benefit-description {
     font-size: 0.875rem;
     line-height: 1.65;
@@ -612,6 +614,7 @@
 }
 
 @media (max-width: 768px) {
+
   .roadmap-list li,
   .method-list li {
     font-size: 0.875rem;
@@ -857,7 +860,7 @@
   .feature-tags {
     gap: 0.375rem;
   }
-  
+
   .feature-tags li {
     font-size: 0.75rem;
     padding: 0.3rem 0.6rem;
@@ -962,35 +965,35 @@
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-  
+
   .platform-card {
     padding: 2rem;
     border-radius: 16px;
   }
-  
+
   .platform-card.featured {
     transform: none;
   }
-  
+
   .platform-card.featured:hover {
     transform: translateY(-4px);
   }
-  
+
   .platform-card h3 {
     font-size: 1.5rem;
   }
-  
+
   .platform-description {
     font-size: 0.9375rem;
     line-height: 1.65;
     margin: 0 0 1.5rem 0;
   }
-  
+
   .platform-icon {
     font-size: 3rem;
     margin-bottom: 1.25rem;
   }
-  
+
   .platform-badge {
     top: 1rem;
     right: 1rem;
@@ -1064,6 +1067,7 @@
 }
 
 @media (max-width: 768px) {
+
   .platform-card .btn,
   .platform-cta {
     padding: 0.875rem 1.25rem;
@@ -1134,6 +1138,7 @@
   .lsp-feature-card h4 {
     font-size: 1rem;
   }
+
   .lsp-feature-card p {
     font-size: 0.8125rem;
     line-height: 1.65;
@@ -1231,6 +1236,7 @@
   .variant-card h3 {
     font-size: 1.25rem;
   }
+
   .variant-card p {
     font-size: 0.875rem;
     line-height: 1.65;
@@ -1322,6 +1328,7 @@
   .cta-content {
     padding: 0 1rem;
   }
+
   .cta-content p {
     font-size: 1rem;
     line-height: 1.65;
@@ -1379,15 +1386,15 @@
   }
 
   /* Ensure cards don't exceed viewport width on mobile */
-  .features-grid > *,
-  .status-grid > *,
-  .architecture-grid > *,
-  .benefits-grid > *,
-  .insights-grid > *,
-  .page-intro-grid > *,
-  .methods-grid > *,
-  .roadmap-grid > *,
-  .differentiators-grid > * {
+  .features-grid>*,
+  .status-grid>*,
+  .architecture-grid>*,
+  .benefits-grid>*,
+  .insights-grid>*,
+  .page-intro-grid>*,
+  .methods-grid>*,
+  .roadmap-grid>*,
+  .differentiators-grid>* {
     min-width: 0;
     max-width: 100%;
     width: 100%;
@@ -1429,13 +1436,13 @@
     max-width: 100%;
     box-sizing: border-box;
   }
-  
+
   /* Ensure SpotlightCard content in differentiators-grid doesn't overflow */
   .differentiators-grid .spotlight-card {
     min-width: 0;
     overflow: hidden;
   }
-  
+
   .differentiators-grid .spotlight-card h3,
   .differentiators-grid .spotlight-card p,
   .differentiators-grid .spotlight-card .card-title,
@@ -1445,7 +1452,7 @@
     word-wrap: break-word;
     overflow-wrap: break-word;
   }
-  
+
   .differentiators-grid .differentiator-icon {
     font-size: 2.5rem;
   }
@@ -1507,4 +1514,126 @@
   .about-list li {
     font-size: 0.95rem;
   }
+}
+
+/* Generic Badge Styles */
+.badge-available {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.badge-beta {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.badge-development {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+/* Generic Icon Img Style */
+.spotlight-icon-img {
+  height: 120px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+/* Advanced Glassmorphism & Visual Polish */
+.glass-panel {
+  background: rgba(13, 13, 13, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.glass-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border-color: rgba(0, 180, 216, 0.3);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.4);
+}
+
+/* Text Gradients */
+.text-gradient-primary {
+  background: linear-gradient(135deg, var(--turquoise) 0%, #4facfe 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-secondary {
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animations */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 180, 216, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 180, 216, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 180, 216, 0);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+/* Micro-interactions */
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+}
+
+.hover-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(0, 180, 216, 0.4);
 }

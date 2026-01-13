@@ -523,8 +523,13 @@
 }
 
 .productShowcaseSection {
-  padding: 4rem 0;
-  background: var(--bg-secondary);
+  padding: 6rem 0;
+  background: linear-gradient(180deg, rgba(13, 13, 13, 0.5), rgba(0, 180, 216, 0.03));
+  position: relative;
+}
+
+[data-theme="light"] .productShowcaseSection {
+  background: linear-gradient(180deg, rgba(248, 250, 252, 0.8), rgba(0, 180, 216, 0.05));
 }
 
 .roleNavigationSection {
@@ -536,10 +541,22 @@
   padding: 4rem 0;
   background: var(--bg-secondary);
 }
+
 /* Platforms Section */
 .platformsSection {
   padding: 6rem 0;
-  background: var(--bg-primary);
+  background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(0, 180, 216, 0.02) 50%, var(--bg-primary) 100%);
+  position: relative;
+}
+
+.platformsSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-color), transparent);
 }
 
 .platformsGrid {
@@ -550,19 +567,47 @@
 }
 
 .platformCard {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 180, 216, 0.15);
+  border-radius: 16px;
   padding: 2rem;
   position: relative;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.platformCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 180, 216, 0.05), rgba(251, 191, 36, 0.02));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 0;
 }
 
 .platformCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-  border-color: var(--brand-cyan);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 180, 216, 0.15), 0 0 0 1px rgba(0, 180, 216, 0.3);
+  border-color: rgba(0, 180, 216, 0.4);
+}
+
+.platformCard:hover::before {
+  opacity: 1;
+}
+
+[data-theme="light"] .platformCard {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-color: rgba(0, 180, 216, 0.2);
+}
+
+[data-theme="light"] .platformCard:hover {
+  box-shadow: 0 20px 40px rgba(0, 180, 216, 0.1), 0 0 0 1px rgba(0, 180, 216, 0.3);
 }
 
 .platformStatus {

@@ -143,7 +143,7 @@ const Resources = () => {
     : resources.filter(r => r.type === activeFilter)
 
   const getResourceIcon = (type) => {
-    switch(type) {
+    switch (type) {
       case 'datasheet': return { text: 'PDF', color: '#00bcd4' }
       case 'whitepaper': return { text: 'WP', color: '#ff9800' }
       case 'video': return { text: 'VID', color: '#9c27b0' }
@@ -184,56 +184,17 @@ const Resources = () => {
       {/* Filter Tabs */}
       <section className="page-content-section" style={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
         <div className="container">
-          <div style={{
-            display: 'flex',
-            gap: '1rem',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            marginBottom: '3rem'
-          }}>
+          <div className="resource-filter-container">
             {resourceTypes.map((type) => (
               <button
                 key={type.id}
                 onClick={() => setActiveFilter(type.id)}
-                style={{
-                  padding: '0.75rem 1.5rem',
-                  background: activeFilter === type.id ? 'var(--accent-primary)' : 'var(--bg-secondary)',
-                  color: activeFilter === type.id ? 'white' : 'var(--text-primary)',
-                  border: activeFilter === type.id ? 'none' : '1px solid var(--border-color)',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  fontSize: '0.95rem',
-                  fontWeight: activeFilter === type.id ? 'bold' : 'normal',
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.75rem'
-                }}
-                onMouseEnter={(e) => {
-                  if (activeFilter !== type.id) {
-                    e.currentTarget.style.background = 'var(--bg-primary)'
-                    e.currentTarget.style.borderColor = 'var(--accent-primary)'
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (activeFilter !== type.id) {
-                    e.currentTarget.style.background = 'var(--bg-secondary)'
-                    e.currentTarget.style.borderColor = 'var(--border-color)'
-                  }
-                }}
+                className={`resource-filter-btn ${activeFilter === type.id ? 'active' : ''}`}
               >
-                <span style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '6px',
-                  background: activeFilter === type.id ? 'rgba(255, 255, 255, 0.2)' : type.iconColor,
-                  color: 'white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '0.7rem',
-                  fontWeight: 'bold'
-                }}>
+                <span
+                  className="resource-filter-icon"
+                  style={{ background: activeFilter === type.id ? null : type.iconColor }}
+                >
                   {type.iconText}
                 </span>
                 <span>{type.label}</span>
@@ -242,13 +203,7 @@ const Resources = () => {
           </div>
 
           {/* Resources Grid */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-            gap: '2rem',
-            maxWidth: '1400px',
-            margin: '0 auto'
-          }}>
+          <div className="resources-grid">
             {filteredResources.map((resource, index) => (
               <motion.div
                 key={resource.id}
@@ -257,60 +212,31 @@ const Resources = () => {
                 transition={{ duration: 0.5, delay: index * 0.05 }}
               >
                 <SpotlightCard>
-                  <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div style={{
-                      width: '64px',
-                      height: '64px',
-                      borderRadius: '12px',
-                      background: getResourceIcon(resource.type).color,
-                      color: 'white',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '1.25rem',
-                      fontWeight: 'bold',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
-                    }}>
+                  <div className="resource-card-header">
+                    <div
+                      className="resource-icon-wrapper"
+                      style={{ background: getResourceIcon(resource.type).color }}
+                    >
                       {getResourceIcon(resource.type).text}
                     </div>
-                    <div style={{
-                      padding: '0.4rem 0.8rem',
-                      background: resource.status === 'available' ? '#3fb950' : '#f59e0b',
-                      color: 'white',
-                      borderRadius: '6px',
-                      fontSize: '0.75rem',
-                      fontWeight: 'bold',
-                      textTransform: 'uppercase'
-                    }}>
+                    <div className={`resource-status-badge ${resource.status === 'available' ? 'resource-status-available' : 'resource-status-coming-soon'}`}>
                       {resource.status === 'available' ? 'Available' : 'Coming Soon'}
                     </div>
                   </div>
 
-                  <h3 style={{ marginBottom: '0.75rem', fontSize: '1.25rem', color: 'var(--accent-primary)' }}>
+                  <h3 className="resource-title">
                     {resource.title}
                   </h3>
 
-                  <p style={{
-                    fontSize: '0.9rem',
-                    lineHeight: '1.6',
-                    color: 'var(--text-secondary)',
-                    marginBottom: '1.5rem',
-                    minHeight: '4.5rem'
-                  }}>
+                  <p className="resource-description">
                     {resource.description}
                   </p>
 
-                  <div style={{
-                    display: 'flex',
-                    gap: '1rem',
-                    marginBottom: '1.5rem',
-                    paddingTop: '1rem',
-                    borderTop: '1px solid var(--border-color)'
-                  }}>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  <div className="resource-meta">
+                    <div className="resource-meta-item">
                       <strong>Format:</strong> {resource.format}
                     </div>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                    <div className="resource-meta-item">
                       <strong>Length:</strong> {resource.pages}
                     </div>
                   </div>

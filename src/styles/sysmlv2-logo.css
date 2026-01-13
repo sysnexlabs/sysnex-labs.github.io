@@ -1,0 +1,237 @@
+/* SysML v2 Logo Styles and Animations */
+
+/* Base Logo Container */
+.sysmlv2-logo {
+  display: inline-block;
+  position: relative;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Logo Sizes */
+.sysmlv2-logo--small {
+  width: 40px;
+  height: 40px;
+}
+
+.sysmlv2-logo--medium {
+  width: 80px;
+  height: 80px;
+}
+
+.sysmlv2-logo--large {
+  width: 120px;
+  height: 120px;
+}
+
+.sysmlv2-logo--xlarge {
+  width: 160px;
+  height: 160px;
+}
+
+/* Logo Image */
+.sysmlv2-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Hover Effects */
+.sysmlv2-logo--interactive {
+  cursor: pointer;
+}
+
+.sysmlv2-logo--interactive:hover {
+  transform: scale(1.05);
+}
+
+.sysmlv2-logo--glow:hover {
+  filter: drop-shadow(0 0 20px rgba(0, 180, 216, 0.5));
+}
+
+.sysmlv2-logo--rotate:hover {
+  animation: gentleRotate 2s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes gentleRotate {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 10px rgba(0, 180, 216, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 25px rgba(0, 180, 216, 0.6));
+  }
+}
+
+.sysmlv2-logo--pulse {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+/* Logo with Text Container */
+.sysmlv2-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(0, 180, 216, 0.05);
+  border: 1px solid rgba(0, 180, 216, 0.2);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.sysmlv2-badge:hover {
+  background: rgba(0, 180, 216, 0.1);
+  border-color: rgba(0, 180, 216, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 180, 216, 0.15);
+}
+
+.sysmlv2-badge__logo {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.sysmlv2-badge__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sysmlv2-badge__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.sysmlv2-badge__subtitle {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Hero Integration */
+.sysmlv2-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 180, 216, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 180, 216, 0.3);
+  border-radius: 999px;
+  margin-bottom: 1.5rem;
+}
+
+.sysmlv2-hero-badge__logo {
+  width: 32px;
+  height: 32px;
+}
+
+.sysmlv2-hero-badge__text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--turquoise);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Footer Integration */
+.sysmlv2-footer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.sysmlv2-footer-badge:hover {
+  border-color: var(--turquoise);
+  background: rgba(0, 180, 216, 0.05);
+}
+
+.sysmlv2-footer-badge__logo {
+  width: 24px;
+  height: 24px;
+}
+
+.sysmlv2-footer-badge__text {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Inline Logo (for text content) */
+.sysmlv2-inline {
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  vertical-align: middle;
+  margin: 0 0.25em;
+}
+
+/* Accessibility */
+.sysmlv2-logo img,
+.sysmlv2-badge__logo img,
+.sysmlv2-hero-badge__logo img,
+.sysmlv2-footer-badge__logo img {
+  /* Ensure proper alt text is provided in HTML */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .sysmlv2-logo--large {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .sysmlv2-logo--xlarge {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .sysmlv2-badge {
+    padding: 0.5rem 1rem;
+    gap: 0.75rem;
+  }
+  
+  .sysmlv2-badge__logo {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Dark Mode Adjustments */
+[data-theme="dark"] .sysmlv2-badge {
+  background: rgba(0, 180, 216, 0.08);
+  border-color: rgba(0, 180, 216, 0.25);
+}
+
+[data-theme="dark"] .sysmlv2-badge:hover {
+  background: rgba(0, 180, 216, 0.15);
+  border-color: rgba(0, 180, 216, 0.5);
+}
+
+/* Light Mode Adjustments */
+[data-theme="light"] .sysmlv2-badge {
+  background: rgba(0, 180, 216, 0.06);
+  border-color: rgba(0, 180, 216, 0.2);
+}
+
+[data-theme="light"] .sysmlv2-badge:hover {
+  background: rgba(0, 180, 216, 0.12);
+  border-color: rgba(0, 180, 216, 0.4);
+}

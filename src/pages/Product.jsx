@@ -37,7 +37,7 @@ const Product = () => {
             <div className="hero-badge">Enterprise SysML v2 Tooling</div>
             <h1>NexSuite</h1>
             <p className="page-hero-description">
-              NexSuite delivers production-ready SysML v2 Language Server technology with VS Code integration, AI assistance, and compliance variants. 
+              NexSuite delivers production-ready SysML v2 Language Server technology with VS Code integration, AI assistance, and compliance variants.
               Built for OEM/Tier-1 teams who demand performance, reliability, and regulatory compliance.
             </p>
             <div className="hero-cta">
@@ -86,7 +86,7 @@ const Product = () => {
                       <img
                         src={item.icon}
                         alt={item.title}
-                        style={{height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain'}}
+                        style={{ height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain' }}
                       />
                     ) : (
                       item.icon
@@ -119,9 +119,9 @@ const Product = () => {
             <div className="architecture-top">
               <div className="architecture-header-card">
                 <div className="architecture-logo">
-                  <img 
-                    src={theme === 'light' ? "./assets/logo_new.svg" : "./assets/logo_white.svg"} 
-                    alt="SysNex" 
+                  <img
+                    src={theme === 'light' ? "./assets/logo_new.svg" : "./assets/logo_white.svg"}
+                    alt="SysNex"
                     className="architecture-logo-img"
                   />
                 </div>
@@ -158,7 +158,7 @@ const Product = () => {
                 transition={{ delay: 0.3 }}
                 className="architecture-module"
               >
-                <div className="module-icon module-icon-test"><img src="/assets/icon_nextest.svg" alt="NexTest" style={{width: "120px", height: "120px", objectFit: "contain"}} /></div>
+                <div className="module-icon module-icon-test"><img src="/assets/icon_nextest.svg" alt="NexTest" style={{ width: "120px", height: "120px", objectFit: "contain" }} /></div>
                 <h3>NexTest</h3>
                 <p>Model-driven Verification</p>
               </motion.div>
@@ -168,7 +168,7 @@ const Product = () => {
                 transition={{ delay: 0.35 }}
                 className="architecture-module"
               >
-                <div className="module-icon module-icon-viz"><img src="/assets/icon_nexviz.svg" alt="NexViz" style={{width: "120px", height: "120px", objectFit: "contain"}} /></div>
+                <div className="module-icon module-icon-viz"><img src="/assets/icon_nexviz.svg" alt="NexViz" style={{ width: "120px", height: "120px", objectFit: "contain" }} /></div>
                 <h3>NexViz</h3>
                 <p>Interactive Visualization</p>
               </motion.div>
@@ -178,7 +178,7 @@ const Product = () => {
                 transition={{ delay: 0.4 }}
                 className="architecture-module"
               >
-                <div className="module-icon module-icon-analytics"><img src="/assets/icon_nexanalytics.svg" alt="NexAnalytics" style={{width: "120px", height: "120px", objectFit: "contain"}} /></div>
+                <div className="module-icon module-icon-analytics"><img src="/assets/icon_nexanalytics.svg" alt="NexAnalytics" style={{ width: "120px", height: "120px", objectFit: "contain" }} /></div>
                 <h3>NexAnalytics</h3>
                 <p>Model Analysis</p>
               </motion.div>
@@ -188,7 +188,7 @@ const Product = () => {
                 transition={{ delay: 0.45 }}
                 className="architecture-module"
               >
-                <div className="module-icon module-icon-trade"><img src="/assets/icon_nextrade.svg" alt="NexTrade" style={{width: "120px", height: "120px", objectFit: "contain"}} /></div>
+                <div className="module-icon module-icon-trade"><img src="/assets/icon_nextrade.svg" alt="NexTrade" style={{ width: "120px", height: "120px", objectFit: "contain" }} /></div>
                 <h3>NexTrade</h3>
                 <p>Trade Study Analysis</p>
               </motion.div>
@@ -198,7 +198,7 @@ const Product = () => {
                 transition={{ delay: 0.5 }}
                 className="architecture-module"
               >
-                <div className="module-icon module-icon-var"><img src="/assets/icon_nexvar.svg" alt="NexVar" style={{width: "120px", height: "120px", objectFit: "contain"}} /></div>
+                <div className="module-icon module-icon-var"><img src="/assets/icon_nexvar.svg" alt="NexVar" style={{ width: "120px", height: "120px", objectFit: "contain" }} /></div>
                 <h3>NexVar</h3>
                 <p>Variability Management</p>
               </motion.div>
@@ -208,7 +208,7 @@ const Product = () => {
                 transition={{ delay: 0.55 }}
                 className="architecture-module"
               >
-                <div className="module-icon module-icon-sim"><img src="/assets/icon_nexsim.svg" alt="NexSim" style={{width: "120px", height: "120px", objectFit: "contain"}} /></div>
+                <div className="module-icon module-icon-sim"><img src="/assets/icon_nexsim.svg" alt="NexSim" style={{ width: "120px", height: "120px", objectFit: "contain" }} /></div>
                 <h3>NexSim</h3>
                 <p>State Machine Simulation</p>
               </motion.div>
@@ -218,7 +218,7 @@ const Product = () => {
                 transition={{ delay: 0.6 }}
                 className="architecture-module architecture-module-suite"
               >
-                <div className="module-icon module-icon-suite"><img src="/assets/icon_nexsuite.svg" alt="NexSuite" style={{width: "120px", height: "120px", objectFit: "contain"}} /></div>
+                <div className="module-icon module-icon-suite"><img src="/assets/icon_nexsuite.svg" alt="NexSuite" style={{ width: "120px", height: "120px", objectFit: "contain" }} /></div>
                 <h3>NexSuite</h3>
                 <p>Engineering Workflow Layer</p>
                 <span className="module-badge">Integrates all Nex features</span>
@@ -234,9 +234,9 @@ const Product = () => {
             >
               <div className="architecture-platform-card">
                 <div className="platform-logo">
-                  <img 
-                    src={theme === 'light' ? "./assets/logo_new.svg" : "./assets/logo_white.svg"} 
-                    alt="SysNex Platform" 
+                  <img
+                    src={theme === 'light' ? "./assets/logo_new.svg" : "./assets/logo_white.svg"}
+                    alt="SysNex Platform"
                     className="platform-logo-img"
                   />
                 </div>
@@ -427,6 +427,38 @@ const Product = () => {
             </div>
           </motion.div>
 
+          {/* KRAKEN Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.15 }}
+            className="product-suite-section"
+          >
+            <div className="product-suite-header">
+              <div className="product-suite-icon"><img src="/assets/icon_kraken.png" alt="KRAKEN" style={{ width: "120px", height: "120px", objectFit: "contain" }} /></div>
+              <h3>KRAKEN by SysNex - Engineering Service Mesh</h3>
+              <p className="product-suite-description">The high-performance digital backbone connecting SysML v2, requirements, simulation, and legacy tools</p>
+            </div>
+            <div className="product-variants-grid">
+              <div className="product-variant-card product-variant-featured">
+                <div className="variant-badge variant-badge-publisher">Core</div>
+                <h4>Kraken Hub</h4>
+                <p className="variant-tier">🐙 Backbone</p>
+                <p className="variant-description">Unified orchestrator acting as a central nervous system for your engineering data, ensuring consistency and real-time sync</p>
+                <ul className="variant-features">
+                  <li>✅ <b>Service Mesh Architecture</b>: Connects tools via high-performance Rust sidecars</li>
+                  <li>✅ <b>Incremental Intelligence</b>: Salsa-based incremental computation for sub-second updates</li>
+                  <li>✅ <b>Polyglot SDKs</b>: First-class Python and Java APIs for custom automation</li>
+                  <li>✅ <b>Legacy Bridge</b>: Bi-directional sync with Cameo, DOORS, and Codebeamer</li>
+                  <li>✅ <b>Data Unification</b>: Single source of truth across federated repositories</li>
+                  <li>✅ <b>Event Streaming</b>: Real-time change propagation and webhooks</li>
+                  <li>✅ <b>Security</b>: OIDC-compliant authentication and role-based access</li>
+                </ul>
+                <div className="variant-status">✅ Production-Ready</div>
+              </div>
+            </div>
+          </motion.div>
+
           {/* NexReq Section */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -496,7 +528,7 @@ const Product = () => {
             className="product-suite-section"
           >
             <div className="product-suite-header">
-              <div className="product-suite-icon"><img src="/assets/icon_nextest.svg" alt="NexTest" style={{width: "120px", height: "120px", objectFit: "contain"}} /></div>
+              <div className="product-suite-icon"><img src="/assets/icon_nextest.svg" alt="NexTest" style={{ width: "120px", height: "120px", objectFit: "contain" }} /></div>
               <h3>NexTest - Model-driven Verification</h3>
               <p className="product-suite-description">Comprehensive test management, verification planning, and validation workflows</p>
             </div>
@@ -557,7 +589,7 @@ const Product = () => {
             className="product-suite-section"
           >
             <div className="product-suite-header">
-              <div className="product-suite-icon"><img src="/assets/icon_nexviz.svg" alt="NexViz" style={{width: "120px", height: "120px", objectFit: "contain"}} /></div>
+              <div className="product-suite-icon"><img src="/assets/icon_nexviz.svg" alt="NexViz" style={{ width: "120px", height: "120px", objectFit: "contain" }} /></div>
               <h3>NexViz - Interactive Visualization</h3>
               <p className="product-suite-description">Modern diagram editing and visualization with React Flow and interactive diagrams</p>
             </div>
@@ -604,7 +636,7 @@ const Product = () => {
             className="product-suite-section"
           >
             <div className="product-suite-header">
-              <div className="product-suite-icon"><img src="/assets/icon_nexanalytics.svg" alt="NexAnalytics" style={{width: "120px", height: "120px", objectFit: "contain"}} /></div>
+              <div className="product-suite-icon"><img src="/assets/icon_nexanalytics.svg" alt="NexAnalytics" style={{ width: "120px", height: "120px", objectFit: "contain" }} /></div>
               <h3>NexAnalytics - Model Analysis</h3>
               <p className="product-suite-description">Comprehensive model quality metrics, complexity analysis, and relationship analytics</p>
             </div>
@@ -651,7 +683,7 @@ const Product = () => {
             className="product-suite-section"
           >
             <div className="product-suite-header">
-              <div className="product-suite-icon"><img src="/assets/icon_nextrade.svg" alt="NexTrade" style={{width: "120px", height: "120px", objectFit: "contain"}} /></div>
+              <div className="product-suite-icon"><img src="/assets/icon_nextrade.svg" alt="NexTrade" style={{ width: "120px", height: "120px", objectFit: "contain" }} /></div>
               <h3>NexTrade - Trade Study Analysis</h3>
               <p className="product-suite-description">ISO 15288 compliant decision management with MCDA trade studies and UVL integration</p>
             </div>
@@ -683,7 +715,7 @@ const Product = () => {
             className="product-suite-section"
           >
             <div className="product-suite-header">
-              <div className="product-suite-icon"><img src="/assets/icon_nexvar.svg" alt="NexVar" style={{width: "120px", height: "120px", objectFit: "contain"}} /></div>
+              <div className="product-suite-icon"><img src="/assets/icon_nexvar.svg" alt="NexVar" style={{ width: "120px", height: "120px", objectFit: "contain" }} /></div>
               <h3>NexVar - Variability Management</h3>
               <p className="product-suite-description">UVL feature model management with Z3 solver integration and product derivation</p>
             </div>
@@ -716,7 +748,7 @@ const Product = () => {
             className="product-suite-section"
           >
             <div className="product-suite-header">
-              <div className="product-suite-icon"><img src="/assets/icon_nexsim.svg" alt="NexSim" style={{width: "120px", height: "120px", objectFit: "contain"}} /></div>
+              <div className="product-suite-icon"><img src="/assets/icon_nexsim.svg" alt="NexSim" style={{ width: "120px", height: "120px", objectFit: "contain" }} /></div>
               <h3>NexSim - State Machine Simulation</h3>
               <p className="product-suite-description">Execute and simulate state machines with debugging support and checkpoint/resume</p>
             </div>
@@ -749,7 +781,7 @@ const Product = () => {
             className="product-suite-section product-suite-featured"
           >
             <div className="product-suite-header">
-              <div className="product-suite-icon"><img src="/assets/icon_nexsuite.svg" alt="NexSuite" style={{width: "120px", height: "120px", objectFit: "contain"}} /></div>
+              <div className="product-suite-icon"><img src="/assets/icon_nexsuite.svg" alt="NexSuite" style={{ width: "120px", height: "120px", objectFit: "contain" }} /></div>
               <h3>NexSuite - Engineering Workflow Layer</h3>
               <p className="product-suite-description">Integrated platform combining all Nex products (NexDocs, NexReq, NexTest, NexViz, NexAnalytics, NexTrade, NexVar, NexSim) with advanced workflow capabilities</p>
               <span className="suite-badge">Integrates all Nex features</span>

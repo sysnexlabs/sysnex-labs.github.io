@@ -165,7 +165,7 @@ const Tools = () => {
                       <img
                         src={highlight.icon}
                         alt={highlight.title}
-                        style={{height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain'}}
+                        className="spotlight-icon-img"
                       />
                     ) : (
                       highlight.icon

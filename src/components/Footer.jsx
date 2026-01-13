@@ -7,7 +7,7 @@ import './Footer.css'
 const Footer = () => {
   const { theme } = useTheme()
   const { t } = useTranslation()
-  
+
   return (
     <footer className="footer" role="contentinfo">
       <div className="footer-container">
@@ -56,9 +56,22 @@ const Footer = () => {
       </div>
 
       <div className="footer-bottom">
-        <p className="footer-copyright">
-          © {new Date().getFullYear()} SysNex. All rights reserved.
-        </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', width: '100%' }}>
+          <p className="footer-copyright">
+            © {new Date().getFullYear()} SysNex. All rights reserved.
+          </p>
+          <a
+            href="https://www.omg.org/spec/SysML"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="sysmlv2-footer-badge"
+          >
+            <div className="sysmlv2-footer-badge__logo">
+              <img src="./assets/sysmlv2.png" alt="SysML v2 Logo" />
+            </div>
+            <span className="sysmlv2-footer-badge__text">Built on SysML v2</span>
+          </a>
+        </div>
       </div>
     </footer>
   )

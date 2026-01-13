@@ -39,6 +39,37 @@ export const products = [
     demoLink: '/try-nexdocs'
   },
   {
+    id: 'kraken',
+    icon: '/assets/icon_kraken.png',
+    title: 'KRAKEN Hub',
+    subtitle: 'Engineering Service Mesh',
+    description: 'The high-performance digital backbone connecting SysML v2, requirements, simulation, and legacy tools via a unified service mesh.',
+    badge: 'Platform',
+    status: '✅ Production-Ready',
+    features: [
+      'Service Mesh Architecture',
+      'Incremental Intelligence (Salsa)',
+      'Polyglot SDKs (Rust/Python/Java)',
+      'Legacy Bridge (Cameo/DOORS)',
+      'Real-time Data Unification',
+      'Event Streaming & Webhooks',
+      'OIDC Security'
+    ],
+    components: [
+      { name: 'Hub', edition: 'Platform', description: 'Central orchestration engine' },
+      { name: 'Sidecars', edition: 'Platform', description: 'Tool-specific connectivity adapters' }
+    ],
+    useCases: [
+      'Toolchain integration',
+      'Data synchronization',
+      'Digital thread management',
+      'Cross-tool queries'
+    ],
+    pricing: 'Included in Platform edition',
+    link: '/try-kraken',
+    demoLink: '/try-kraken'
+  },
+  {
     id: 'nexreq',
     icon: '/assets/icon_nexreq.svg',
     title: 'NexReq',

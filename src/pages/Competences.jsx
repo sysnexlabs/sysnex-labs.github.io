@@ -178,7 +178,7 @@ const Competences = () => {
                       <img
                         src={competence.icon}
                         alt={competence.title}
-                        style={{height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain'}}
+                        className="spotlight-icon-img"
                       />
                     ) : (
                       competence.icon
@@ -252,7 +252,7 @@ const Competences = () => {
                       <img
                         src={industry.icon}
                         alt={industry.title}
-                        style={{height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain'}}
+                        style={{ height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain' }}
                       />
                     ) : (
                       industry.icon

@@ -17,6 +17,7 @@ const TryNexReq = lazy(() => import('./pages/demos/TryNexReq'))
 const TryNexTest = lazy(() => import('./pages/demos/TryNexTest'))
 const TryNexTrade = lazy(() => import('./pages/demos/TryNexTrade'))
 const TryNexSim = lazy(() => import('./pages/demos/TryNexSim'))
+const TryKraken = lazy(() => import('./pages/demos/TryKraken'))
 const Pricing = lazy(() => import('./pages/Pricing'))
 const Legal = lazy(() => import('./pages/Legal'))
 const HeroAlternative = lazy(() => import('./pages/HeroAlternative'))
@@ -48,12 +49,14 @@ const Tools = lazy(() => import('./pages/Tools'))
 const Competences = lazy(() => import('./pages/Competences'))
 // Resources page
 const Resources = lazy(() => import('./pages/Resources'))
+// Agents page
+const Agents = lazy(() => import('./pages/Agents'))
 import './styles/App.css'
 
 function AppContent() {
   const location = useLocation()
   const isAlternativeHero = location.pathname === '/hero-alternative'
-  
+
   // Handle redirect from 404.html fallback (GitHub Pages)
   useEffect(() => {
     // Check if we have a redirect path stored from 404.html
@@ -72,7 +75,7 @@ function AppContent() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [location.pathname])
-  
+
   return (
     <div className="app">
       {!isAlternativeHero && <Header />}
@@ -119,6 +122,7 @@ function AppContent() {
             <Route path="/try-nextest" element={<TryNexTest />} />
             <Route path="/try-nextrade" element={<TryNexTrade />} />
             <Route path="/try-nexsim" element={<TryNexSim />} />
+            <Route path="/try-kraken" element={<TryKraken />} />
             <Route path="/hero-alternative" element={<HeroAlternative />} />
             {/* Competences pages */}
             <Route path="/about" element={<About />} />
@@ -128,6 +132,8 @@ function AppContent() {
             <Route path="/competences" element={<Competences />} />
             {/* Resources page */}
             <Route path="/resources" element={<Resources />} />
+            {/* Agents page */}
+            <Route path="/agents" element={<Agents />} />
             {/* Catch-all route - show home for any unmatched path */}
             <Route path="*" element={<Home />} />
           </Routes>
@@ -142,7 +148,7 @@ function App() {
   // Get base URL - handle both development and production
   // For GitHub Pages with base './', we need to normalize it
   const baseUrl = import.meta.env.BASE_URL === './' ? '' : (import.meta.env.BASE_URL || '')
-  
+
   return (
     <ThemeProvider>
       <Router basename={baseUrl}>
