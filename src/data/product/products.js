@@ -43,17 +43,17 @@ export const products = [
     icon: '/assets/icon_kraken.png',
     title: 'KRAKEN Hub',
     subtitle: 'Engineering Service Mesh',
-    description: 'The high-performance digital backbone connecting SysML v2, requirements, simulation, and legacy tools via a unified service mesh.',
+    description: 'The high-performance digital backbone orchestrating engineering data via native SysML v2 configuration, connecting tools into a unified service mesh.',
     badge: 'Platform',
     status: '✅ Production-Ready',
     features: [
+      'SysML v2 Native Configuration',
       'Service Mesh Architecture',
       'Incremental Intelligence (Salsa)',
       'Polyglot SDKs (Rust/Python/Java)',
       'Legacy Bridge (Cameo/DOORS)',
       'Real-time Data Unification',
-      'Event Streaming & Webhooks',
-      'OIDC Security'
+      'Event Streaming & Webhooks'
     ],
     components: [
       { name: 'Hub', edition: 'Platform', description: 'Central orchestration engine' },

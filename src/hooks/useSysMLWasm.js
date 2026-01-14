@@ -32,11 +32,11 @@ export function useSysMLWasm() {
         // Vite adds ?import automatically which breaks WASM loading
         const wasmJsPath = import.meta.env.PROD
           ? `${baseUrl}wasm/sysml_wasm_bridge.js?v=${WASM_VERSION}`
-          : `/wasm/sysml_wasm_bridge.js`  // No query params in dev mode
+          : `/src/wasm/sysml_wasm_bridge.js`  // Use src path in dev mode
         const wasmBinaryPath = import.meta.env.PROD
           ? `${baseUrl}wasm/sysml_wasm_bridge_bg.wasm?v=${WASM_VERSION}`
-          : `/wasm/sysml_wasm_bridge_bg.wasm` // No query params in dev mode
-        
+          : `/src/wasm/sysml_wasm_bridge_bg.wasm` // Use src path in dev mode
+
         // Try to load WASM module - catch import errors gracefully
         let wasmModule
         try {
@@ -50,7 +50,7 @@ export function useSysMLWasm() {
           setLoading(false)
           return // Exit early, continue with fallback parser
         }
-        
+
         // Initialize WASM module
         // Pass the WASM file path explicitly for both dev and production
         if (wasmModule.default) {
@@ -60,7 +60,7 @@ export function useSysMLWasm() {
             await wasmModule.default()
           }
         }
-        
+
         // Initialize panic hook for better error reporting
         if (wasmModule.init_panic_hook) {
           wasmModule.init_panic_hook()
@@ -74,10 +74,10 @@ export function useSysMLWasm() {
         if (!SysMLWasm) {
           throw new Error('SysMLWasm class not found in WASM module')
         }
-        
+
         // Try to create instance - will throw if placeholder
         const instance = new SysMLWasm()
-        
+
         setWasm(instance)
         setLoading(false)
       } catch (err) {
@@ -117,10 +117,10 @@ export function useSysMLParser(code) {
         try {
           console.log('🔍 Calling WASM parse with code length:', code.length)
           console.log('🔍 Code preview:', code.substring(0, 200))
-          
+
           // Detect UVL code (starts with 'namespace' instead of 'package')
           const isUvlCode = code.trim().startsWith('namespace') || code.trim().startsWith('features')
-          
+
           let diags
           if (isUvlCode && wasm.parse_uvl) {
             // Use UVL parser for UVL code
@@ -147,16 +147,16 @@ export function useSysMLParser(code) {
             console.log('🧪 Testing with invalid code:', testInvalidCode)
             const testDiags = wasm.parse(testInvalidCode)
             console.log('🧪 Test diagnostics:', testDiags, 'length:', testDiags?.length)
-            
+
             // Use WASM parser - parse is synchronous and returns Result directly
             // wasm-bindgen converts Result<T, E> to throw on Err, return value on Ok
             diags = wasm.parse(code)
           }
-          
+
           console.log('📦 WASM parse returned:', diags, 'type:', typeof diags, 'isArray:', Array.isArray(diags))
           console.log('📦 Diagnostics details:', JSON.stringify(diags, null, 2))
           console.log('📦 Diagnostics length:', diags?.length, 'first item:', diags?.[0])
-          
+
           // Ensure it's an array
           if (Array.isArray(diags)) {
             console.log('✅ Diagnostics received:', diags.length, 'items', diags)
@@ -187,7 +187,7 @@ export function useSysMLParser(code) {
           // Fall through to fallback parser
           const errors = []
           const lines = code.split('\n')
-          
+
           lines.forEach((line, index) => {
             if (line.includes('package') && !line.includes("'")) {
               errors.push({
@@ -196,7 +196,7 @@ export function useSysMLParser(code) {
                 severity: 'error'
               })
             }
-            
+
             if (line.includes('attribute') && !line.includes(':>')) {
               errors.push({
                 line: index + 1,
@@ -205,14 +205,14 @@ export function useSysMLParser(code) {
               })
             }
           })
-          
+
           setDiagnostics(errors)
         }
       } else {
         // Fallback: simple regex-based validation
         const errors = []
         const lines = code.split('\n')
-        
+
         lines.forEach((line, index) => {
           if (line.includes('package') && !line.includes("'")) {
             errors.push({
@@ -221,7 +221,7 @@ export function useSysMLParser(code) {
               severity: 'error'
             })
           }
-          
+
           if (line.includes('attribute') && !line.includes(':>')) {
             errors.push({
               line: index + 1,
@@ -230,7 +230,7 @@ export function useSysMLParser(code) {
             })
           }
         })
-        
+
         setDiagnostics(errors)
       }
     }
@@ -273,7 +273,7 @@ export function useSysMLDocumentation(code, fileUri = 'editor://current', refres
 
     const generateDoc = async () => {
       const cacheKey = getCacheKey(code, fileUri)
-      
+
       // Check cache first (unless manual refresh)
       const isManualRefresh = prevRefreshKeyRef.current !== refreshKey
       if (!isManualRefresh && cacheKeyRef.current === cacheKey && documentationCache.has(cacheKey)) {
@@ -282,10 +282,10 @@ export function useSysMLDocumentation(code, fileUri = 'editor://current', refres
         setLoading(false)
         return
       }
-      
+
       setLoading(true)
       console.log('🔄 [useSysMLDocumentation] Generating documentation, refreshKey:', refreshKey)
-      
+
       if (wasm) {
         try {
           console.log('🔍 [JS] Calling WASM generate_documentation with code length:', code.length)
@@ -302,7 +302,7 @@ export function useSysMLDocumentation(code, fileUri = 'editor://current', refres
                 subchapterTitles: c.subchapters?.map(s => s.title) || [],
                 hasRequirements: c.subchapters?.some(s => s.kind?.includes('Requirement')) || false
               })))
-              
+
               // Debug: Log all subchapters in detail
               doc.chapters.forEach((chapter, idx) => {
                 console.log(`📖 Chapter ${idx + 1} "${chapter.title}":`, {
@@ -352,9 +352,9 @@ export function useSysMLDocumentation(code, fileUri = 'editor://current', refres
           }
         } catch (err) {
           // Only fallback on actual errors, not empty results
-          console.error('❌ WASM documentation generation failed:', formatWasmError(err, { 
-            code, 
-            functionName: 'generate_documentation' 
+          console.error('❌ WASM documentation generation failed:', formatWasmError(err, {
+            code,
+            functionName: 'generate_documentation'
           }))
           console.warn('Falling back to simple parser due to WASM error')
           const simpleDoc = parseSysMLToDocumentationSimple(code)
@@ -366,7 +366,7 @@ export function useSysMLDocumentation(code, fileUri = 'editor://current', refres
         const simpleDoc = parseSysMLToDocumentationSimple(code)
         setDocumentation(simpleDoc)
       }
-      
+
       setLoading(false)
     }
 
@@ -377,7 +377,7 @@ export function useSysMLDocumentation(code, fileUri = 'editor://current', refres
       prevRefreshKeyRef.current = refreshKey
       generateDoc()
       // Return cleanup function (no-op since we're not using setTimeout)
-      return () => {}
+      return () => { }
     }
 
     // Update ref for next comparison
@@ -395,15 +395,15 @@ export function useSysMLDocumentation(code, fileUri = 'editor://current', refres
 function parseSysMLToDocumentationSimple(code) {
   const chapters = []
   const lines = code.split('\n')
-  
+
   let currentPackage = null
   let currentPart = null
   let inDocComment = false
   let docComment = ''
-  
+
   lines.forEach((line, index) => {
     const trimmed = line.trim()
-    
+
     if (trimmed.startsWith("package '")) {
       const match = trimmed.match(/package '([^']+)'/)
       if (match) {
@@ -430,7 +430,7 @@ function parseSysMLToDocumentationSimple(code) {
         inDocComment = false
       }
     }
-    
+
     if (trimmed.includes('doc /*')) {
       inDocComment = true
       docComment = ''
@@ -439,7 +439,7 @@ function parseSysMLToDocumentationSimple(code) {
     } else if (inDocComment) {
       docComment += line.replace(/^\s*\*\s?/, '') + '\n'
     }
-    
+
     if (trimmed.startsWith('part def ')) {
       const match = trimmed.match(/part def (\w+)/)
       if (match && currentPackage) {
@@ -466,7 +466,7 @@ function parseSysMLToDocumentationSimple(code) {
         inDocComment = false
       }
     }
-    
+
     if (trimmed.startsWith('attribute ') && currentPart) {
       const match = trimmed.match(/attribute\s+(\w+)\s*:>\s*([^=\[]+)(\[[^\]]*\])?\s*=?\s*(.*)?/)
       if (match) {
@@ -474,7 +474,7 @@ function parseSysMLToDocumentationSimple(code) {
         const attrType = match[2].trim()
         const multiplicity = match[3] || ''
         const defaultValue = match[4]?.trim() || undefined
-        
+
         currentPart.nested_elements.push({
           title: attrName,
           kind: '[AttributeUsage]',
@@ -498,14 +498,14 @@ function parseSysMLToDocumentationSimple(code) {
         currentPart.metadata.nested_count++
       }
     }
-    
+
     if (trimmed.startsWith('part ') && currentPart && !trimmed.includes('def')) {
       const match = trimmed.match(/part\s+(\w+)\s*:\s*(\w+)(\[[^\]]*\])?/)
       if (match) {
         const partName = match[1]
         const partType = match[2]
         const multiplicity = match[3] || ''
-        
+
         currentPart.nested_elements.push({
           title: partName,
           kind: '[PartUsage]',
@@ -528,18 +528,18 @@ function parseSysMLToDocumentationSimple(code) {
         currentPart.metadata.nested_count++
       }
     }
-    
+
     if (trimmed === '}' && currentPart && currentPackage) {
       currentPackage.subchapters.push(currentPart)
       currentPackage.metadata.subchapter_count++
       currentPart = null
     }
   })
-  
+
   if (currentPackage) {
     chapters.push(currentPackage)
   }
-  
+
   return {
     chapters,
     file_uri: 'editor://current',

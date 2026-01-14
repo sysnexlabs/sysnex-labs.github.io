@@ -248,7 +248,7 @@ export default defineConfig({
   resolve: {
     // Handle WASM imports gracefully
     alias: {
-      // This prevents Vite from trying to resolve WASM imports at build time
+      '/wasm': join(__dirname, 'src/wasm')
     }
   },
   // Ensure WASM files are served correctly

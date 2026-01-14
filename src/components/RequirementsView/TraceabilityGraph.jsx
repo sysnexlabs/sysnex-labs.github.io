@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import GenericGraph from '../Graph/GenericGraph'
 import './TraceabilityGraph.css'
 
 /**
@@ -14,6 +15,20 @@ export default function TraceabilityGraph({ requirements, relationships, verific
   const graphData = useMemo(() => {
     const nodes = []
     const edges = []
+
+    // Helper to get short name from FQN
+    const getShortName = (name) => {
+      if (!name) return ''
+      const parts = name.split('::')
+      return parts[parts.length - 1].replace(/'/g, '')
+    }
+
+    // Helper to check if two requirement names match (definition vs usage vs FQN)
+    const isMatch = (relTo, nodeLabel) => {
+      const relShort = getShortName(relTo).toLowerCase().replace('req', '')
+      const nodeShort = getShortName(nodeLabel).toLowerCase().replace('req', '')
+      return relShort === nodeShort || relShort.includes(nodeShort) || nodeShort.includes(relShort)
+    }
 
     // Create requirement nodes (center column)
     requirements.forEach((req, idx) => {
@@ -33,22 +48,22 @@ export default function TraceabilityGraph({ requirements, relationships, verific
     // Process satisfy relationships (left side)
     relationships.satisfy.forEach((rel, idx) => {
       // Find the requirement node this satisfies
-      const reqNode = nodes.find(n => n.label === rel.to ||
-        n.label.toLowerCase().replace('req', '') === rel.to.toLowerCase().replace('req', ''))
+      const reqNode = nodes.find(n => isMatch(rel.to, n.label))
 
       if (reqNode) {
         // Create or reuse implementation node
-        let implNode = implementationMap.get(rel.from)
+        const shortFrom = getShortName(rel.from)
+        let implNode = implementationMap.get(shortFrom)
         if (!implNode) {
           implNode = {
             id: `impl-${implementationMap.size}`,
-            label: rel.from,
+            label: shortFrom,
             type: 'implementation',
             x: 100, // Left side
             y: 100 + implementationMap.size * 80,
           }
           nodes.push(implNode)
-          implementationMap.set(rel.from, implNode)
+          implementationMap.set(shortFrom, implNode)
         }
 
         // Create edge from implementation to requirement
@@ -65,22 +80,22 @@ export default function TraceabilityGraph({ requirements, relationships, verific
     // Process verify relationships (right side)
     relationships.verify.forEach((rel, idx) => {
       // Find the requirement node being verified
-      const reqNode = nodes.find(n => n.label === rel.to ||
-        n.label.toLowerCase().replace('req', '') === rel.to.toLowerCase().replace('req', ''))
+      const reqNode = nodes.find(n => isMatch(rel.to, n.label))
 
       if (reqNode) {
         // Create or reuse verification node
-        let verifNode = verificationMap.get(rel.from)
+        const shortFrom = getShortName(rel.from)
+        let verifNode = verificationMap.get(shortFrom)
         if (!verifNode) {
           verifNode = {
             id: `verif-${verificationMap.size}`,
-            label: rel.from,
+            label: shortFrom,
             type: 'verification',
             x: 700, // Right side
             y: 100 + verificationMap.size * 80,
           }
           nodes.push(verifNode)
-          verificationMap.set(rel.from, verifNode)
+          verificationMap.set(shortFrom, verifNode)
         }
 
         // Create edge from verification to requirement (verification verifies requirement)
@@ -126,89 +141,12 @@ export default function TraceabilityGraph({ requirements, relationships, verific
         </div>
       </div>
 
-      <svg
-        className="graph-svg"
+      <GenericGraph
+        nodes={graphData.nodes}
+        edges={graphData.edges}
         width={width}
         height={height}
-        viewBox={`0 0 ${width} ${height}`}
-      >
-        {/* Render edges first (so they appear behind nodes) */}
-        {graphData.edges.map(edge => {
-          const fromNode = graphData.nodes.find(n => n.id === edge.from)
-          const toNode = graphData.nodes.find(n => n.id === edge.to)
-
-          if (!fromNode || !toNode) return null
-
-          // Calculate edge path (with arrow)
-          // Start point: right edge of implementation/verification nodes, left edge of requirement
-          const x1 = fromNode.type === 'implementation' ? fromNode.x + 120 :
-                     fromNode.type === 'verification' ? fromNode.x :
-                     fromNode.x + 180
-          const y1 = fromNode.y + 20
-          // End point: left edge of requirement nodes, right edge for verifications
-          const x2 = toNode.type === 'requirement' ?
-                     (fromNode.type === 'verification' ? toNode.x + 180 : toNode.x) :
-                     toNode.x
-          const y2 = toNode.y + 20
-
-          // Control point for curved edge
-          const midX = (x1 + x2) / 2
-          const curve = `M ${x1},${y1} Q ${midX},${y1} ${midX},${(y1+y2)/2} T ${x2},${y2}`
-
-          return (
-            <g key={edge.id}>
-              <path
-                d={curve}
-                className={`graph-edge ${edge.type}`}
-                fill="none"
-                markerEnd="url(#arrowhead)"
-              />
-              <text
-                x={(x1 + x2) / 2}
-                y={(y1 + y2) / 2 - 5}
-                className="edge-label"
-                textAnchor="middle"
-              >
-                {edge.label}
-              </text>
-            </g>
-          )
-        })}
-
-        {/* Define arrowhead marker */}
-        <defs>
-          <marker
-            id="arrowhead"
-            markerWidth="10"
-            markerHeight="10"
-            refX="9"
-            refY="3"
-            orient="auto"
-          >
-            <polygon points="0 0, 10 3, 0 6" fill="#666" />
-          </marker>
-        </defs>
-
-        {/* Render nodes */}
-        {graphData.nodes.map(node => (
-          <g key={node.id} className={`graph-node ${node.type}`}>
-            <rect
-              x={node.x}
-              y={node.y}
-              width={node.type === 'requirement' ? 180 : 120}
-              height={40}
-              rx={4}
-            />
-            <text
-              x={node.x + (node.type === 'requirement' ? 90 : 60)}
-              y={node.y + 25}
-              textAnchor="middle"
-            >
-              {node.label}
-            </text>
-          </g>
-        ))}
-      </svg>
+      />
     </div>
   )
 }
