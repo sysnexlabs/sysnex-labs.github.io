@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ExperienceHero } from './ui/experience-hero'
 import Lenis from 'lenis'
+import JourneySection from './JourneySection'
 import './Hero.css'
 
 const Hero = React.memo(() => {
@@ -32,38 +33,32 @@ const Hero = React.memo(() => {
 
   // SysNex-specific stats for the hero
   const sysnexStats = [
-    { 
-      id: "001", 
-      title: "AVAILABILITY", 
-      val: "Open", 
-      type: "progress" 
+    {
+      id: "001",
+      title: "AVAILABILITY",
+      val: "Open",
+      type: "progress"
     },
-    { 
-      id: "002", 
-      title: "PLATFORM STATS", 
-      val: "3 Platforms", 
+    {
+      id: "002",
+      title: "PLATFORM STATS",
+      val: "3 Platforms",
       type: "data",
       data: [
         { label: "VS Code Extension", value: "Available" },
         { label: "NexSuite by SysNex", value: "Coming Soon" }
       ]
     },
-    { 
-      id: "003", 
-      title: "EXPERTISE", 
-      val: "Transforming systems engineering through advanced SysML v2 tooling.", 
-      type: "text" 
+    {
+      id: "003",
+      title: "EXPERTISE",
+      val: "Transforming systems engineering through advanced SysML v2 tooling.",
+      type: "text"
     }
   ]
 
   return (
     <div className="hero-wrapper">
-      <div className="sysmlv2-hero-badge">
-        <div className="sysmlv2-hero-badge__logo">
-          <img src="/assets/sysmlv2.png" alt="SysML v2 Logo" />
-        </div>
-        <span className="sysmlv2-hero-badge__text">Built on SysML v2 Standards</span>
-      </div>
       <ExperienceHero
         kicker="Model-Based Systems Engineering, Re-invented"
         title={`Systems\nEngineering\nfor\nInnovators.`}
@@ -72,6 +67,9 @@ const Hero = React.memo(() => {
         ctaLink="/contact"
         stats={sysnexStats}
       />
+      <div className="container" style={{ paddingBottom: '8rem' }}>
+        <JourneySection />
+      </div>
     </div>
   )
 })

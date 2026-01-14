@@ -180,7 +180,7 @@ export default function TryYourself() {
             gap: '1.5rem',
             marginTop: '2rem'
           }}>
-            {demos.map((demo) => (
+            {demos.filter(demo => demo.id !== 'kraken').map((demo) => (
               <SpotlightCard key={demo.id}>
                 <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', height: '100%' }}>
                   {/* Icon and Title */}
@@ -240,6 +240,67 @@ export default function TryYourself() {
                   >
                     Try Demo →
                   </Link>
+                </div>
+              </SpotlightCard>
+            ))}
+          </div>
+
+          {/* KRAKEN Hub Dedicated Section */}
+          <div className="section-header" style={{ marginTop: '5rem' }}>
+            <h2>Service Mesh & Orchestration</h2>
+            <p className="section-subtitle">
+              Powerful digital backbone for industrial-scale engineering automation
+            </p>
+          </div>
+
+          <div style={{ marginTop: '2rem', maxWidth: '900px', margin: '2rem auto 0' }}>
+            {demos.filter(demo => demo.id === 'kraken').map((demo) => (
+              <SpotlightCard key={demo.id}>
+                <div style={{ padding: '3rem', display: 'flex', gap: '2.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                  <div style={{ flex: '0 0 120px', display: 'flex', justifyContent: 'center' }}>
+                    <img
+                      src={demo.icon}
+                      alt={demo.title}
+                      style={{ height: '120px', width: 'auto' }}
+                    />
+                  </div>
+                  <div style={{ flex: '1', minWidth: '300px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                      <h3 style={{ margin: 0, color: 'var(--accent-primary)', fontSize: '1.8rem' }}>{demo.title}</h3>
+                      <div style={{
+                        padding: '0.35rem 0.7rem',
+                        background: 'var(--bg-tertiary)',
+                        borderRadius: '4px',
+                        fontSize: '0.8rem',
+                        fontWeight: '600',
+                        color: demo.statusColor
+                      }}>
+                        {demo.status}
+                      </div>
+                    </div>
+                    <p style={{
+                      fontSize: '1.1rem',
+                      color: 'var(--text-secondary)',
+                      lineHeight: '1.6',
+                      marginBottom: '1.5rem'
+                    }}>
+                      {demo.description}
+                    </p>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '2rem' }}>
+                      {demo.features.map((feature, idx) => (
+                        <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.95rem' }}>
+                          <span style={{ color: 'var(--color-success)' }}>•</span> {feature}
+                        </div>
+                      ))}
+                    </div>
+                    <Link
+                      to={demo.link}
+                      className="btn primary large"
+                      style={{ padding: '1rem 3rem' }}
+                    >
+                      Explore KRAKEN Hub Demo →
+                    </Link>
+                  </div>
                 </div>
               </SpotlightCard>
             ))}
