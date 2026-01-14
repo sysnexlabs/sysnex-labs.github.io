@@ -1,0 +1,16 @@
+{
+  "name": "sysml-kraken-wasm",
+  "type": "module",
+  "description": "WASM bridge for Kraken Hub logic",
+  "version": "0.1.0",
+  "files": [
+    "sysml_kraken_wasm_bg.wasm",
+    "sysml_kraken_wasm.js",
+    "sysml_kraken_wasm.d.ts"
+  ],
+  "main": "sysml_kraken_wasm.js",
+  "types": "sysml_kraken_wasm.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
