@@ -15,7 +15,7 @@ export default defineConfig({
       name: 'wasm-loader',
       resolveId(id) {
         // Tell Vite to treat WASM files as external (don't process them)
-        if (id.includes('/wasm/sysml_wasm_bridge.js') || id.includes('sysml_wasm_bridge.js')) {
+        if (id.includes('/wasm/') && id.endsWith('.js')) {
           // Return the ID as-is to prevent Vite from processing it
           return { id, external: false }
         }
@@ -24,7 +24,7 @@ export default defineConfig({
       configureServer(server) {
         server.middlewares.use((req, res, next) => {
           // Intercept WASM JS file requests and serve them without processing
-          if (req.url?.includes('/wasm/sysml_wasm_bridge.js')) {
+          if (req.url?.includes('/wasm/') && req.url.endsWith('.js')) {
             // Remove any Vite-added query params like ?import
             const url = new URL(req.url, `http://${req.headers.host}`)
             if (url.searchParams.has('import')) {
@@ -52,48 +52,37 @@ export default defineConfig({
       const copyWasmFiles = () => {
         const wasmDest = join(__dirname, 'dist/wasm')
         mkdirSync(wasmDest, { recursive: true })
-        
-        // Try to copy from src/wasm first, then public/wasm as fallback
-        const wasmSources = [
-          join(__dirname, 'src/wasm'),
-          join(__dirname, 'public/wasm')
-        ]
-        
-        const files = ['sysml_wasm_bridge.js', 'sysml_wasm_bridge_bg.wasm', 'sysml_wasm_bridge.d.ts', 'package.json']
-        const copiedFiles = new Set()
-        
-        for (const wasmSource of wasmSources) {
-          if (existsSync(wasmSource)) {
-            try {
-              files.forEach(file => {
-                if (copiedFiles.has(file)) return // Skip if already copied
-                
-                const src = join(wasmSource, file)
-                const dest = join(wasmDest, file)
-                if (existsSync(src)) {
-                  copyFileSync(src, dest)
-                  console.log(`✓ Copied ${file} from ${wasmSource} to dist/wasm/`)
-                  copiedFiles.add(file)
-                }
-              })
-            } catch (e) {
-              console.error(`Error copying WASM files from ${wasmSource}:`, e)
+
+        // Helper to copy directory recursively
+        const copyDirRecursive = (srcDir, destDir) => {
+          if (!existsSync(srcDir)) return
+          mkdirSync(destDir, { recursive: true })
+          const items = readdirSync(srcDir)
+          for (const item of items) {
+            const srcPath = join(srcDir, item)
+            const destPath = join(destDir, item)
+            const stat = statSync(srcPath)
+            if (stat.isDirectory()) {
+              copyDirRecursive(srcPath, destPath)
+            } else {
+              copyFileSync(srcPath, destPath)
+              console.log(`✓ Copied ${item} to ${destPath}`)
             }
           }
         }
-        
-        // Verify all required files were copied
-        const missingFiles = files.filter(file => !copiedFiles.has(file))
-        if (missingFiles.length > 0) {
-          console.error(`❌ Missing WASM files: ${missingFiles.join(', ')}`)
-          console.error('WASM files must be present in either src/wasm/ or public/wasm/')
-          return false
-        } else {
-          console.log('✅ All WASM files copied successfully')
+
+        const wasmSource = join(__dirname, 'src/wasm')
+
+        if (existsSync(wasmSource)) {
+          console.log(`📦 Copying WASM files from ${wasmSource} to ${wasmDest}...`)
+          copyDirRecursive(wasmSource, wasmDest)
           return true
+        } else {
+          console.error(`❌ WASM source directory not found: ${wasmSource}`)
+          return false
         }
       }
-      
+
       return {
         name: 'copy-wasm',
         // Call copy function in writeBundle (after bundles are written)
@@ -102,15 +91,15 @@ export default defineConfig({
         },
         // Also call in closeBundle as backup (after all bundles are closed)
         closeBundle() {
-          // Verify files exist, if not, try copying again
+          // Verify key WASM files exist, if not, try copying again
           const wasmDest = join(__dirname, 'dist/wasm')
           const requiredFiles = ['sysml_wasm_bridge.js', 'sysml_wasm_bridge_bg.wasm']
           const missingFiles = requiredFiles.filter(file => !existsSync(join(wasmDest, file)))
           if (missingFiles.length > 0) {
-            console.warn('⚠️ Some WASM files missing in closeBundle, attempting to copy again...')
+            console.warn('⚠️ Some core WASM files missing in closeBundle, attempting to copy again...')
             copyWasmFiles()
           }
-        
+
           // Copy i18n.js to dist root
           const i18nSource = join(__dirname, 'i18n.js')
           const i18nDest = join(__dirname, 'dist/i18n.js')
@@ -136,7 +125,7 @@ export default defineConfig({
               console.error('Error copying .nojekyll:', e)
             }
           }
-          
+
           // Copy 404.html to dist root (GitHub Pages fallback)
           const notFoundSource = join(__dirname, '404.html')
           const notFoundDest = join(__dirname, 'dist/404.html')
@@ -150,7 +139,7 @@ export default defineConfig({
           } else {
             console.warn('⚠ 404.html not found:', notFoundSource)
           }
-          
+
           // Copy assets folder to dist
           const assetsSource = join(__dirname, 'assets')
           const assetsDest = join(__dirname, 'dist/assets')
@@ -206,8 +195,8 @@ export default defineConfig({
           // React and all React-dependent libraries must be in the same chunk
           // to ensure React is available when these libraries need it (e.g., forwardRef)
           if (
-            id.includes('node_modules/react') || 
-            id.includes('node_modules/react-dom') || 
+            id.includes('node_modules/react') ||
+            id.includes('node_modules/react-dom') ||
             id.includes('node_modules/react-router') ||
             id.includes('node_modules/@monaco-editor/react') ||
             id.includes('node_modules/framer-motion') ||

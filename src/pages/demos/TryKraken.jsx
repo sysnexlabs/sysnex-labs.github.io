@@ -62,8 +62,13 @@ const KrakenView = ({ code }) => {
         const loadWasm = async () => {
             if (!wasmModule) {
                 try {
-                    // Import the WASM module
-                    const wasm = await import('../../wasm/sysml-kraken-wasm/sysml_kraken_wasm.js');
+                    // Import the WASM module dynamically to avoid build-time resolution
+                    const baseUrl = import.meta.env.BASE_URL || '/'
+                    const wasmJsPath = import.meta.env.PROD
+                        ? `${baseUrl}wasm/sysml-kraken-wasm/sysml_kraken_wasm.js`
+                        : `/src/wasm/sysml-kraken-wasm/sysml_kraken_wasm.js`
+
+                    const wasm = await import(/* @vite-ignore */ wasmJsPath);
                     await wasm.default(); // Initialize
                     wasmModule = wasm;
                     wasm.init();
