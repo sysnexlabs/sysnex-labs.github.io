@@ -131,36 +131,41 @@ function Agents() {
                         </div>
 
                         {/* Hero Visual Card */}
-                        <div className="insight-card spotlight-card" style={{
+                        <div className="insight-card" style={{
                             padding: '2rem',
-                            background: 'linear-gradient(135deg, rgba(13,13,13,0.95), rgba(0,180,216,0.05))',
-                            transform: 'rotate(-2deg)',
-                            border: '1px solid rgba(0,180,216,0.2)'
+                            border: '4px solid var(--pixel-border)',
+                            background: 'var(--pixel-bg)',
+                            boxShadow: '8px 8px 0px var(--pixel-dim)'
                         }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem' }}>
-                                <div style={{ textAlign: 'center' }}>
-                                    <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🤖</div>
-                                    <div style={{ fontSize: '0.75rem', opacity: 0.7 }}>Antigravity</div>
-                                </div>
-                                <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
-                                    <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🧠</div>
-                                    <div style={{ fontSize: '0.75rem', opacity: 0.7 }}>Claude</div>
-                                </div>
-                                <div style={{ textAlign: 'center' }}>
-                                    <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>💡</div>
-                                    <div style={{ fontSize: '0.75rem', opacity: 0.7 }}>Copilot</div>
-                                </div>
-                            </div>
                             <div style={{
-                                padding: '1rem',
-                                background: 'rgba(0,180,216,0.1)',
-                                borderRadius: '8px',
-                                fontSize: '0.9rem',
-                                textAlign: 'center',
-                                color: 'var(--turquoise)',
-                                border: '1px solid rgba(0,180,216,0.2)'
+                                width: '100%',
+                                height: 'auto',
+                                marginBottom: '1rem',
+                                border: '2px solid var(--pixel-dim)',
+                                overflow: 'hidden',
+                                background: '#000'
                             }}>
-                                <strong>Unified Agentic Workflow</strong>
+                                <img
+                                    src="./assets/pixel_sprite.png"
+                                    alt="Pixel Art Tools"
+                                    style={{
+                                        width: '100%',
+                                        height: 'auto',
+                                        imageRendering: 'pixelated',
+                                        display: 'block'
+                                    }}
+                                />
+                            </div>
+                            <h3 className="insight-title" style={{ textAlign: 'center', margin: 0, textShadow: '2px 2px 0px var(--pixel-accent)' }}>
+                                UNIFIED_AGENTIC_WORKFLOW
+                            </h3>
+                            <div style={{
+                                marginTop: '1rem',
+                                height: '4px',
+                                background: 'var(--pixel-border)',
+                                width: '100%'
+                            }}>
+                                <div style={{ width: '60%', height: '100%', background: 'var(--pixel-accent)', animation: 'pulse-glow 1s steps(2) infinite' }}></div>
                             </div>
                         </div>
                     </div>
@@ -178,17 +183,22 @@ function Agents() {
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ margin: "-50px" }}
-                                transition={{ duration: 0.6, delay: index * 0.15 }}
-                                className={`glass-card insight-card insight-card--${agent.type}`}
+                                transition={{ duration: 0.1, delay: index * 0.1 }}
+                                className={`insight-card insight-card--${agent.type}`}
+                                style={{
+                                    border: '2px solid var(--pixel-border)',
+                                    boxShadow: '4px 4px 0px var(--pixel-dim)',
+                                    background: 'var(--pixel-bg)'
+                                }}
                             >
-                                <div style={{ fontSize: '3rem', marginBottom: '1rem' }} className="animate-float">{agent.icon}</div>
-                                <span className="insight-eyebrow text-gradient-secondary">{agent.provider}</span>
-                                <h3 className="insight-title">{agent.name}</h3>
-                                <p className="insight-description" style={{ marginBottom: '1.5rem' }}>{agent.description}</p>
+                                <div style={{ fontSize: '3rem', marginBottom: '1rem', filter: 'grayscale(100%) contrast(150%)' }} className="animate-float">{agent.icon}</div>
+                                <span className="insight-eyebrow" style={{ color: 'var(--pixel-accent)', textTransform: 'uppercase' }}>{agent.provider}</span>
+                                <h3 className="insight-title" style={{ textShadow: '2px 2px 0px var(--pixel-accent-secondary)' }}>{agent.name}</h3>
+                                <p className="insight-description" style={{ marginBottom: '1.5rem', fontFamily: 'var(--font-pixel-body)' }}>{agent.description}</p>
 
                                 <div style={{ marginBottom: '1.5rem' }}>
-                                    <h4 style={{ fontSize: '1rem', color: 'var(--turquoise)', marginBottom: '0.75rem' }}>Capabilities</h4>
-                                    <ul className="method-list">
+                                    <h4 style={{ fontSize: '1rem', color: 'var(--pixel-accent)', marginBottom: '0.75rem', textTransform: 'uppercase' }}>Capabilities</h4>
+                                    <ul className="method-list" style={{ listStyle: 'square' }}>
                                         {agent.capabilities.map((capability, i) => (
                                             <li key={i}>{capability}</li>
                                         ))}
@@ -197,14 +207,13 @@ function Agents() {
 
                                 <div style={{
                                     padding: '0.75rem',
-                                    background: 'rgba(0,180,216,0.05)',
-                                    borderRadius: '8px',
-                                    marginBottom: '1rem',
-                                    border: '1px solid rgba(0,180,216,0.1)'
+                                    border: '1px solid var(--pixel-border)',
+                                    background: 'var(--pixel-surface)',
+                                    marginBottom: '1rem'
                                 }}>
-                                    <strong style={{ color: 'var(--turquoise)', fontSize: '0.9rem' }}>Current Focus:</strong>
+                                    <strong style={{ color: 'var(--pixel-accent)', fontSize: '0.9rem' }}>CURRENT_FOCUS:</strong>
                                     <br />
-                                    <span style={{ fontSize: '0.9rem', opacity: 0.9 }}>{agent.focus}</span>
+                                    <span style={{ fontSize: '0.9rem' }}>{agent.focus}</span>
                                 </div>
 
                                 <div className="status-badge" style={{ marginBottom: 0 }}>

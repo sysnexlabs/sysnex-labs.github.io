@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from '../utils/i18n'
 import { useTheme } from '../contexts/ThemeContext'
 import ThemeToggle from './ThemeToggle'
+import pixelLogo from '../assets/pixel_logo.png' // Import pixel logo
 import './Header.css'
 
 const Header = () => {
@@ -19,7 +20,7 @@ const Header = () => {
     // Determine active page based on current pathname
     const path = location.pathname
     let page = 'home'
-    
+
     if (path === '/' || path === '/index.html' || path === '') {
       page = 'home'
     } else if (path === '/contact' || path === '/contact.html') {
@@ -33,7 +34,7 @@ const Header = () => {
     } else if (path === '/about' || path === '/about.html') {
       page = 'about'
     }
-    
+
     setActivePage(page)
   }, [location.pathname])
 
@@ -92,7 +93,7 @@ const Header = () => {
     if (page === 'consulting' && (activePage === 'methods' || activePage === 'process' || activePage === 'tools')) return true
     return false
   }
-  
+
   const isSubmenuActive = (subPage) => {
     const path = location.pathname
     if (subPage === 'try-yourself' && path.includes('/try-yourself')) return true
@@ -111,20 +112,20 @@ const Header = () => {
       e.preventDefault()
       e.stopPropagation()
     }
-    
+
     const newLang = lang === 'en' ? 'de' : 'en'
-    
+
     try {
       // Save to localStorage first
       localStorage.setItem('sysnex-lang', newLang)
-      
+
       // Update ALL language toggle buttons immediately (for both React and static HTML)
       const buttons = document.querySelectorAll('#langToggle, .lang-toggle')
       buttons.forEach((button) => {
         button.textContent = newLang === 'en' ? 'DE' : 'EN'
         button.setAttribute('aria-label', newLang === 'en' ? 'Sprache auf Deutsch umschalten' : 'Switch language to English')
       })
-      
+
       // Trigger static i18n if available (this will update static HTML pages)
       if (typeof window !== 'undefined' && window.setLanguage) {
         try {
@@ -133,7 +134,7 @@ const Header = () => {
           console.warn('Could not set language via window.setLanguage:', err)
         }
       }
-      
+
       // Dispatch event for other React components (useTranslation hook will pick this up)
       try {
         window.dispatchEvent(new CustomEvent('languagechange'))
@@ -157,8 +158,8 @@ const Header = () => {
       // Scroll to top immediately
       window.scrollTo({ top: 0, behavior: 'instant' })
       // Force navigation with state to trigger re-render
-      navigate('/', { 
-        replace: true, 
+      navigate('/', {
+        replace: true,
         state: { refresh: Date.now() },
         preventScrollReset: false
       })
@@ -172,19 +173,24 @@ const Header = () => {
   return (
     <header className={`navbar ${menuOpen ? 'is-open' : ''}`} role="banner">
       <div className="brand">
-        <Link 
-          to="/" 
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}
+        <Link
+          to="/"
+          style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}
           onClick={handleHomeClick}
         >
-          <img src={theme === 'light' ? "./assets/logo_new.svg" : "./assets/logo_white.svg"} alt="SysNex" className="logo" />
-          <span className="brand-text">
-            <span className="brand-text-primary">SYSNEX</span>
-            <span className="brand-text-secondary">Technologies</span>
-          </span>
+          <img
+            src={pixelLogo}
+            alt="SysNex Pixel Logo"
+            style={{
+              height: '48px',
+              width: 'auto',
+              imageRendering: 'pixelated',
+              filter: 'drop-shadow(2px 2px 0px rgba(0,0,0,0.5))'
+            }}
+          />
         </Link>
       </div>
-      
+
       <div className="navbar-actions">
         <button
           className="nav-toggle"
@@ -198,10 +204,10 @@ const Header = () => {
           <span className="nav-toggle-bars" aria-hidden="true"></span>
         </button>
         <div className="header-controls">
-          <button 
-            className="lang-toggle" 
-            id="langToggle" 
-            type="button" 
+          <button
+            className="lang-toggle"
+            id="langToggle"
+            type="button"
             aria-label={lang === 'en' ? 'Sprache auf Deutsch umschalten' : 'Switch language to English'}
             onClick={toggleLanguage}
             onTouchStart={(e) => {
@@ -216,15 +222,15 @@ const Header = () => {
       </div>
 
       <nav id="siteNav" role="navigation" aria-label="Main navigation">
-        <Link 
-          to="/" 
+        <Link
+          to="/"
           className={`nav-link ${isActive('home') ? 'active' : ''}`}
           data-page="home"
           onClick={handleHomeClick}
         >
           {t('nav.home')}
         </Link>
-        
+
         <div className={`nav-dropdown ${productOpen ? 'is-open' : ''}`}>
           <div className="nav-dropdown-trigger">
             <Link
@@ -259,7 +265,7 @@ const Header = () => {
             {/* <Link to="/pricing" className={isSubmenuActive('pricing') ? 'active' : ''} data-page="pricing">{t('nav.pricing')}</Link> */}
           </div>
         </div>
-        
+
         {/* Competences pages */}
         {/* <div className={`nav-dropdown ${consultingOpen ? 'is-open' : ''}`}>
           <div className="nav-dropdown-trigger">
@@ -289,17 +295,17 @@ const Header = () => {
             <Link to="/tools" className={location.pathname === '/tools' ? 'active' : ''} data-page="tools">{t('nav.tools') || 'Tools'}</Link>
           </div>
         </div> */}
-        
-        <Link 
-          to="/about" 
+
+        <Link
+          to="/about"
           className={`nav-link ${isActive('about') ? 'active' : ''}`}
           data-page="about"
         >
           {t('nav.about') || 'About'}
         </Link>
-        
-        <Link 
-          to="/contact" 
+
+        <Link
+          to="/contact"
           className={`nav-link ${isActive('contact') ? 'active' : ''}`}
           data-page="contact"
         >

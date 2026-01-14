@@ -1,0 +1,324 @@
+/* Pixel Art Theme Overrides */
+/* Importing this file switches the entire app to the Mistral.ai-inspired Pixel Art style */
+
+:root {
+    /* Retro Palette - Amber & Green Terminals, Stark Monochrome */
+    --pixel-bg: #000000;
+    --pixel-surface: #111111;
+    --pixel-border: #ffffff;
+    --pixel-text: #ffffff;
+    /* Colors - Brand Aligned */
+    --pixel-bg: #0d0d0d;
+    /* Dark Background */
+    --pixel-surface: #0F2747;
+    /* Tertiary Navy Blue - used for card backgrounds */
+    --pixel-border: #ffffff;
+    /* White wireframe borders for high contrast */
+    --pixel-dim: #0F2747;
+    /* Navy Blue for shadows */
+    --pixel-text: #e6fdf8;
+    /* Light Text */
+
+    /* Brand Accents */
+    --pixel-accent: #00B4D8;
+    /* Primary Cyan */
+    --pixel-accent-secondary: #FBBF24;
+    /* Secondary Amber */
+    --pixel-accent-tertiary: #C80064;
+    /* Aubergine */
+
+    /* Fonts */
+    --font-pixel-header: 'Press Start 2P', cursive;
+    --font-pixel-body: 'VT323', monospace;
+}
+
+/* Global Resets for Pixel Look */
+* {
+    border-radius: 0 !important;
+    /* KILL ALL ROUNDED CORNERS */
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-pixel-body) !important;
+    font-size: 20px;
+    /* Pixel fonts need to be larger to be readable */
+    background-color: var(--pixel-bg);
+    color: var(--pixel-text);
+    letter-spacing: 0.5px;
+    -webkit-font-smoothing: none;
+    /* Crisp edges */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.section-title,
+.insight-title,
+.platformTitle {
+    font-family: var(--font-pixel-header) !important;
+    text-transform: uppercase;
+    line-height: 1.5;
+    letter-spacing: 1px;
+    color: var(--pixel-accent) !important;
+    /* Ensure headers pop */
+    text-shadow: 2px 2px 0px black;
+    /* Add shadow for contrast on any BG */
+}
+
+h1 {
+    font-size: 2rem !important;
+}
+
+h2 {
+    font-size: 1.5rem !important;
+}
+
+h3 {
+    font-size: 1.2rem !important;
+}
+
+/* Subtitles & Body Text High Contrast */
+p,
+.sectionSubtitle,
+.platformDescription {
+    font-family: var(--font-pixel-body) !important;
+    font-weight: 500 !important;
+    /* Thicken thin fonts */
+    color: var(--pixel-text) !important;
+    opacity: 1 !important;
+    /* key: remove transparency causing grey text */
+    text-shadow: 1px 1px 0px #000;
+    /* Subtle text shadow for readability */
+}
+
+.sectionSubtitle {
+    font-size: 1.2rem !important;
+    /* Make subtitles larger */
+    color: var(--pixel-accent-secondary) !important;
+    /* Use Amber for subtitles for variety/pop */
+}
+
+/* Buttons & Interactive Elements */
+/* Buttons & Interactive Elements */
+button,
+.btn,
+a.nav-link,
+nav a {
+    font-family: var(--font-pixel-header) !important;
+    font-size: 0.9rem !important;
+    /* Slightly larger */
+    text-transform: uppercase;
+    text-decoration: none !important;
+}
+
+button,
+.btn {
+    border: 2px solid var(--pixel-border) !important;
+    box-shadow: 4px 4px 0px 0px var(--pixel-dim) !important;
+    background: var(--pixel-surface) !important;
+    color: var(--pixel-text) !important;
+    transition: transform 0.1s steps(2), box-shadow 0.1s steps(2) !important;
+    cursor: pointer;
+    padding: 1rem 1.5rem !important;
+}
+
+button:hover,
+.btn:hover,
+nav a:hover {
+    transform: translate(2px, 2px) !important;
+    box-shadow: 2px 2px 0px 0px var(--pixel-border) !important;
+    background: var(--pixel-accent) !important;
+    color: var(--pixel-bg) !important;
+}
+
+button:active,
+.btn:active {
+    transform: translate(4px, 4px) !important;
+    box-shadow: none !important;
+}
+
+/* Cards & Containers */
+.card,
+.insight-card,
+.SpotlightCard,
+.platformCard,
+.glass-card,
+.benefit-item {
+    background: var(--pixel-bg) !important;
+    border: 2px solid var(--pixel-border) !important;
+    backdrop-filter: none !important;
+    /* Remove glassmorphism */
+    box-shadow: none !important;
+    position: relative;
+    overflow: visible !important;
+    margin-bottom: 2rem;
+}
+
+/* "Window" Header for Cards - pseudo-element to look like a terminal window bar */
+.insight-card::before,
+.platformCard::before,
+.glass-card::before {
+    content: "TERMINAL_V2.0";
+    display: block;
+    background: var(--pixel-border);
+    color: var(--pixel-bg);
+    font-family: var(--font-pixel-body);
+    font-size: 1rem;
+    padding: 2px 8px;
+    width: 100%;
+    margin-bottom: 1rem;
+    text-align: center;
+    border-bottom: 2px solid var(--pixel-border);
+}
+
+/* Remove CSS Gradients & Blurs */
+.glass-panel,
+.glass-card {
+    background: black !important;
+    backdrop-filter: none !important;
+    border-radius: 0 !important;
+}
+
+.text-gradient-primary,
+.text-gradient-secondary {
+    background: none !important;
+    -webkit-text-fill-color: var(--pixel-text) !important;
+    color: var(--pixel-text) !important;
+    text-shadow: 2px 2px 0px var(--pixel-accent);
+}
+
+/* Icons filter */
+img,
+svg {
+    image-rendering: pixelated;
+    /* High contrast and grayscale to mimic 1-bit/2-bit art */
+    filter: grayscale(100%) contrast(150%) brightness(0.9) drop-shadow(4px 4px 0px rgba(0, 255, 65, 0.4));
+}
+
+/* Specific Badge Overrides */
+.status-badge,
+.platformStatus,
+.badge-available,
+.badge-beta,
+.badge-development {
+    border-radius: 0 !important;
+    border: 1px solid var(--pixel-text) !important;
+    background: var(--pixel-dim) !important;
+    color: var(--pixel-text) !important;
+    text-transform: uppercase;
+    font-family: var(--font-pixel-body) !important;
+    box-shadow: 2px 2px 0px black !important;
+}
+
+/* Hero Visual Overrides */
+.insight-card[style*="linear-gradient"] {
+    background: var(--pixel-bg) !important;
+    border: 4px solid var(--pixel-border) !important;
+    transform: none !important;
+    /* Remove 3D skew */
+}
+
+/* Pixel Art Sprite System (Corporate Palette) */
+.pixel-icon {
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+    background-image: url('../assets/pixel_corporate_sprite.png');
+    background-size: 256px 192px;
+    /* 4 cols x 3 rows of 64px icons */
+    image-rendering: pixelated;
+    vertical-align: middle;
+}
+
+/* Row 1 */
+.pixel-icon-server {
+    background-position: 0 0;
+}
+
+.pixel-icon-database {
+    background-position: -64px 0;
+}
+
+.pixel-icon-code {
+    background-position: -128px 0;
+}
+
+.pixel-icon-monitor {
+    background-position: -192px 0;
+}
+
+/* Row 2 */
+.pixel-icon-gear {
+    background-position: 0 -64px;
+}
+
+.pixel-icon-user {
+    background-position: -64px -64px;
+}
+
+.pixel-icon-shield {
+    background-position: -128px -64px;
+}
+
+.pixel-icon-chart {
+    background-position: -192px -64px;
+}
+
+/* Row 3 */
+.pixel-icon-rocket {
+    background-position: 0 -128px;
+}
+
+.pixel-icon-bug {
+    background-position: -64px -128px;
+}
+
+.pixel-icon-bulb {
+    background-position: -128px -128px;
+}
+
+.pixel-icon-mega {
+    background-position: -192px -128px;
+}
+
+/* Pixel Art Product Icons (Corporate Palette) */
+.pixel-product-icon {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    background-image: url('../assets/pixel_product_sprite.png');
+    background-size: 300% 300%;
+    /* 3 cols x 3 rows (approx) */
+    image-rendering: pixelated;
+    vertical-align: middle;
+}
+
+/* Row 1 */
+.pixel-product-vscode {
+    background-position: 0 0;
+}
+
+.pixel-product-window {
+    background-position: 50% 0;
+}
+
+.pixel-product-cloud {
+    background-position: 100% 0;
+}
+
+/* Row 2 */
+.pixel-product-nexdoc {
+    background-position: 0 50%;
+}
+
+.pixel-product-nexsim {
+    background-position: 50% 50%;
+}
+
+.pixel-product-sysml {
+    background-position: 100% 50%;
+}

@@ -52,6 +52,7 @@ const Resources = lazy(() => import('./pages/Resources'))
 // Agents page
 const Agents = lazy(() => import('./pages/Agents'))
 import './styles/App.css'
+import './styles/PixelTheme.css' // PIXEL ART THEME OVERRIDE
 
 function AppContent() {
   const location = useLocation()

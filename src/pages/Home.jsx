@@ -75,58 +75,75 @@ const Home = () => {
             {[
               {
                 title: 'VS Code Extension',
-                status: 'Available Now',
+                status: 'AVAILABLE_NOW',
                 statusClass: 'statusAvailable',
-                icon: '/assets/platform_vscode.svg',
+                iconClass: 'pixel-product-vscode',
                 description: 'The industry-standard editor integration. Native performance with <50ms latency.',
                 features: ['Full LSP Support', 'Syntax Highlighting', 'Git Integration']
               },
               {
                 title: 'CodeFlow Desktop',
-                status: 'Production Ready',
+                status: 'PRODUCTION_READY',
                 statusClass: 'statusAvailable',
-                icon: '/assets/capability_desktop.svg',
+                iconClass: 'pixel-product-window',
                 description: 'Standalone Tauri-based application. No VS Code required. Optimized for large models.',
                 features: ['Standalone App', 'Offline First', 'Multi-Window']
               },
               {
                 title: 'CodeFlow Cloud',
-                status: 'Coming Q2 2026',
+                status: 'COMING_Q2_2026',
                 statusClass: 'statusComing',
-                icon: '/assets/platform_cloud.svg',
+                iconClass: 'pixel-product-cloud',
                 description: 'Zero-install browser experience. Collaborative modeling and reviewing in real-time.',
                 features: ['Zero Install', 'Collaboration', 'Cloud Storage']
               }
             ].map((platform, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ margin: "-50px" }}
-                transition={{ duration: 0.6, delay: index * 0.15 }}
-                className={`${styles.platformCard} glass-card hover-lift`}
+                className={`${styles.platformCard} platformCard`} // Using global platformCard for overrides
+                style={{
+                  border: '2px solid var(--pixel-border)',
+                  background: 'var(--pixel-bg)',
+                  boxShadow: '8px 8px 0px var(--pixel-dim)',
+                  position: 'relative'
+                }}
               >
-                <span className={`${styles.platformStatus} ${styles[platform.statusClass]}`}>
+                <div style={{
+                  position: 'absolute',
+                  top: '-14px',
+                  right: '10px',
+                  background: 'var(--pixel-accent)',
+                  color: 'black',
+                  padding: '2px 8px',
+                  fontSize: '0.7rem',
+                  fontFamily: 'var(--font-pixel-body)',
+                  border: '1px solid var(--pixel-border)'
+                }}>
                   {platform.status}
-                </span>
-                <div className={styles.platformIcon}>
-                  <img
-                    src={platform.icon}
-                    alt={platform.title}
-                    style={{ height: '120px', width: 'auto', maxWidth: '120px', objectFit: 'contain' }}
-                    className="animate-float"
-                  />
                 </div>
-                <h3 className={`${styles.platformTitle} text-gradient-primary`}>{platform.title}</h3>
-                <p className={styles.platformDescription}>{platform.description}</p>
+
+                <div className={styles.platformIcon} style={{ textAlign: 'center', margin: '2rem 0 1rem' }}>
+                  <div className={`pixel-product-icon ${platform.iconClass}`} style={{ transform: 'scale(1.2)' }}></div>
+                </div>
+
+                <h3 className={styles.platformTitle} style={{
+                  color: 'var(--pixel-text)',
+                  textAlign: 'center',
+                  textShadow: '2px 2px 0px var(--pixel-accent)'
+                }}>
+                  {platform.title}
+                </h3>
+
+                <p className={styles.platformDescription} style={{ fontFamily: 'var(--font-pixel-body)', opacity: 1 }}>{platform.description}</p>
+
                 <div className={styles.platformMeta}>
                   {platform.features.map((feat, i) => (
-                    <div key={i} className={styles.metaItem}>
-                      <span style={{ color: 'var(--brand-cyan)' }}>✓</span> {feat}
+                    <div key={i} className={styles.metaItem} style={{ fontFamily: 'var(--font-pixel-body)' }}>
+                      <span style={{ color: 'var(--pixel-accent)', marginRight: '8px' }}>&gt;</span> {feat}
                     </div>
                   ))}
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
