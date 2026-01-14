@@ -65,9 +65,16 @@ const KrakenView = ({ code }) => {
             if (!wasmModule) {
                 try {
                     // Import the WASM module dynamically to avoid build-time resolution
+                    // Import the WASM module dynamically to avoid build-time resolution
                     const baseUrl = import.meta.env.BASE_URL || '/'
-                    const wasmJsPath = `${baseUrl}wasm/sysml-kraken-wasm/sysml_kraken_wasm.js`
-                    const wasmBinaryPath = `${baseUrl}wasm/sysml-kraken-wasm/sysml_kraken_wasm_bg.wasm`
+
+                    const wasmJsPath = import.meta.env.PROD
+                        ? `${baseUrl}wasm/sysml-kraken-wasm/sysml_kraken_wasm.js`
+                        : `/src/wasm/sysml-kraken-wasm/sysml_kraken_wasm.js`
+
+                    const wasmBinaryPath = import.meta.env.PROD
+                        ? `${baseUrl}wasm/sysml-kraken-wasm/sysml_kraken_wasm_bg.wasm`
+                        : `/src/wasm/sysml-kraken-wasm/sysml_kraken_wasm_bg.wasm`
 
                     const wasm = await import(/* @vite-ignore */ wasmJsPath);
                     // Standard wasm-bindgen init supports passing the path directly or via object
