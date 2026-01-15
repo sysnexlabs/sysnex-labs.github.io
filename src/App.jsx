@@ -89,6 +89,7 @@ function AppContent() {
             <Route path="/legal/privacy" element={<Legal type="privacy" />} />
             <Route path="/legal/terms" element={<Legal type="terms" />} />
             <Route path="/legal/license" element={<Legal type="license" />} />
+            <Route path="/impressum" element={<Legal type="impressum" />} />
             {/* New product structure routes */}
             <Route path="/overview" element={<Overview />} />
             <Route path="/solutions" element={<Solutions />} />

@@ -8,6 +8,7 @@ const translations = {
     'nav.consulting': 'Competences',
     'nav.competences': 'Competences',
     'nav.methods': 'Methods',
+    'nav.methods': 'Methods',
     'nav.process': 'Process',
     'nav.tools': 'Tools',
     'nav.about': 'About',
@@ -17,14 +18,14 @@ const translations = {
     'hero.headline.break': 'with Modern Tooling',
     'hero.paragraph': 'Reduce SysML v2 adoption time by 60% with AI-powered IDE built for automotive and aerospace teams. Production-ready LSP, Git-native workflows, and transparent pricing.',
     'hero.metric': 'Built for engineering teams who demand speed, compliance, and developer experience.',
-    
+
     // Competences page
     'competences.hero.badge': 'Expertise & Capabilities',
     'competences.hero.title': 'Our Competences',
     'competences.hero.description': 'Deep expertise in systems engineering, model-based development, functional safety, and standards compliance. We deliver infrastructure and consulting services for mission-critical systems.',
     'competences.hero.cta.primary': 'Contact Us',
     'competences.hero.cta.secondary': 'View Methods',
-    
+
     'competences.core.heading': 'Core Competences',
     'competences.core.subtitle': 'Four pillars of expertise that define our capabilities and service offerings.',
     'competences.core.systems.title': 'Systems Engineering',
@@ -51,7 +52,7 @@ const translations = {
     'competences.core.tooling.area2': 'VS Code Extension Development',
     'competences.core.tooling.area3': 'Enterprise Platform Architecture',
     'competences.core.tooling.area4': 'CI/CD Integration & Automation',
-    
+
     'competences.standards.heading': 'Standards Expertise',
     'competences.standards.subtitle': 'Deep knowledge and practical experience with industry standards and specifications.',
     'competences.standards.iso15288.level': 'Expert',
@@ -67,7 +68,7 @@ const translations = {
     'competences.standards.sysmlv2.description': 'Early adoption and deep expertise in SysML v2 specification, textual modeling syntax, and tool implementation.',
     'competences.standards.sysmlv2.coverage': 'Complete specification knowledge with production tooling',
     'competences.standards.coverage.label': 'Coverage',
-    
+
     'competences.industries.heading': 'Industry Expertise',
     'competences.industries.subtitle': 'Proven experience across safety-critical and regulated industries.',
     'competences.industries.future.badge': 'Aim for the Future',
@@ -91,7 +92,7 @@ const translations = {
     'competences.industries.energy.expertise1': 'Power System Architecture',
     'competences.industries.energy.expertise2': 'Grid Integration & Control',
     'competences.industries.energy.expertise3': 'Regulatory Compliance & Safety',
-    
+
     'competences.cta.heading': 'Ready to Leverage Our Expertise?',
     'competences.cta.subtitle': 'Contact us to discuss how our competences can support your systems engineering challenges.',
     'competences.cta.primary': 'Schedule Consultation',
@@ -162,6 +163,7 @@ const translations = {
     'footer.legal.privacy': 'Privacy Policy',
     'footer.legal.terms': 'Terms of Service',
     'footer.legal.license': 'License',
+    'footer.legal.impressum': 'Imprint',
     'about.hero.title': 'Building the Future of SysML v2 Tooling',
     'about.hero.description': 'Hi, I\'m building what I believe should exist: a fast, modern, open-source IDE for Model-Based Systems Engineering. After years working with slow Java-based MBSE tools, I decided to build what I needed.',
     'about.mission.heading': 'Why I\'m Building This',
@@ -1326,14 +1328,14 @@ const translations = {
     'try-yourself.description': 'Experience SysML v2 directly in your browser. Write code in the editor and see the live documentation view update in real-time.',
     'try-yourself.note': 'Note: This is a proof of concept. Full WASM-based parsing and advanced features are coming soon. For production use, check out our',
     'try-yourself.note.link': 'VS Code Extension',
-    
+
     // Competences page
     'competences.hero.badge': 'Expertise & Capabilities',
     'competences.hero.title': 'Our Competences',
     'competences.hero.description': 'Deep expertise in systems engineering, model-based development, functional safety, and standards compliance. We deliver infrastructure and consulting services for mission-critical systems.',
     'competences.hero.cta.primary': 'Contact Us',
     'competences.hero.cta.secondary': 'View Methods',
-    
+
     'competences.core.heading': 'Core Competences',
     'competences.core.subtitle': 'Four pillars of expertise that define our capabilities and service offerings.',
     'competences.core.systems.title': 'Systems Engineering',
@@ -1360,7 +1362,7 @@ const translations = {
     'competences.core.tooling.area2': 'VS Code Extension Development',
     'competences.core.tooling.area3': 'Enterprise Platform Architecture',
     'competences.core.tooling.area4': 'CI/CD Integration & Automation',
-    
+
     'competences.standards.heading': 'Standards Expertise',
     'competences.standards.subtitle': 'Deep knowledge and practical experience with industry standards and specifications.',
     'competences.standards.iso15288.level': 'Expert',
@@ -1376,7 +1378,7 @@ const translations = {
     'competences.standards.sysmlv2.description': 'Early adoption and deep expertise in SysML v2 specification, textual modeling syntax, and tool implementation.',
     'competences.standards.sysmlv2.coverage': 'Complete specification knowledge with production tooling',
     'competences.standards.coverage.label': 'Coverage',
-    
+
     'competences.industries.heading': 'Industry Expertise',
     'competences.industries.subtitle': 'Proven experience across safety-critical and regulated industries.',
     'competences.industries.future.badge': 'Aim for the Future',
@@ -1400,12 +1402,12 @@ const translations = {
     'competences.industries.energy.expertise1': 'Power System Architecture',
     'competences.industries.energy.expertise2': 'Grid Integration & Control',
     'competences.industries.energy.expertise3': 'Regulatory Compliance & Safety',
-    
+
     'competences.cta.heading': 'Ready to Leverage Our Expertise?',
     'competences.cta.subtitle': 'Contact us to discuss how our competences can support your systems engineering challenges.',
     'competences.cta.primary': 'Schedule Consultation',
     'competences.cta.secondary': 'Explore Methods',
-  
+
     // Tools page
     'tools.hero.title': 'Development Tools & Environment',
     'tools.hero.description': 'SysNex builds AI-augmented SysML v2 tooling for VS Code. Our extension integrates with Git and modern development workflows, bringing systems engineering into the developer experience. Early-stage product, not enterprise-validated.',
@@ -1561,6 +1563,7 @@ const translations = {
     'footer.legal.privacy': 'Datenschutzerklärung',
     'footer.legal.terms': 'Nutzungsbedingungen',
     'footer.legal.license': 'Lizenz',
+    'footer.legal.impressum': 'Impressum',
     'about.title': 'Über SysNex',
     'about.intro': 'SysNex vereint erstklassige Softwareentwicklung mit modellbasierter Systementwicklung. Wir entwickeln schlanke Werkzeuge und praxistaugliche Methoden, die Organisationen bei der Einführung von SysML v2 unterstützen – von textueller Modellierung bis hin zu intelligenter Analyse, mit besonderem Fokus auf funktionale Sicherheit und Compliance.',
     'about.list.language-server': 'Native SysML v2 Language Server',
@@ -2049,7 +2052,7 @@ const translations = {
     'competences.core.tooling.area2': 'VS Code Extension Development',
     'competences.core.tooling.area3': 'Enterprise Platform Architecture',
     'competences.core.tooling.area4': 'CI/CD Integration & Automation',
-    
+
     'competences.standards.heading': 'Standards Expertise',
     'competences.standards.subtitle': 'Deep knowledge and practical experience with industry standards and specifications.',
     'competences.standards.iso15288.level': 'Expert',
@@ -2065,7 +2068,7 @@ const translations = {
     'competences.standards.sysmlv2.description': 'Early adoption and deep expertise in SysML v2 specification, textual modeling syntax, and tool implementation.',
     'competences.standards.sysmlv2.coverage': 'Complete specification knowledge with production tooling',
     'competences.standards.coverage.label': 'Coverage',
-    
+
     'competences.industries.heading': 'Industry Expertise',
     'competences.industries.subtitle': 'Proven experience across safety-critical and regulated industries.',
     'competences.industries.future.badge': 'Aim for the Future',
@@ -2089,7 +2092,7 @@ const translations = {
     'competences.industries.energy.expertise1': 'Power System Architecture',
     'competences.industries.energy.expertise2': 'Grid Integration & Control',
     'competences.industries.energy.expertise3': 'Regulatory Compliance & Safety',
-    
+
     'competences.cta.heading': 'Ready to Leverage Our Expertise?',
     'competences.cta.subtitle': 'Contact us to discuss how our competences can support your systems engineering challenges.',
     'competences.cta.primary': 'Schedule Consultation',
@@ -2164,6 +2167,7 @@ const translations = {
     'footer.legal.privacy': 'Datenschutzerklärung',
     'footer.legal.terms': 'Nutzungsbedingungen',
     'footer.legal.license': 'Lizenz',
+    'footer.legal.impressum': 'Impressum',
     'about.title': 'Über SysNex',
     'about.intro': 'SysNex vereint erstklassige Softwareentwicklung mit modellbasierter Systementwicklung. Wir entwickeln schlanke Werkzeuge und praxistaugliche Methoden, die Organisationen bei der Einführung von SysML v2 unterstützen – von textueller Modellierung bis hin zu intelligenter Analyse, mit besonderem Fokus auf funktionale Sicherheit und Compliance.',
     'about.list.language-server': 'Native SysML v2 Language Server',
@@ -3325,14 +3329,14 @@ const translations = {
     'try-yourself.description': 'Erleben Sie SysML v2 direkt in Ihrem Browser. Schreiben Sie Code im Editor und sehen Sie, wie sich die Live-Dokumentationsansicht in Echtzeit aktualisiert.',
     'try-yourself.note': 'Hinweis: Dies ist ein Proof of Concept. Vollständiges WASM-basiertes Parsing und erweiterte Features kommen bald. Für den produktiven Einsatz schauen Sie sich unsere',
     'try-yourself.note.link': 'VS Code Extension',
-    
+
     // Competences page (German)
     'competences.hero.badge': 'Expertise & Fähigkeiten',
     'competences.hero.title': 'Unsere Kompetenzen',
     'competences.hero.description': 'Tiefgreifende Expertise in Systems Engineering, modellbasierter Entwicklung, Funktionaler Sicherheit und Standards-Compliance. Wir liefern Infrastruktur und Beratungsdienstleistungen für sicherheitskritische Systeme.',
     'competences.hero.cta.primary': 'Kontakt aufnehmen',
     'competences.hero.cta.secondary': 'Methoden ansehen',
-    
+
     'competences.core.heading': 'Kernkompetenzen',
     'competences.core.subtitle': 'Vier Säulen der Expertise, die unsere Fähigkeiten und Serviceangebote definieren.',
     'competences.core.systems.title': 'Systems Engineering',
@@ -3359,7 +3363,7 @@ const translations = {
     'competences.core.tooling.area2': 'VS Code Extension Entwicklung',
     'competences.core.tooling.area3': 'Enterprise-Plattform-Architektur',
     'competences.core.tooling.area4': 'CI/CD-Integration & Automatisierung',
-    
+
     'competences.standards.heading': 'Standards-Expertise',
     'competences.standards.subtitle': 'Tiefes Wissen und praktische Erfahrung mit Industriestandards und Spezifikationen.',
     'competences.standards.iso15288.level': 'Experte',
@@ -3375,7 +3379,7 @@ const translations = {
     'competences.standards.sysmlv2.description': 'Frühe Adoption und tiefe Expertise in SysML v2 Spezifikation, textueller Modellierungssyntax und Tool-Implementierung.',
     'competences.standards.sysmlv2.coverage': 'Vollständiges Spezifikationswissen mit produktionsreifen Tools',
     'competences.standards.coverage.label': 'Abdeckung',
-    
+
     'competences.industries.heading': 'Branchen-Expertise',
     'competences.industries.subtitle': 'Bewährte Erfahrung in sicherheitskritischen und regulierten Branchen.',
     'competences.industries.future.badge': 'Ziel für die Zukunft',
@@ -3399,13 +3403,13 @@ const translations = {
     'competences.industries.energy.expertise1': 'Energiesystem-Architektur',
     'competences.industries.energy.expertise2': 'Netzintegration & -steuerung',
     'competences.industries.energy.expertise3': 'Regulatorische Compliance & Sicherheit',
-    
+
     'competences.cta.heading': 'Bereit, unsere Expertise zu nutzen?',
     'competences.cta.subtitle': 'Kontaktieren Sie uns, um zu besprechen, wie unsere Kompetenzen Ihre Systems Engineering-Herausforderungen unterstützen können.',
     'competences.cta.primary': 'Beratung vereinbaren',
     'competences.cta.secondary': 'Methoden erkunden',
-  
-    
+
+
     // Tools page (German)
     'tools.hero.title': 'Entwicklungstools & Umgebung',
     'tools.hero.description': 'SysNex entwickelt KI-gestützte SysML v2 Tools für VS Code. Unsere Erweiterung integriert sich mit Git und modernen Entwicklungs-Workflows und bringt Systems Engineering in die Developer Experience. Frühstadium-Produkt, nicht unternehmensvalidiert.',
@@ -3491,7 +3495,7 @@ const translations = {
     'tools.disclaimer.not.item3': '❌ Bieten keine proprietäre KI oder benutzerdefinierte IDE',
     'tools.disclaimer.not.item4': '❌ Ersetzen nicht CATIA/Cameo/Rhapsody (noch nicht)',
     'tools.disclaimer.not.item5': '❌ Nicht zertifiziert für sicherheitskritische Verwendung',
-    
+
     // Process page (German)
     'process.hero.title': 'Standards-bewusstes Tooling',
     'process.hero.description': 'SysNex entwickelt SysML v2 Tooling, das mit ISO 15288 (Systems and Software Engineering) und ISO 26262 (Automotive Functional Safety) Bewusstsein konzipiert wurde. Unsere Tools helfen Teams, konforme Systeme zu modellieren—wir sind keine Berater oder Prüfer, sondern entwickeln besseres MBSE-Tooling mit Standards-Unterstützung.',
@@ -3545,7 +3549,7 @@ const translations = {
     'process.disclaimer.not.item3': '❌ Nicht von TÜV oder Compliance-Behörden validiert',
     'process.disclaimer.not.item4': '❌ Behaupten nicht produktionsgetestetes Compliance-Tooling',
     'process.disclaimer.not.item5': '❌ Keine Experten—nur gutes Verständnis aus Forschung',
-    
+
     // Solutions page (German)
     'solutions.breadcrumb.home': 'Startseite',
     'solutions.breadcrumb.solutions': 'Lösungen',
@@ -3633,7 +3637,7 @@ const translations = {
     'solutions.cta.primary': 'Beratung vereinbaren',
     'solutions.cta.secondary': 'Interaktive Demo ausprobieren',
     'solutions.cta.note': 'Kostenlose Beratung. Keine Verpflichtung. 30-tägige Testversion verfügbar.',
-    
+
     // Resources page (German)
     'resources.breadcrumb.home': 'Startseite',
     'resources.breadcrumb.resources': 'Ressourcen',
@@ -3718,62 +3722,62 @@ const applyLanguage = (lang) => {
     toggle.textContent = lang === 'en' ? 'DE' : 'EN';
     toggle.setAttribute('aria-label', lang === 'en' ? 'Sprache auf Deutsch umschalten' : 'Switch language to English');
   });
-  
+
   // Also update any React component lang toggles (they listen to languagechange event)
   localStorage.setItem('sysnex-lang', lang);
 };
 
 const initI18n = () => {
   currentLang = getStoredLanguage();
-  
+
   // Apply language immediately if not already initialized
   if (!initialized) {
     applyLanguage(currentLang);
     initialized = true;
   }
-  
+
   // Always try to attach click handler (in case header was loaded dynamically)
   const attachToggleHandler = () => {
     // Find all language toggle buttons (both static and React)
     const toggles = document.querySelectorAll('#langToggle, .lang-toggle');
-    
+
     toggles.forEach((toggle) => {
       if (!toggle.dataset.listenerAttached) {
         toggle.dataset.listenerAttached = 'true';
-        
+
         // Remove any existing listeners by cloning the element
         const newToggle = toggle.cloneNode(true);
         toggle.parentNode.replaceChild(newToggle, toggle);
-        
+
         newToggle.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
-          
+
           const newLang = currentLang === 'en' ? 'de' : 'en';
           currentLang = newLang;
-          
+
           // Update localStorage first
           try {
             localStorage.setItem('sysnex-lang', newLang);
           } catch (err) {
             console.warn('Could not save language to localStorage:', err);
           }
-          
+
           // Apply language to static HTML
           applyLanguage(newLang);
-          
+
           // Dispatch event for React components
           window.dispatchEvent(new CustomEvent('languagechange'));
         });
       }
     });
-    
+
     return toggles.length > 0;
   };
-  
+
   // Try to attach handler immediately
   attachToggleHandler();
-  
+
   // If toggle not found, try again after a short delay (for dynamic includes)
   setTimeout(() => {
     attachToggleHandler();
@@ -3782,12 +3786,12 @@ const initI18n = () => {
       initialized = true;
     }
   }, 100);
-  
+
   // Also try after a longer delay for React components
   setTimeout(() => {
     attachToggleHandler();
   }, 300);
-  
+
   // Final attempt after React might have loaded
   setTimeout(() => {
     attachToggleHandler();
@@ -3797,7 +3801,7 @@ const initI18n = () => {
 // Expose translations and functions to window for React components
 if (typeof window !== 'undefined') {
   window.translations = translations;
-  
+
   // Expose setLanguage function
   window.setLanguage = (lang) => {
     if (translations[lang]) {
@@ -3805,7 +3809,7 @@ if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('languagechange'));
     }
   };
-  
+
   // Expose getLanguage function
   window.getLanguage = () => currentLang;
 }
@@ -3816,7 +3820,7 @@ document.addEventListener('partials:loaded', () => {
   setTimeout(() => {
     initI18n();
   }, 50);
-  
+
   // Also try again after React might have loaded
   setTimeout(() => {
     initI18n();

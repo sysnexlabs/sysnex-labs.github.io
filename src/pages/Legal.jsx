@@ -83,6 +83,36 @@ const Legal = ({ type = 'privacy' }) => {
           text: 'For licensing inquiries: contact@sysnex.tech'
         }
       ]
+    },
+    impressum: {
+      title: 'Imprint (Impressum)',
+      lastUpdated: 'Last updated: January 2025',
+      sections: [
+        {
+          heading: 'Company Information',
+          text: 'SysNex Technologies GmbH (in formation)\nSoftware Engineering & Consulting'
+        },
+        {
+          heading: 'Address',
+          text: 'Musterstraße 123\n80331 Munich\nGermany'
+        },
+        {
+          heading: 'Contact',
+          text: 'Email: contact@sysnex.tech\nPhone: +49 (0) 89 12345678'
+        },
+        {
+          heading: 'Represented by',
+          text: 'Managing Director: Max Mustermann'
+        },
+        {
+          heading: 'Register Entry',
+          text: 'Entry in the Handelsregister.\nRegister Court: Amtsgericht München\nRegister Number: HRB 123456'
+        },
+        {
+          heading: 'VAT ID',
+          text: 'VAT Identification Number according to §27 a Umsatzsteuergesetz: DE 123456789'
+        }
+      ]
     }
   }
 
@@ -94,7 +124,7 @@ const Legal = ({ type = 'privacy' }) => {
         <div className="legal-content">
           <h1>{pageContent.title}</h1>
           <p className="legal-last-updated">{pageContent.lastUpdated}</p>
-          
+
           {pageContent.sections.map((section, index) => (
             <section key={index} className="legal-section">
               <h2>{section.heading}</h2>

@@ -51,6 +51,7 @@ const Footer = () => {
             <a href="/legal/privacy" className="footer-link">{t('footer.legal.privacy')}</a>
             <a href="/legal/terms" className="footer-link">{t('footer.legal.terms')}</a>
             <a href="/legal/license" className="footer-link">{t('footer.legal.license')}</a>
+            <Link to="/impressum" className="footer-link">{t('footer.legal.impressum')}</Link>
           </div>
         </div>
       </div>
