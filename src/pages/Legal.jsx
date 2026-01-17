@@ -94,19 +94,19 @@ const Legal = ({ type = 'privacy' }) => {
         },
         {
           heading: 'Address',
-          text: 'Musterstraße 123\n80331 Munich\nGermany'
+          text: 'Im Unterwald 37\n67661 Kaiserslautern\nGermany'
         },
         {
           heading: 'Contact',
-          text: 'Email: contact@sysnex.tech\nPhone: +49 (0) 89 12345678'
+          text: 'Email: contact@sysnex.tech\nPhone: +49 (0) 176 62235520'
         },
         {
           heading: 'Represented by',
-          text: 'Managing Director: Max Mustermann'
+          text: 'Managing Director: Andre Schauer'
         },
         {
           heading: 'Register Entry',
-          text: 'Entry in the Handelsregister.\nRegister Court: Amtsgericht München\nRegister Number: HRB 123456'
+          text: 'Entry in the Handelsregister.\nRegister Court: \nRegister Number: HRB 123456'
         },
         {
           heading: 'VAT ID',
